@@ -7,7 +7,7 @@ import {
 export default function InsertUser() {
      return (
        <View>
-           <Text>Insert User page</Text>
+           <Text>Insert User page test</Text>
         </View>
      );
    }

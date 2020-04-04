@@ -3,112 +3,116 @@
  * https://github.com/facebook/react-native
  *
  * @format
- * @flow strict-local
+ * @flow
  */
-
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { enableScreens } from 'react-native-screens';
+import {Login, Logout} from './src/components';
+import {TabNavigator} from './src/navigators';
+import {LogoTitle, Splash} from './src/components';
+import {connect} from 'react-redux';
+import domain from './config';
+import { insertToken, deleteToken } from './actions';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+// performance imporovement for navigator
+enableScreens();
+
+//Navigator initialization 
+const Stack = createStackNavigator();
+export const AuthContext = React.createContext();
+
+
+const App = ({userToken, isLoading, isSignout, dispatch}) => {
+  const authContext = React.useMemo(
+    () => ({
+      signIn: async () => {
+        // In a production app, we need to send some data (usually username, password) to server and get a token
+        // We will also need to handle errors if sign in failed
+        // After getting token, we need to persist the token using `AsyncStorage`
+        // In the example, we'll use a dummy token
+        try {
+          let response = await fetch(domain.BACKEND_URL + `/hackathon/testingRoute`,
+          {
+            method:'GET'
+          });
+          let responseJson = await response.json();
+
+          dispatch(insertToken("User"));
+
+        }
+        catch(error){
+          alert(error)
+        }
+      },
+
+      signOut: async () =>{ 
+        dispatch(deleteToken())
+      },
+    }),
+    []
   );
-};
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+  return (
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+      <Stack.Navigator 
+        headerMode={userToken == null || isLoading ?'none':'screen'}>
+        {userToken == null? 
+        (
+          <Stack.Screen 
+            name="SignIn" 
+            component={Login} 
+            options={{
+              title: 'Sign in',
+              animationTypeForReplace: isSignout ? 'pop' : 'push',
+            }}
+          />
+        ) : (
+          <>
+          {isLoading && <Stack.Screen name="Splash" component={Splash}/>}
+          <Stack.Screen 
+            name="TabNavigator" 
+            component={TabNavigator}
+            options={{ 
+              headerStyle: {
+                backgroundColor: 'black',
+                height:45
+              },
+              headerRight: props=> (
+                <Logout />
+              ),
+              headerTitle: props => (
+              <>
+                <LogoTitle {...props} />
+              </>
+              ),
+              headerTitleAlign:'center'             
+            }}
+          />
+          </>
+        )}
+      </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
+  )
+}
 
-export default App;
+
+const mapStateToProps = (state) => ({
+  userToken: state.auth.userToken,
+  isSignout: state.auth.isSignout,
+  isLoading: state.auth.isLoading
+
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+  

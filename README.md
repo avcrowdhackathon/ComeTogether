@@ -11,6 +11,8 @@ Demo: https://www.youtube.com/watch?v=qhSGrEikyoQ&feature=youtu.be
 
 * Clone the repository git@github.com:avcrowdhackathon/ComeTogether.git
 
+* Create a firebase account and add google-services.jon to /android/app/location
+
 ### How to run in your personal mobile phone at LINUX: 
 
 * This document will guide you through the necessary steps to run your React Native app on a device https://reactnative.dev/docs/running-on-device 

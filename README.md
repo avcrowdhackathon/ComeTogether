@@ -9,7 +9,7 @@
 
 * Make sure you have an emulator (or your personal mobile phone with dev enabled) and Android Studio is installed (https://medium.com/swlh/react-native-and-android-studio-everything-you-need-to-get-started-in-linux-b47154e78f9e) 
 
-Clone the repository git@github.com:avcrowdhackathon/ComeTogether.git
+* Clone the repository git@github.com:avcrowdhackathon/ComeTogether.git
 
 ### How to run in your personal mobile phone at LINUX: 
 
@@ -27,3 +27,8 @@ A app shortcut will be created in your mobile desktop and you can test the appli
 * The server that is used is ComeTogether's server, but is in not used in this version as login uses temp data.
 
 * The blockchain protocol that is used is EOSIO testnet https://testnet.eos.io/ and the smart contracts have been deployed and are functional in this version. 
+
+## The App 
+
+Login page
+![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/login_page.jpg)

@@ -51,11 +51,11 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
         try {
-          let response = await fetch(domain.BACKEND_URL + `/hackathon/testingRoute`,
-          {
-            method:'GET'
-          });
-          let responseJson = await response.json();
+          // let response = await fetch(domain.BACKEND_URL + `/hackathon/testingRoute`,
+          // {
+          //   method:'GET'
+          // });
+          // let responseJson = await response.json();
 
           dispatch(insertToken("User"));
 

@@ -4,3 +4,4 @@ export {default as VerifyUser} from './VerifyUser';
 export {default as Login} from './Login';
 export {default as Logout} from './Logout';
 export {default as LogoTitle} from './LogoTitle';
+export {default as CalendarComponent} from './CalendarComponent';

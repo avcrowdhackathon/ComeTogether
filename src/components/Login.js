@@ -3,13 +3,12 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableHighlight
 } from 'react-native';
 import { AuthContext } from "../../App";
 
 
-export default function Login ({navigation}) {    
+export default function Login ({navigation}) {
   const { signIn } = React.useContext(AuthContext);
 
   return (
@@ -41,6 +40,6 @@ const styles = StyleSheet.create({
       borderRadius:7,
       backgroundColor: '#FF652F',
       marginBottom:100
-  
+
     },
   });

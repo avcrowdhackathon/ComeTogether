@@ -15,7 +15,7 @@ import {TabNavigator} from './src/navigators';
 import {LogoTitle, Splash} from './src/components';
 import {connect} from 'react-redux';
 import domain from './config';
-import { insertToken, deleteToken } from './actions';
+import { insertToken, deleteToken, restoreToken } from './actions';
 
 
 // performance imporovement for navigator
@@ -27,6 +27,22 @@ export const AuthContext = React.createContext();
 
 
 const App = ({userToken, isLoading, isSignout, dispatch}) => {
+
+  React.useEffect(() => {
+    const bootstrapAsync = async () => {
+      // After restoring token, we may need to validate it in production apps
+
+      // This will switch to the A
+      // screen will be unmounted and thrown away.
+      dispatch(restoreToken());
+    };
+    if(userToken != null){
+      bootstrapAsync();
+    }else {
+      dispatch(restoreToken())
+    }
+  }, []);
+
   const authContext = React.useMemo(
     () => ({
       signIn: async () => {

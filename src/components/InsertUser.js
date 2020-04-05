@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native'
 import CalendarComponent from "./CalendarComponent";
+import { Api, JsonRpc } from 'eosjs-rn';
+import { JsSignatureProvider } from 'eosjs-rn/dist/eosjs-jssig';
 
-// const { Api, JsonRpc } = require('eosjs');
-// const fetch = require('node-fetch');
-// const { TextDecoder, TextEncoder } = require('util');
-// const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig')
-
-// const signatureProvider = new JsSignatureProvider([process.env.PRIVATE_KEY]);
-// const rpc = new JsonRpc(process.env.ENDPOINT_URL, { fetch });
-// const api = new Api({ rpc,signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
+import sha256  from "./sha256";
+const { TextEncoder, TextDecoder } = require('text-encoding');
+const defaultPrivateKey = "5K6FsMBtaNEvbFMaJbqNruSoKWoe5vLcZA8QEX6br3BxQhQp6cK"; // bob
+const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
+const rpc = new JsonRpc('https://jungle2.cryptolions.io:443', { fetch });
+const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
 class InsertUser extends Component {
   constructor(props) {
@@ -20,11 +20,35 @@ class InsertUser extends Component {
     this.state = {
       citizenId: '',
       testId: '',
-      issueDate: {},
-      expiryDate: {}
+      issueDate: '',
+      expiryDate: '',
+      isPending: false
     }
   }
 
+  issue = async (dataParams) => {
+    try {
+      const result = await api.transact({
+        actions: [{
+          account: 'immunityproo',
+          name: 'issue',
+          authorization: [{
+            actor: 'immunityproo',
+            permission: 'active',
+          }],
+          data: dataParams,
+        }]
+      }, {
+        blocksBehind: 3,
+        expireSeconds: 30,
+      });
+      alert('Certificate Successfully issued')
+    }catch (e) {
+      alert('Certificate was NOT issued')
+      console.log( e)
+    }
+    await this.setState({isPending:false})
+  };
 
   oneYearExpiry() {
     var d = new Date();
@@ -43,8 +67,26 @@ class InsertUser extends Component {
   }
 
 
-  issueCertificate = () => {
-    alert('call blockchain here:... ' )
+issueCertificate = async () => {
+    try{
+      const b = this.state.citizenId.text.toString()
+      const hashId = await sha256.hex(b)
+        if(!this.state.isPending) {
+          this.setState({isPending:true})
+          const data = {
+            test_id: this.state.testId.text,
+            card_id_hash: hashId,
+            immunity: true,
+            sample_date: this.state.issueDate,
+            expiry_date: this.state.expiryDate,
+            tester_id: 1234
+          };
+           this.issue(data)
+        }
+    } catch (e) {
+      alert('Certificate was not issued!' + e)
+      await this.setState({isPending:false})
+    }
   }
 
   render() {
@@ -75,7 +117,7 @@ class InsertUser extends Component {
 
 
         <Text style={styles.label}>Expiry date</Text>
-        <CalendarComponent typeOfDate='expiryDate' maxDate={this.oneYearExpiry()}  sendData={this.getData}/>
+        <CalendarComponent typeOfDate='expiryDate'  sendData={this.getData} minDate={Date()}/>
 
         <TouchableOpacity
           style = {styles.submitButton}
@@ -88,8 +130,13 @@ class InsertUser extends Component {
       </View>
     )
   }
-  async getData(val){
-    await this.setState({[val.typeOfDate]: val.date})
+   getData(val){
+    try {
+      this.setState({[val.typeOfDate]: val.date})
+
+    }catch (e) {
+
+    }
   }
 }
 export default InsertUser

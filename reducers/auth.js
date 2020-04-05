@@ -1,9 +1,9 @@
 const initialData = {
-    isLoading: true,
+    isLoading: false,
     isSignout: false,
     userToken: null,
   }
-  
+
 export default  authReducer = (prevState = initialData, action) => {
     switch (action.type) {
     case 'RESTORE_TOKEN':
@@ -25,6 +25,6 @@ export default  authReducer = (prevState = initialData, action) => {
         userToken: null
         };
     default:
-        return prevState;  
+        return prevState;
     }
 }

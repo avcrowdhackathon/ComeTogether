@@ -24,9 +24,9 @@ class CalendarComponent extends Component {
   }
 
   //set date as we only need one
-  async setMarkedDates(key, typeOfDate) {
+   setMarkedDates(key, typeOfDate) {
     const markedDates = {[key]: {selected: true}};
-     await this.setState( {markedDates})
+    this.setState( {markedDates})
     this.sendToParent(key, typeOfDate)
   }
 
@@ -36,7 +36,8 @@ class CalendarComponent extends Component {
         <Calendar
           onDayPress={(day) => this.setMarkedDates(day.dateString, this.props.typeOfDate)}
           markedDates={this.state.markedDates}
-          maxDate={this.props.maxDate}
+          maxDate={this.props.maxDate ? this.props.maxDate : ''}
+          minDate={this.props.minDate ? this.props.minDate : ''}
           monthFormat={'yyyy MMMM'}
           firstDay={1}
           onPressArrowLeft={substractMonth => substractMonth()}

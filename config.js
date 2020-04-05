@@ -1,3 +1,3 @@
 export default domain = {
-    BACKEND_URL : 'http://b9dc6106.ngrok.io/api'
+    BACKEND_URL : 'http://7e52c716.ngrok.io/api'
 }

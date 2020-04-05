@@ -31,17 +31,20 @@ A app shortcut will be created in your mobile desktop and you can test the appli
 ## The App 
 
 ### Login page
-![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/login_page.jpg)
+![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/login_page_small.jpg)
 
 ## Issue Certificate 
-In this page the doctor, or a person, authorized by the goverment , can issue a certificate for a user via his ID card/passport/driving licence
+In this page the doctor, or a person, authorized by the goverment , can issue a certificate for a user via his ID card/passport/driving licence.
+
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/issue_certificate_small.jpg)
 
 ## Immunity Verification 
 In this page an officer, a doctor, or a person, authorized by the goverment , can verify the immutity of a user via his ID card/passport/driving licence, either by the camera or by typing the ID.
+
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/scan_document_small.jpg)
 
 ## Issue Certificate 
-When the user has immunity
+When the user has immunity.
+
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/immunity_small.jpg)
 

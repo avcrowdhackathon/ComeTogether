@@ -11,7 +11,7 @@ import {
 import { AuthContext } from "../../App";
 
 
-export default function Login ({navigation}) {    
+export default function Login ({navigation}) {
   const { signIn } = React.useContext(AuthContext);
 
   const [username, setUsername] = React.useState('')

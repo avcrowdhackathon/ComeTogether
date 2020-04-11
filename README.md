@@ -11,7 +11,7 @@ Demo: https://www.youtube.com/watch?v=qhSGrEikyoQ&feature=youtu.be
 
 * Clone the repository git@github.com:avcrowdhackathon/ComeTogether.git
 
-* Create a firebase account and add google-services.jon to /android/app/location
+* Create a firebase account and add google-services.json to /android/app/location
 
 ### How to run in your personal mobile phone at LINUX: 
 

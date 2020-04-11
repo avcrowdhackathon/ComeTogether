@@ -45,7 +45,7 @@ export default function Login ({navigation}) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableHighlight style={styles.scan} title="Login" onPress= {()=>{signIn()}} >
+          <TouchableHighlight style={styles.scan} title="Login" onPress= {()=>{signIn(username, password)}} >
             <Text style={styles.button}>Login</Text>
           </TouchableHighlight>
         </View>

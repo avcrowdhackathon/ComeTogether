@@ -14,7 +14,7 @@ import {Login, Logout} from './src/components';
 import {TabNavigator} from './src/navigators';
 import {LogoTitle, Splash} from './src/components';
 import {connect} from 'react-redux';
-import domain from './config';
+import {loginProcess} from './src/services/sevices'
 import { insertToken, deleteToken, restoreToken } from './actions';
 
 
@@ -31,6 +31,7 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
+      // request to backend in order to see if the token is valid / maybe with the mac address ?? 
 
       // This will switch to the A
       // screen will be unmounted and thrown away.
@@ -45,7 +46,7 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async () => {
+      signIn: async (username, password) => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -56,8 +57,12 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
           //   method:'GET'
           // });
           // let responseJson = await response.json();
-
-          dispatch(insertToken("User"));
+          
+          user = loginProcess(username, password)
+          if(user == '') alert('Wrong credentials')
+          else{
+            await dispatch(insertToken(user));
+          }
 
         }
         catch(error){

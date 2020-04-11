@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image} from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {InsertUser, VerifyUser, UserQRCode} from '../components';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';\
 import {connect} from 'react-redux';
 import {getTabScreens} from './utils'
 
@@ -18,7 +17,7 @@ const  TabNavigator = ({userToken}) => {
           let iconName;
           if (route.name === 'Insert') {
             iconName = focused? require('../../images/insert_user_active.png'):require('../../images/inser_user_inactive.png');
-          } 
+          }
           if (route.name === 'Verify') {
             iconName = focused? require('../../images/verify_user_active.png'):require('../../images/verify_user_inactive.png');
           }

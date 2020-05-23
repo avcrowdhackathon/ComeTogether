@@ -22,7 +22,7 @@ export const users = [
     },
     {
         "id":"4",
-        "username": "DoctorNikos",
+        "username": "Doctor",
         "password": "password",
         "role":"health",
         "id_licence": "AL 545132",
@@ -31,7 +31,7 @@ export const users = [
     },
     {
         "id":"5",
-        "username": "OfficerStathis",
+        "username": "Officer",
         "password": "password",
         "role":"verifier",
         "id_licence": "AZ 232563",
@@ -40,7 +40,7 @@ export const users = [
     },
     {
         "id":"6",
-        "username": "AdminStavrakas",
+        "username": "Admin",
         "password": "password",
         "role":"admin",
         "id_licence": "AN 154652",

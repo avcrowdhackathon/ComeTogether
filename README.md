@@ -1,7 +1,7 @@
-# ImmunityProof by ComeTogether's team
+# BackTogether - COVID-19 Passports
 
 ## Overview
-Demo: https://www.youtube.com/watch?v=QRXN13qrV9s&t=29s
+Provides: RT-PCR and antibody test status. Built by ComeTogether on EOSIO.
 
 ## Prerequisites
 * In order to run the app make sure you have react-native installed https://reactnative.dev/docs/getting-started
@@ -28,15 +28,15 @@ A app shortcut will be created in your mobile desktop and you can test the appli
 
 * The server that is used is ComeTogether's server, but is in not used in this version as login uses temp data.
 
-* The blockchain protocol that is used is EOSIO testnet https://testnet.eos.io/ and the smart contracts have been deployed and are functional in this version. 
+* The blockchain protocol that is used is EOSIO Jungle testnet https://jungletestnet.io/ and the smart contracts have been deployed and are functional in this version. 
 
 ## The App 
 
 ### Login page
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/login_page_small.jpg)
 
-## Issue Certificate 
-In this page the doctor, or a person, authorized by the goverment , can issue a certificate for a user via his ID card/passport/driving licence.
+## Issue Passport 
+In this page the doctor, or a person, authorized by the goverment , can issue a passport for a user via his ID card/passport/driving licence.
 
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/issue_certificate_small.jpg)
 
@@ -45,7 +45,7 @@ In this page an officer, a doctor, or a person, authorized by the goverment , ca
 
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/scan_document_small.jpg)
 
-## Issue Certificate 
+## Issue Passport 
 When the user has immunity.
 
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/immunity_small.jpg)

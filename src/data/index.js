@@ -20,3 +20,36 @@ export const Role = {
       inherits: ['user']
     }
   }
+
+  export const Types = [
+    { 
+      label:'COVID-19 Test',
+      value: 'type1',
+      checkBoxes: [{
+        label:'COVID-19',
+        value: 0
+      }]
+    },
+    { 
+      label: 'Antibody Test',
+      value: 'type2',
+      checkBoxes: [
+      {
+        label:'Antibodies',
+        value: 0
+      }]
+    },
+    { 
+      label: 'COVID-19 & Antibody Test',
+      value: 'type3',
+      checkBoxes: [{
+        label:'COVID-19',
+        value: 0
+      },
+      {
+        label:'Antibodies',
+        value: 0
+      }]
+    }
+  ]
+    

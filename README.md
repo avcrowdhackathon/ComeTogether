@@ -38,7 +38,7 @@ A app shortcut will be created in your mobile desktop and you can test the appli
 ## Issue Passport 
 In this page the doctor, or a person, authorized by the goverment , can issue a passport for a user via his ID card/passport/driving licence.
 
-![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/issue_certificate_small_new.jpg)
+![Image description](https://github.com/ComeTogether/BackTogether/blob/master/images/issue_certificate_small_new.jpg)
 
 ## Immunity Verification 
 In this page an officer, a doctor, or a person, authorized by the goverment , can verify the immutity of a user via his ID card/passport/driving licence, either by the camera or by typing the ID.
@@ -48,5 +48,5 @@ In this page an officer, a doctor, or a person, authorized by the goverment , ca
 ## Issue Passport 
 When the user has immunity.
 
-![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/immunity_small_new.jpg)
+![Image description](https://github.com/ComeTogether/BackTogether/blob/master/images/immunity_small_new.jpg)
 

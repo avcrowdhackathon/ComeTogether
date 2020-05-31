@@ -36,17 +36,17 @@ A app shortcut will be created in your mobile desktop and you can test the appli
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/login_page_small.jpg)
 
 ## Issue Passport 
-In this page the doctor, or a person, authorized by the goverment , can issue a passport for a user via his ID card/passport/driving licence.
+In this page a health worker , can issue a passport for a user tied to their ID card/passport/driving licence.
 
 ![Image description](https://github.com/ComeTogether/BackTogether/blob/master/images/issue_certificate_small_new.jpg)
 
-## Immunity Verification 
-In this page an officer, a doctor, or a person, authorized by the goverment , can verify the immutity of a user via his ID card/passport/driving licence, either by the camera or by typing the ID.
+## COVID-19 Status validation 
+Here a validator can verify that the user has tested positive for antibodies or negative for COVID-19, through their ID card/passport/driving licence, either by scanning it or by typing the ID. 
 
 ![Image description](https://github.com/avcrowdhackathon/ComeTogether/blob/master/images/scan_document_small.jpg)
 
-## Issue Passport 
-When the user has immunity.
+## Passport 
+When the user has been tested positive for antibodies.
 
 ![Image description](https://github.com/ComeTogether/BackTogether/blob/master/images/immunity_small_new.jpg)
 

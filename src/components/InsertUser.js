@@ -3,13 +3,22 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 
 import CalendarComponent from "./CalendarComponent";
 import { Api, JsonRpc } from 'eosjs-rn';
 import { JsSignatureProvider } from 'eosjs-rn/dist/eosjs-jssig';
-
+import {Picker} from '@react-native-community/picker';
+import { Types } from '../data'
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import sha256  from "./sha256";
+
 const { TextEncoder, TextDecoder } = require('text-encoding');
 const defaultPrivateKey = "5K6FsMBtaNEvbFMaJbqNruSoKWoe5vLcZA8QEX6br3BxQhQp6cK"; // bob
 const signatureProvider = new JsSignatureProvider([defaultPrivateKey]);
 const rpc = new JsonRpc('https://jungle2.cryptolions.io:443', { fetch });
 const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
+
+
+var radio_props = [
+  {label: 'positive', value: 1 },
+  {label: 'negative', value: 0 }
+];
 
 class InsertUser extends Component {
   constructor(props) {
@@ -20,8 +29,9 @@ class InsertUser extends Component {
     this.state = {
       citizenId: '',
       testId: '',
+      type: '',
       issueDate: '',
-      expiryDate: '',
+      checkBoxes: [],
       isPending: false
     }
   }
@@ -30,10 +40,10 @@ class InsertUser extends Component {
     try {
       const result = await api.transact({
         actions: [{
-          account: 'immunityproo',
+          account: 'covidcontrac',
           name: 'issue',
           authorization: [{
-            actor: 'immunityproo',
+            actor: 'covidcontrac',
             permission: 'active',
           }],
           data: dataParams,
@@ -69,19 +79,52 @@ class InsertUser extends Component {
 
 issueCertificate = async () => {
     try{
+      let data
+      if(this.state.type === 'type1'){
+        data = [{
+          card_id_hash: hashId,
+          tests:  {
+            test_id: this.state.testId.text,
+            test_type: 'RT_PCR',
+            result: this.state.checkBoxes[0].value,
+            sample_date: this.state.issueDate,
+            issuer: 'covidcontrac'}
+        }];
+      }else if(this.state.type === 'type2'){
+        data = [{
+          card_id_hash: hashId,
+          tests:  {test_id: this.state.testId.text,
+            test_type: 1,
+            result: this.state.checkBoxes[0].value,
+            sample_date: this.state.issueDate,
+            tester_id: 1234}
+        }];
+      }else if(this.state.type === 'type3'){
+        let temp = {
+          card_id_hash: hashId,
+          tests:  {test_id: this.state.testId.text,
+            test_type: 0,
+            result: this.state.checkBoxes[0].value,
+            sample_date: this.state.issueDate,
+            tester_id: 1234}
+        }
+        data.push(temp)
+        temp = {
+          card_id_hash: hashId,
+          tests:  {test_id: this.state.testId.text,
+            test_type: 1,
+            result: this.state.checkBoxes[0].value,
+            sample_date: this.state.issueDate,
+            tester_id: 1234}
+        }
+        data.push(temp)
+      }
+      
       const b = this.state.citizenId.text.toString()
       const hashId = await sha256.hex(b)
         if(!this.state.isPending) {
           this.setState({isPending:true})
-          const data = {
-            test_id: this.state.testId.text,
-            card_id_hash: hashId,
-            immunity: true,
-            sample_date: this.state.issueDate,
-            expiry_date: this.state.expiryDate,
-            tester_id: 1234
-          };
-           this.issue(data)
+          this.issue(data) 
         }
     } catch (e) {
       alert('Certificate was not issued!' + e)
@@ -95,7 +138,7 @@ issueCertificate = async () => {
         <ScrollView>
           <Text style={styles.title}>Issue Certificate</Text>
 
-        <Text style={styles.label}>Citizen Id</Text>
+        <Text style={styles.label}>Citizen ID</Text>
         <TextInput style = {styles.input}
                    underlineColorAndroid = "transparent"
                    placeholder = "Citizen Id"
@@ -103,7 +146,7 @@ issueCertificate = async () => {
                    autoCapitalize = "none"
         onChangeText={(text) => this.handleCitizenId({text})}/>
 
-        <Text style={styles.label}>Test Id</Text>
+        <Text style={styles.label}>Test ID</Text>
         <TextInput style = {styles.input}
                    underlineColorAndroid = "transparent"
                    placeholder = "Test Id"
@@ -111,13 +154,54 @@ issueCertificate = async () => {
                    autoCapitalize = "none"
         onChangeText={(text) => this.handleTestId({text})}/>
 
+        <Text style={styles.label}>Test Type</Text>
+        <View style={styles.typeDropdown}>
+          <Picker
+            selectedValue={this.state.type}
+            style={{height: 40}}
+            onValueChange={(itemValue) =>{
+              if (itemValue !== 0) {
+                this.setState({type: itemValue})
+                let checkBoxes = [];
+                Types.forEach((type)=> {
+                  if(type.value === itemValue) checkBoxes= type.checkBoxes;
+                })
+                this.setState({checkBoxes: checkBoxes})
+              }
+            }
+            }>
+              <Picker.Item key={0} label='Please select...' value={0} />
 
-        <Text style={styles.label}>Issue date</Text>
+              {Types.map((type)=> {
+                return <Picker.Item key={type.value} label={type.label} value={type.value} />
+              })}
+          </Picker>
+        </View>
+
+        {this.state.checkBoxes.map((checkBox,index)=>{
+          return(
+            <View style={styles.typeCheckbox}>
+              <Text key={checkBox.label} style={styles.radioBtnLabel}>{checkBox.label}</Text>
+              <RadioForm
+                radio_props={radio_props}
+                initial={checkBox.value}
+                formHorizontal={true}
+                labelHorizontal={false}
+                buttonColor={'#2196f3'}
+                animation={true}
+                onPress={(value) => {
+                  let checkBoxes = this.state.checkBoxes;
+                  checkBoxes[index].value = value
+                  this.setState({checkBoxes:checkBoxes})
+                }}
+              />  
+            </View>
+            
+          )
+        })}
+
+        <Text style={styles.label}>Issuance Date</Text>
         <CalendarComponent typeOfDate='issueDate' maxDate={Date()} sendData={this.getData}/>
-
-
-        <Text style={styles.label}>Expiry date</Text>
-        <CalendarComponent typeOfDate='expiryDate'  sendData={this.getData} minDate={Date()}/>
 
         <TouchableOpacity
           style = {styles.submitButton}
@@ -158,9 +242,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5
   },
+  typeDropdown: {
+    marginLeft: 15,
+    marginBottom: 2,
+    borderColor: '#C0C0C0',
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  typeCheckbox: {
+    marginLeft: 35,
+  },
   label: {
     marginLeft: 15,
     marginTop: 35,
+    fontSize: 18
+  },
+  radioBtnLabel: {
+    marginTop: 5,
     fontSize: 18
   },
   submitButton: {

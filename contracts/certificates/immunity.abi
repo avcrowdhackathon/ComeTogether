@@ -1,0 +1,123 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "certificate",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "card_id_hash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "tests",
+                    "type": "test[]"
+                }
+            ]
+        },
+        {
+            "name": "issue",
+            "base": "",
+            "fields": [
+                {
+                    "name": "card_id_hash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "tests",
+                    "type": "test[]"
+                }
+            ]
+        },
+        {
+            "name": "setconfig",
+            "base": "",
+            "fields": [
+                {
+                    "name": "version",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "test",
+            "base": "",
+            "fields": [
+                {
+                    "name": "issuer",
+                    "type": "name"
+                },
+                {
+                    "name": "test_id",
+                    "type": "string"
+                },
+                {
+                    "name": "test_type",
+                    "type": "string"
+                },
+                {
+                    "name": "result",
+                    "type": "bool"
+                },
+                {
+                    "name": "sample_date",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "tokenconfigs",
+            "base": "",
+            "fields": [
+                {
+                    "name": "standard",
+                    "type": "name"
+                },
+                {
+                    "name": "version",
+                    "type": "string"
+                },
+                {
+                    "name": "patient_id",
+                    "type": "uint64"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "issue",
+            "type": "issue",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "setconfig",
+            "type": "setconfig",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "certificates",
+            "type": "certificate",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "tokenconfigs",
+            "type": "tokenconfigs",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}

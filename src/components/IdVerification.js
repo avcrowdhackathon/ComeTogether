@@ -61,7 +61,6 @@ const IdVerification = ({offline, navigation, camera}) => {
           return
         }
         sha256(id).then(async hash => {
-          console.warn(hash)
           var resp = await rpc.get_table_rows({
             json: true, // Get the response as json
             code: 'covidcontrac', // Contract that we target
@@ -74,19 +73,18 @@ const IdVerification = ({offline, navigation, camera}) => {
             upper_bound: hash, //Auth.getProfile().eosId, // Table secondary key value
             limit: 1 // Here we limit to 1 to get only row
           });
-          console.warn(resp.rows)
 
-          if(resp.rows.length === 0){
+          if(resp.rows[0].tests.length === 0){
             setmsg('User was not found')
             setValid(false)
             setModal(true)
-          }else if(resp.rows[0].immunity === 1) {
-            setmsg('User has immunity')
+          }else if(resp.rows[0].tests.length === 1) {
+            setmsg(`${resp.rows[0].tests.test_type} = ${resp.rows[0].tests.result}`)
             setValid(true)
             setModal(true)
-          }else{
-            setmsg('User does NOT have immunity')
-            setValid(false)
+          }else if (resp.rows[0].tests.length === 2){
+            setmsg(`${resp.rows[0].tests[0].test_type} = ${resp.rows[0].tests[0].result} \n`+`${resp.rows[0].tests[1].test_type} = ${resp.rows[0].tests[1].result}`)
+            setValid(true)
             setModal(true)
           }
           setValidation(false)

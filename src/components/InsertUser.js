@@ -55,7 +55,7 @@ class InsertUser extends Component {
       alert('Certificate Successfully issued')
     }catch (e) {
       alert('Certificate was NOT issued')
-      console.log( e)
+      console.log(e)
     }
     await this.setState({isPending:false})
   };
@@ -79,53 +79,54 @@ class InsertUser extends Component {
 
 issueCertificate = async () => {
     try{
-      let data
-      if(this.state.type === 'type1'){
-        data = [{
-          card_id_hash: hashId,
-          tests:  {
-            test_id: this.state.testId.text,
-            test_type: 'RT_PCR',
-            result: this.state.checkBoxes[0].value,
-            sample_date: this.state.issueDate,
-            issuer: 'covidcontrac'}
-        }];
-      }else if(this.state.type === 'type2'){
-        data = [{
-          card_id_hash: hashId,
-          tests:  {test_id: this.state.testId.text,
-            test_type: 1,
-            result: this.state.checkBoxes[0].value,
-            sample_date: this.state.issueDate,
-            tester_id: 1234}
-        }];
-      }else if(this.state.type === 'type3'){
-        let temp = {
-          card_id_hash: hashId,
-          tests:  {test_id: this.state.testId.text,
-            test_type: 0,
-            result: this.state.checkBoxes[0].value,
-            sample_date: this.state.issueDate,
-            tester_id: 1234}
-        }
-        data.push(temp)
-        temp = {
-          card_id_hash: hashId,
-          tests:  {test_id: this.state.testId.text,
-            test_type: 1,
-            result: this.state.checkBoxes[0].value,
-            sample_date: this.state.issueDate,
-            tester_id: 1234}
-        }
-        data.push(temp)
-      }
-      
+      let data;
+
       const b = this.state.citizenId.text.toString()
       const hashId = await sha256.hex(b)
-        if(!this.state.isPending) {
-          this.setState({isPending:true})
-          this.issue(data) 
-        }
+
+
+      if(this.state.type === 'type1'){
+        data = {
+          card_id_hash: hashId,
+          tests:  [{
+            test_id: this.state.testId.text,
+            test_type: 'RT_PCR',
+            result: this.state.checkBoxes[0].value === 1 ? true : false,
+            sample_date: this.state.issueDate,
+            issuer: 'covidcontrac'}]
+        };
+      }else if(this.state.type === 'type2'){
+        data = {
+          card_id_hash: hashId,
+          tests:  [{
+            test_id: this.state.testId.text,
+            test_type: 'Antibodies',
+            result: this.state.checkBoxes[0].value === 1 ? true : false,
+            sample_date: this.state.issueDate,
+            issuer: 'covidcontrac'}]
+        };
+      }else if(this.state.type === 'type3'){
+         data = {
+          card_id_hash: hashId,
+          tests:  [
+            {test_id: this.state.testId.text,
+            test_type: 'RT_PCR',
+            result: this.state.checkBoxes[0].value === 1 ? true : false,
+            sample_date: this.state.issueDate,
+            issuer: 'covidcontrac'},
+            {test_id: this.state.testId.text,
+            test_type: 'Antibodies',
+            result: this.state.checkBoxes[0].value === 1 ? true : false,
+            sample_date: this.state.issueDate,
+            issuer: 'covidcontrac'}]
+      }
+    }
+    
+
+      if(!this.state.isPending) {
+        this.setState({isPending:true})
+        this.issue(data) 
+      }
     } catch (e) {
       alert('Certificate was not issued!' + e)
       await this.setState({isPending:false})

@@ -61,10 +61,11 @@ const IdVerification = ({offline, navigation, camera}) => {
           return
         }
         sha256(id).then(async hash => {
+          console.warn(hash)
           var resp = await rpc.get_table_rows({
             json: true, // Get the response as json
-            code: 'immunityproo', // Contract that we target
-            scope: 'immunityproo', // Account that owns the data
+            code: 'covidcontrac', // Contract that we target
+            scope: 'covidcontrac', // Account that owns the data
             table: 'certificates', // Table name
             table_key: 'cashid', // Table secondary key name
             key_type: 'sha256', // Table secondary key name
@@ -73,6 +74,8 @@ const IdVerification = ({offline, navigation, camera}) => {
             upper_bound: hash, //Auth.getProfile().eosId, // Table secondary key value
             limit: 1 // Here we limit to 1 to get only row
           });
+          console.warn(resp.rows)
+
           if(resp.rows.length === 0){
             setmsg('User was not found')
             setValid(false)

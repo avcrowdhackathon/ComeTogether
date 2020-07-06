@@ -8,3 +8,4 @@ export {default as CalendarComponent} from './CalendarComponent';
 export {default as UserQRCode} from './UserQRCode';
 export {default as VerifyOptions} from './VerifyOptions';
 export {default as QrVerification} from './QrVerification';
+export {default as Settings} from './Settings';

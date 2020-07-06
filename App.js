@@ -10,13 +10,14 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
-import {Login, Logout, QrVerification} from './src/components';
+import {Login, Logout, QrVerification, Settings} from './src/components';
 import {TabNavigator} from './src/navigators';
 import {LogoTitle, Splash} from './src/components';
 import {connect} from 'react-redux';
 import {loginProcess} from './src/services/sevices'
 import { insertToken, deleteToken, restoreToken } from './actions';
 import IdVerification from "./src/components/IdVerification";
+import {TouchableHighlight, Text} from 'react-native';
 
 
 // performance imporovement for navigator
@@ -99,13 +100,16 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
           <Stack.Screen
             name="TabNavigator"
             component={TabNavigator}
-            options={{
+            options={ ({navigation}) => ({
               headerStyle: {
                 backgroundColor: 'black',
                 height:45
               },
-              headerRight: props=> (
-                <Logout />
+              headerRight: () => (
+                <TouchableHighlight style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}} title="Settings" onPress={() => navigation.navigate('Settings')}>
+                  <Text style={{color:'white', paddingHorizontal:8}}>Settings</Text>
+                </TouchableHighlight>
+                
               ),
               headerTitle: props => (
               <>
@@ -113,8 +117,15 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
               </>
               ),
               headerTitleAlign:'center'
-            }}
+            })}
           />
+          <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            title: 'Settings'
+          }}
+        />
           </>
         )}
         <Stack.Screen
@@ -131,6 +142,7 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
             title: 'Scan QR Code'
           }}
         />
+        
       </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>

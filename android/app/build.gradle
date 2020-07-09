@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -198,7 +199,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
-
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    
     implementation (project(':react-native-text-detector')) {
         exclude group: 'com.google.firebase'
     }
@@ -237,4 +239,4 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 
 // Work around for onesignal-gradle-plugin compatibility
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
+// com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

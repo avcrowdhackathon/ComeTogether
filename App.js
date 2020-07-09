@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 import {Login, Logout, QrVerification, Settings} from './src/components';
+import { PrivacyPolicy, TermsOfUse, ResetPassword, DeleteAccount } from './src/components/Settings';
 import {TabNavigator} from './src/navigators';
 import {LogoTitle, Splash} from './src/components';
 import {connect} from 'react-redux';
@@ -120,12 +121,12 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
             })}
           />
           <Stack.Screen
-          name="Settings"
-          component={Settings}
-          options={{
-            title: 'Settings'
-          }}
-        />
+            name="Settings"
+            component={Settings}
+            options={{
+              title: 'Settings'
+            }}
+          />
           </>
         )}
         <Stack.Screen
@@ -140,6 +141,34 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
           component={QrVerification}
           options={{
             title: 'Scan QR Code'
+          }}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
+          options={{
+            title: 'Privacy Policy'
+          }}
+        />
+        <Stack.Screen
+          name="TermsOfUse"
+          component={TermsOfUse}
+          options={{
+            title: 'Terms Of Use'
+          }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{
+            title: 'Reset Password'
+          }}
+        />
+        <Stack.Screen
+          name="DeleteAccount"
+          component={DeleteAccount}
+          options={{
+            title: 'Delete Account'
           }}
         />
         

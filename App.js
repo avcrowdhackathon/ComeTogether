@@ -5,19 +5,18 @@
  * @format
  * @flow
  */
-import React from 'react';
-import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { enableScreens } from 'react-native-screens';
-import {Login, Logout, QrVerification} from './src/components';
-import {TabNavigator} from './src/navigators';
-import {LogoTitle, Splash} from './src/components';
-import {connect} from 'react-redux';
-import {loginProcess} from './src/services/sevices'
-import { insertToken, deleteToken, restoreToken } from './actions';
+import React from "react";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { enableScreens } from "react-native-screens";
+import { Login, Logout, QrVerification } from "./src/components";
+import { TabNavigator, LoginNavigator } from "./src/navigators";
+import { LogoTitle, Splash } from "./src/components";
+import { connect } from "react-redux";
+import { loginProcess } from "./src/services/sevices";
+import { insertToken, deleteToken, restoreToken } from "./actions";
 import IdVerification from "./src/components/IdVerification";
-
 
 // performance imporovement for navigator
 enableScreens();
@@ -26,28 +25,26 @@ enableScreens();
 const Stack = createStackNavigator();
 export const AuthContext = React.createContext();
 
-
-const App = ({userToken, isLoading, isSignout, dispatch}) => {
-
+const App = ({ userToken, isLoading, isSignout, dispatch }) => {
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
-      // request to backend in order to see if the token is valid / maybe with the mac address ?? 
+      // request to backend in order to see if the token is valid / maybe with the mac address ??
 
       // This will switch to the A
       // screen will be unmounted and thrown away.
       dispatch(restoreToken());
     };
-    if(userToken != null){
+    if (userToken != null) {
       bootstrapAsync();
-    }else {
-      dispatch(restoreToken())
+    } else {
+      dispatch(restoreToken());
     }
   }, []);
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async (username, password) => {
+      signIn: async (password) => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -58,21 +55,19 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
           //   method:'GET'
           // });
           // let responseJson = await response.json();
-          
-          user = loginProcess(username, password)
-          if(user == '') alert('Wrong credentials')
-          else{
+
+          user = loginProcess(password);
+          if (user == "") alert("Wrong credentials");
+          else {
             await dispatch(insertToken(user));
           }
-
-        }
-        catch(error){
-          alert(error)
+        } catch (error) {
+          alert(error);
         }
       },
 
-      signOut: async () =>{
-        dispatch(deleteToken())
+      signOut: async () => {
+        dispatch(deleteToken());
       },
     }),
     []
@@ -81,74 +76,71 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-      <Stack.Navigator
-        headerMode={userToken == null || isLoading ?'none':'screen'}>
-        {userToken == null?
-        (
+        <Stack.Navigator
+          headerMode={userToken == null || isLoading ? "none" : "screen"}
+        >
+          {userToken == null ? (
+            <Stack.Screen
+              name="SignIn"
+              component={LoginNavigator}
+              options={{
+                title: "Sign in",
+                animationTypeForReplace: isSignout ? "pop" : "push",
+              }}
+            />
+          ) : (
+            <>
+              {isLoading && <Stack.Screen name="Splash" component={Splash} />}
+              <Stack.Screen
+                name="TabNavigator"
+                component={TabNavigator}
+                options={{
+                  headerStyle: {
+                    backgroundColor: "black",
+                    height: 45,
+                  },
+                  headerRight: (props) => <Logout />,
+                  headerTitle: (props) => (
+                    <>
+                      <LogoTitle {...props} />
+                    </>
+                  ),
+                  headerTitleAlign: "center",
+                }}
+              />
+            </>
+          )}
           <Stack.Screen
-            name="SignIn"
-            component={Login}
+            name="VerifyById"
+            component={IdVerification}
             options={{
-              title: 'Sign in',
-              animationTypeForReplace: isSignout ? 'pop' : 'push',
+              title: "Scan or type Id",
             }}
           />
-        ) : (
-          <>
-          {isLoading && <Stack.Screen name="Splash" component={Splash}/>}
           <Stack.Screen
-            name="TabNavigator"
-            component={TabNavigator}
+            name="VerifyByQR"
+            component={QrVerification}
             options={{
-              headerStyle: {
-                backgroundColor: 'black',
-                height:45
-              },
-              headerRight: props=> (
-                <Logout />
-              ),
-              headerTitle: props => (
-              <>
-                <LogoTitle {...props} />
-              </>
-              ),
-              headerTitleAlign:'center'
+              title: "Scan QR Code",
             }}
           />
-          </>
-        )}
-        <Stack.Screen
-          name="VerifyById"
-          component={IdVerification}
-          options={{
-            title: 'Scan or type Id'
-          }}
-        />
-        <Stack.Screen
-          name="VerifyByQR"
-          component={QrVerification}
-          options={{
-            title: 'Scan QR Code'
-          }}
-        />
-      </Stack.Navigator>
+        </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
-  )
-}
-
+  );
+};
 
 const mapStateToProps = (state) => ({
   userToken: state.auth.userToken,
   isSignout: state.auth.isSignout,
-  isLoading: state.auth.isLoading
-
-})
+  isLoading: state.auth.isLoading,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch
-})
+  dispatch,
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

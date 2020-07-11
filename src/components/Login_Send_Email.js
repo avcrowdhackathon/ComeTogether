@@ -8,12 +8,37 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
-import { AuthContext } from "../../App";
+import AWS from "aws-sdk/dist/aws-sdk-react-native";
 
-export default function Login({ navigation }) {
-  const { signIn } = React.useContext(AuthContext);
+const ses = new AWS.SES({
+  accessKeyId: "AKIAI3AHZ2I7EX4SABGA",
+  secretAccessKey: "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",
+  region: "eu-west-1",
+  apiVersion: "2010-12-01",
+});
 
-  const [password, setPassword] = React.useState("");
+export default function Login_Send_Email({ navigation }) {
+  const [email, setEmail] = React.useState("");
+
+  const sendEmail = () => {
+    var TemplateData = {
+      urlLink: 'lala',
+    };
+
+    var params = {
+      Source: "info@cometogether.network",
+      Destination: {
+        ToAddresses: [email],
+      },
+      Template: "Login" /* required */,
+      TemplateData: JSON.stringify(TemplateData) /* required */,
+    };
+
+    ses
+      .sendTemplatedEmail(params)
+      .promise()
+      .then(navigation.navigate("SignIn"));
+  };
 
   return (
     <View style={styles.container}>
@@ -22,29 +47,26 @@ export default function Login({ navigation }) {
         source={require("../../images/comeTogetherBlack.png")}
         resizeMode="contain"
       />
-      <Text style={styles.header}> Login</Text>
+      <Text style={styles.header}> One-Time Password</Text>
 
       <View style={styles.root}>
         <View style={styles.rowContainer}>
-          <Text style={styles.label}>Submit your one-time-password</Text>
+          <Text style={styles.label}>Submit your email</Text>
 
           <TextInput
-            autoCorrect={false}
-            onChangeText={setPassword}
-            value={password}
+            autoCorrect={true}
+            onChangeText={setEmail}
+            value={email}
             style={styles.textInput}
-            secureTextEntry={true}
           />
           <TouchableHighlight
             title="goToEmail"
             style={styles.goToEmail}
             onPress={() => {
-              navigation.navigate('SendEmail');
+              navigation.navigate("SignIn");
             }}
           >
-            <Text style={styles.labelEmail}>
-              I don't have a one-time-password
-            </Text>
+            <Text style={styles.labelEmail}>Go to login</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -52,12 +74,10 @@ export default function Login({ navigation }) {
       <View style={styles.buttonContainer}>
         <TouchableHighlight
           style={styles.scan}
-          title="Login"
-          onPress={() => {
-            signIn(password);
-          }}
+          title="SendEmail"
+          onPress={sendEmail}
         >
-          <Text style={styles.button}>Login</Text>
+          <Text style={styles.button}>Send Password</Text>
         </TouchableHighlight>
       </View>
     </View>

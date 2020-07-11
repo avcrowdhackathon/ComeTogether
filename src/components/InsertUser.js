@@ -7,6 +7,8 @@ import {Picker} from '@react-native-community/picker';
 import { Types } from '../data'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import sha256  from "./sha256";
+import database from '@react-native-firebase/database';
+
 
 const { TextEncoder, TextDecoder } = require('text-encoding');
 const defaultPrivateKey = "5K6FsMBtaNEvbFMaJbqNruSoKWoe5vLcZA8QEX6br3BxQhQp6cK"; // bob
@@ -122,6 +124,14 @@ issueCertificate = async () => {
       }
     }
     
+    console.warn("here");
+    database()
+      .ref('/users/123')
+      .set({
+        name: 'Ada Lovelace',
+        age: 31,
+      })
+      .then(() => console.warn('Data set.')); 
 
       if(!this.state.isPending) {
         this.setState({isPending:true})

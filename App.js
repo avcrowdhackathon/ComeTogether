@@ -72,7 +72,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
     }),
     []
   );
-
+    console.log(userToken)
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>

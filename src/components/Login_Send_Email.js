@@ -9,6 +9,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
+import firestore from "@react-native-firebase/firestore";
 
 const ses = new AWS.SES({
   accessKeyId: "AKIAI3AHZ2I7EX4SABGA",
@@ -20,9 +21,11 @@ const ses = new AWS.SES({
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
 
+  const defaultNum = Math.floor(100000 + Math.random() * 900000); //6 digits default number
+
   const sendEmail = () => {
     var TemplateData = {
-      urlLink: 'lala',
+      urlLink: "lala",
     };
 
     var params = {
@@ -37,7 +40,28 @@ export default function Login_Send_Email({ navigation }) {
     ses
       .sendTemplatedEmail(params)
       .promise()
-      .then(navigation.navigate("SignIn"));
+      .then(() => {
+        firestore()
+          .collection("users")
+          .get({ email: email })
+          .then((doc) => {
+            if (!doc.empty) {
+              //update and dont create
+              firestore()
+                .collection("users")
+                .doc(doc.docs[0].ref.id)
+                .update({ one_time_password: defaultNum });
+            } else {
+              firestore()
+                .collection("users")
+                .add({
+                  email: email.toLowerCase().trim(),
+                  one_time_password: defaultNum,
+                });
+            }
+          });
+        navigation.navigate("SignIn");
+      });
   };
 
   return (

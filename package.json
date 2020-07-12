@@ -22,6 +22,7 @@
     "aws-sdk": "^2.709.0",
     "eosjs": "^20.0.3",
     "eosjs-rn": "^20.0.0",
+    "moment": "^2.27.0",
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-native": "0.62.0",

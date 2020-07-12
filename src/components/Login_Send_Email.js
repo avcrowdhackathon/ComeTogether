@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import AWS from "aws-sdk/dist/aws-sdk-react-native";
 import firestore from "@react-native-firebase/firestore";
+import auth from "@react-native-firebase/auth";
 
 const ses = new AWS.SES({
-  accessKeyId: "AKIAI3AHZ2I7EX4SABGA",
-  secretAccessKey: "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",
+  accessKeyId: "AKIAXQFEMNA4AWKM4HW5",
+  secretAccessKey: "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",
   region: "eu-west-1",
   apiVersion: "2010-12-01",
 });
@@ -21,46 +22,96 @@ const ses = new AWS.SES({
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
 
-  const defaultNum = Math.floor(100000 + Math.random() * 900000); //6 digits default number
-
   const sendEmail = () => {
-    var TemplateData = {
-      urlLink: "lala",
-    };
+    //check if user exists in our database already
+    const email_trimmed = email.toLowerCase().trim();
+    firestore()
+      .collection("users")
+      .where("email", "==", email_trimmed)
+      .get()
+      .then((doc) => {
+        if (!doc.empty) {
+          //user exists, so get his one time password
+          if (doc.docs[0].data.one_time_password === "")
+            console.warn(
+              `You are a registered user, if you don't remember your password, please reset it!`
+            );
+          else {
+            //send email, if one time password is set
+            var TemplateData = {
+              urlLink: "lala",
+            };
 
-    var params = {
-      Source: "info@cometogether.network",
-      Destination: {
-        ToAddresses: [email],
-      },
-      Template: "Login" /* required */,
-      TemplateData: JSON.stringify(TemplateData) /* required */,
-    };
+            var params = {
+              Source: "info@cometogether.network",
+              Destination: {
+                ToAddresses: [email_trimmed],
+              },
+              Template: "Login" /* required */,
+              TemplateData: JSON.stringify(TemplateData) /* required */,
+            };
 
-    ses
-      .sendTemplatedEmail(params)
-      .promise()
-      .then(() => {
-        firestore()
-          .collection("users")
-          .get({ email: email })
-          .then((doc) => {
-            if (!doc.empty) {
-              //update and dont create
-              firestore()
-                .collection("users")
-                .doc(doc.docs[0].ref.id)
-                .update({ one_time_password: defaultNum });
-            } else {
+            ses
+              .sendTemplatedEmail(params)
+              .promise()
+              .then(() => {
+                //redirect to 'email sent page'
+                navigation.navigate("SignIn");
+              });
+          }
+        } else {
+          //user dont exist, so register him, and add him to database.
+          const defaultNum = Math.floor(100000 + Math.random() * 900000); //6 digits default number
+
+          auth()
+            .createUserWithEmailAndPassword(
+              email_trimmed,
+              defaultNum.toString()
+            )
+            .then((data) => {
+              console.log(data)
               firestore()
                 .collection("users")
                 .add({
-                  email: email.toLowerCase().trim(),
+                  email: email_trimmed,
                   one_time_password: defaultNum,
+                  id: data.user.uid,
+                  role: 'user'
                 });
-            }
-          });
-        navigation.navigate("SignIn");
+              //send email with his code.
+              var TemplateData = {
+                urlLink: "lala",
+              };
+
+              var params = {
+                Source: "info@cometogether.network",
+                Destination: {
+                  ToAddresses: [email_trimmed],
+                },
+                Template: "Login" /* required */,
+                TemplateData: JSON.stringify(TemplateData) /* required */,
+              };
+
+              ses
+                .sendTemplatedEmail(params)
+                .promise()
+                .then(() => {
+                  //redirect to 'email sent page'
+                  navigation.navigate("SignIn");
+                });
+            })
+            .catch((error) => {
+              if (error.code === "auth/email-already-in-use") {
+                console.warn("That email address is already in use!");
+              }
+
+              if (error.code === "auth/invalid-email") {
+                console.warn("That email address is invalid!");
+              }
+
+              console.log(error);
+            });
+        }
       });
   };
 

@@ -14,6 +14,7 @@ export default function Login({ navigation }) {
   const { signIn } = React.useContext(AuthContext);
 
   const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
 
   return (
     <View style={styles.container}>
@@ -26,7 +27,14 @@ export default function Login({ navigation }) {
 
       <View style={styles.root}>
         <View style={styles.rowContainer}>
-          <Text style={styles.label}>Submit your one-time-password</Text>
+
+          <TextInput
+            autoCorrect={true}
+            onChangeText={setEmail}
+            value={email}
+            style={styles.textInput}
+            secureTextEntry={false}
+          />
 
           <TextInput
             autoCorrect={false}
@@ -39,11 +47,11 @@ export default function Login({ navigation }) {
             title="goToEmail"
             style={styles.goToEmail}
             onPress={() => {
-              navigation.navigate('SendEmail');
+              navigation.navigate("SendEmail");
             }}
           >
             <Text style={styles.labelEmail}>
-              I don't have a one-time-password
+              Don't have an account? Register now! 
             </Text>
           </TouchableHighlight>
         </View>
@@ -54,7 +62,7 @@ export default function Login({ navigation }) {
           style={styles.scan}
           title="Login"
           onPress={() => {
-            signIn(password);
+            signIn(email, password);
           }}
         >
           <Text style={styles.button}>Login</Text>
@@ -99,12 +107,12 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   logo: {
-    flex: 1,
+    flex: 0.5,
     height: undefined,
     width: undefined,
   },
   header: {
-    flex: 0.5,
+    flex: 0.4,
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",

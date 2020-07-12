@@ -23,7 +23,8 @@ const UserQRCode= ({navigation,qrValue}) => {
 
 
 const mapStateToProps = (state, props) => ({
-    qrValue: state.auth.userToken.id_licence,
+    // qrValue: state.auth.userToken.id_licence,
+    qrValue: 'user123',
     navigation: props.navigation
 })
 

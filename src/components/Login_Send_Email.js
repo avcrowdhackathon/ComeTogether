@@ -8,12 +8,12 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
-import AWS from "aws-sdk/dist/aws-sdk-react-native";
+import AWS from 'aws-sdk';
 import firestore from "@react-native-firebase/firestore";
 
 const ses = new AWS.SES({
-  accessKeyId: "AKIAI3AHZ2I7EX4SABGA",
-  secretAccessKey: "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",
+  accessKeyId: "AKIAXQFEMNA4AWKM4HW5",
+  secretAccessKey: "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",
   region: "eu-west-1",
   apiVersion: "2010-12-01",
 });

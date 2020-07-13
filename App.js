@@ -17,6 +17,8 @@ import { connect } from "react-redux";
 import { loginProcess } from "./src/services/sevices";
 import { insertToken, deleteToken, restoreToken } from "./actions";
 import IdVerification from "./src/components/IdVerification";
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 // performance imporovement for navigator
 enableScreens();
@@ -44,23 +46,36 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async (password) => {
+      signIn: async (email, password) => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
         try {
-          // let response = await fetch(domain.BACKEND_URL + `/hackathon/testingRoute`,
-          // {
-          //   method:'GET'
-          // });
-          // let responseJson = await response.json();
+          const email_trimmed = email.toLowerCase().trim();
+          auth()
+            .signInWithEmailAndPassword(email_trimmed, password)
+            .then(async (data) => {
+              const userid = data.user.uid;
+              firestore()
+                .collection("users")
+                .where("id", "==", userid)
+                .get()
+                .then((doc) => {
+                  if (!doc.empty) {
+                    const data = doc.docs[0].data();
 
-          user = loginProcess(password);
-          if (user == "") alert("Wrong credentials");
-          else {
-            await dispatch(insertToken(user));
-          }
+                    dispatch(insertToken(data));
+                  }
+                });
+            })
+            .catch((error) => {
+              if (error.code === "auth/invalid-email") {
+                console.log("That email address is invalid!");
+              }
+
+              console.log(error);
+            });
         } catch (error) {
           alert(error);
         }
@@ -72,7 +87,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
     }),
     []
   );
-    console.log(userToken)
+
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>

@@ -32,14 +32,14 @@ export default function Login_Send_Email({ navigation }) {
       .then((doc) => {
         if (!doc.empty) {
           //user exists, so get his one time password
-          if (doc.docs[0].data.one_time_password === "")
+          if (doc.docs[0].data().one_time_password === "")
             console.warn(
               `You are a registered user, if you don't remember your password, please reset it!`
             );
           else {
             //send email, if one time password is set
             var TemplateData = {
-              urlLink: "lala",
+              passwrod: doc.docs[0].data().one_time_password.toString(),
             };
 
             var params = {
@@ -47,7 +47,7 @@ export default function Login_Send_Email({ navigation }) {
               Destination: {
                 ToAddresses: [email_trimmed],
               },
-              Template: "Login" /* required */,
+              Template: "BackTogetherLoginPassword" /* required */,
               TemplateData: JSON.stringify(TemplateData) /* required */,
             };
 
@@ -56,7 +56,7 @@ export default function Login_Send_Email({ navigation }) {
               .promise()
               .then(() => {
                 //redirect to 'email sent page'
-                navigation.navigate("SignIn");
+                navigation.navigate("EmailSent");
               });
           }
         } else {
@@ -69,18 +69,17 @@ export default function Login_Send_Email({ navigation }) {
               defaultNum.toString()
             )
             .then((data) => {
-              console.log(data)
               firestore()
                 .collection("users")
                 .add({
                   email: email_trimmed,
                   one_time_password: defaultNum,
                   id: data.user.uid,
-                  role: 'user'
+                  role: "user",
                 });
               //send email with his code.
               var TemplateData = {
-                urlLink: "lala",
+                passwrod: defaultNum,
               };
 
               var params = {
@@ -88,7 +87,7 @@ export default function Login_Send_Email({ navigation }) {
                 Destination: {
                   ToAddresses: [email_trimmed],
                 },
-                Template: "Login" /* required */,
+                Template: "BackTogetherLoginPassword" /* required */,
                 TemplateData: JSON.stringify(TemplateData) /* required */,
               };
 
@@ -97,7 +96,7 @@ export default function Login_Send_Email({ navigation }) {
                 .promise()
                 .then(() => {
                   //redirect to 'email sent page'
-                  navigation.navigate("SignIn");
+                  navigation.navigate("EmailSent");
                 });
             })
             .catch((error) => {
@@ -119,7 +118,7 @@ export default function Login_Send_Email({ navigation }) {
     <View style={styles.container}>
       <Image
         style={styles.logo}
-        source={require("../../images/comeTogetherBlack.png")}
+        source={require("../../images/BT_logoWithName.png")}
         resizeMode="contain"
       />
       <Text style={styles.header}> One-Time Password</Text>
@@ -194,12 +193,14 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   logo: {
-    flex: 1,
+    flex: 0.5,
+    marginBottom: 25,
+    marginTop: 15,
     height: undefined,
     width: undefined,
   },
   header: {
-    flex: 0.5,
+    flex: 0.3,
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",

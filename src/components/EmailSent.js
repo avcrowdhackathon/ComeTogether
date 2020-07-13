@@ -2,20 +2,12 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  ScrollView,
   Text,
-  TextInput,
   Image,
   TouchableHighlight,
 } from "react-native";
-import { AuthContext } from "../../App";
 
-export default function Login({ navigation }) {
-  const { signIn } = React.useContext(AuthContext);
-
-  const [password, setPassword] = React.useState("");
-  const [email, setEmail] = React.useState("");
-
+export default function EmailSent({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
@@ -23,49 +15,27 @@ export default function Login({ navigation }) {
         source={require("../../images/BT_logoWithName.png")}
         resizeMode="contain"
       />
-      <Text style={styles.header}> Login</Text>
+      <Image
+        source={require("../../images/imageEmailVerification.png")}
+        resizeMode="contain"
+      />
+      <Text style={styles.header}> Check your Email!</Text>
 
       <View style={styles.root}>
         <View style={styles.rowContainer}>
-
-          <TextInput
-            autoCorrect={true}
-            onChangeText={setEmail}
-            value={email}
-            style={styles.textInput}
-            secureTextEntry={false}
-          />
-
-          <TextInput
-            autoCorrect={false}
-            onChangeText={setPassword}
-            value={password}
-            style={styles.textInput}
-            secureTextEntry={true}
-          />
-          <TouchableHighlight
-            title="goToEmail"
-            style={styles.goToEmail}
-            onPress={() => {
-              navigation.navigate("SendEmail");
-            }}
-          >
-            <Text style={styles.labelEmail}>
-              Don't have an account? Register now! 
-            </Text>
-          </TouchableHighlight>
+          <Text style={styles.label}>
+            Use the password that has been sent in your Email in order to log
+            in.{" "}
+          </Text>
         </View>
-      </View>
-
-      <View style={styles.buttonContainer}>
         <TouchableHighlight
-          style={styles.scan}
-          title="Login"
+          title="goToLogin"
+          style={styles.goToEmail}
           onPress={() => {
-            signIn(email, password);
+            navigation.navigate("SignIn");
           }}
         >
-          <Text style={styles.button}>Login</Text>
+          <Text style={styles.labelEmail}>Go to login</Text>
         </TouchableHighlight>
       </View>
     </View>
@@ -89,6 +59,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: "bold",
+    textAlign: "center",
   },
   labelEmail: {
     fontSize: 12,
@@ -126,6 +97,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "column",
     alignItems: "center",
+    textAlign: "center",
   },
   buttonContainer: {
     width: "100%",

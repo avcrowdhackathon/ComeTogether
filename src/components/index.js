@@ -13,3 +13,4 @@ export {default as CertificateHistory} from './CertificateHistory';
 export {default as CertificateSummary} from './CertificateSummary';
 export {default as Test} from './Test';
 export {default as B} from './B';
+export {default as EmailSent} from './EmailSent';

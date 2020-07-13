@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import React, { Component } from 'react'
 import {Calendar} from 'react-native-calendars';
+import moment from "moment";
 
 
 class CalendarComponent extends Component {
@@ -13,8 +14,7 @@ class CalendarComponent extends Component {
     this.setMarkedDates = this.setMarkedDates.bind(this);
 
     this.state = {
-      testId: '',
-      markedDates:{}
+      markedDates:{[moment(this.props.current).format('YYYY-MM-DD')] : {selected: !!this.props.current}}
     };
   }
 
@@ -36,8 +36,8 @@ class CalendarComponent extends Component {
         <Calendar
           onDayPress={(day) => this.setMarkedDates(day.dateString, this.props.typeOfDate)}
           markedDates={this.state.markedDates}
-          maxDate={this.props.maxDate ? this.props.maxDate : ''}
-          minDate={this.props.minDate ? this.props.minDate : ''}
+          maxDate={this.props.maxDate || ''}
+          minDate={this.props.minDate || ''}
           monthFormat={'yyyy MMMM'}
           firstDay={1}
           onPressArrowLeft={substractMonth => substractMonth()}

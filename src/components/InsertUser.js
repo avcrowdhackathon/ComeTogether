@@ -42,14 +42,32 @@ class InsertUser extends Component {
 
   issue = async (dataParams) => {
     try {
-        // firestore()
-        //   .collection("users")
-        //   .update({
-        //     email: 'email.toLowerCase().trim()', todo TAKE FROM current user
-        //     tests: 'defaultNum' dataParams && dataParams.tests,
-        //   }, merge: true kati tetoio nmzw xreiazetai).then(() => console.warn('Data set.'));;
-
-
+      if (dataParams && dataParams.tests && dataParams.tests.length) {
+        firestore()
+          .collection("tests")
+          .where('email', '==', this.state.patientEmail)
+          .get()
+          .then((res) => {
+            if (res.docs.length !== 0) {
+              firestore()
+                .collection("tests")
+                .doc(res.docs[0].ref.id)
+                .update({ tests:  [...res.docs[0].data().tests, ...dataParams.tests]})
+            .then(() => {
+              alert('Updated data successfully')
+            })
+            } else {
+              firestore()
+                .collection("tests")
+                .add({ email: this.state.patientEmail, tests: [...dataParams.tests]})
+                .then(() => {
+                  alert('Inserted data successfully')
+                })
+            }
+          });
+      }else {
+        alert('Please fill all the test information')
+      }
     } catch (e) {
       alert('Certificate was not issued!' + e)
       await this.setState({isPending:false})
@@ -133,12 +151,11 @@ class InsertUser extends Component {
             }]
         }
       }
-      // console.log('doc......')
 
-      // if(!this.state.isPending) {
+      if(!this.state.isPending) {
         this.setState({isPending: true})
         await this.issue(data)
-      // }
+      }
     } catch (e) {
       alert('Certificate was not issued!' + e)
       await this.setState({isPending: false})
@@ -229,11 +246,10 @@ class InsertUser extends Component {
 
             )
           })}
-
           <Text style={styles.label}>Issuance Date</Text>
           <CalendarComponent typeOfDate='issueDate' maxDate={new Date()} current={new Date()} sendData={this.getData}/>
           <Text style={styles.label}>Expiry Date (optional)</Text>
-          <CalendarComponent typeOfDate='expiryDate' minDate={new Date()} sendData={this.getData}/>
+          <CalendarComponent typeOfDate='expireDate' minDate={new Date()} sendData={this.getData}/>
 
           <TouchableOpacity
             style = {styles.submitButton}

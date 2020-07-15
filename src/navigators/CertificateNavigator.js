@@ -6,14 +6,18 @@ const Certificate = createStackNavigator();
 
 const CertificateNavigator = () => {
     return(
-        <Certificate.Navigator header={({scene, navigation})=> { console.warn("scene",scene.route.name); console.warn("navi",navigation); scene.route.name == 'History'?'none': 'screen'}} mode='modal'
+        <Certificate.Navigator 
+            headerMode='none' 
+            mode='modal'
             screenOptions={{
                 // cardStyle: { backgroundColor: 'transparent'},
                 cardOverlayEnabled: true,
             }} 
         >
-            <Certificate.Screen name='History' component={CertificateHistory}/>
-            <Certificate.Screen name='Summary' component= {CertificateSummary} />
+            <Certificate.Screen name='History' component={CertificateHistory}
+             options={{header : ({ scene, previous, navigation }) => ( null)}}/>
+            <Certificate.Screen name='Summary' component= {CertificateSummary} 
+             options={{}}/>
         </Certificate.Navigator>
     )   
 }

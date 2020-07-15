@@ -13,6 +13,7 @@ export const getTabScreens = (role, Tab) => {
                 <Tab.Screen name="Insert" component={InsertUser} />
                 <Tab.Screen name="Verify" component={VerifyOptions} />
                 <Tab.Screen name="QR Code" component={UserQRCode} />
+                <Tab.Screen name= "Certificates" component={CertificateNavigator} />
             </>
         );
     }else if(role == 'health'){

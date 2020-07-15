@@ -111,8 +111,10 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 component={TabNavigator}
                 options={{
                   headerStyle: {
-                    backgroundColor: "black",
-                    height: 45,
+                    backgroundColor: "white",
+                    // elevation: 0,
+                    // shadowOpacity: 0,
+                    // borderBottomWidth: 0
                   },
                   headerRight: (props) => <Logout />,
                   headerTitle: (props) => (
@@ -121,6 +123,8 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                     </>
                   ),
                   headerTitleAlign: "center",
+                  // headerStatusBarHeight: 10
+
                 }}
               />
             </>

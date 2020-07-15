@@ -8,7 +8,8 @@ import {
   Image,
   TouchableHighlight,
 } from "react-native";
-import AWS from 'aws-sdk';
+
+import AWS from "aws-sdk";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 

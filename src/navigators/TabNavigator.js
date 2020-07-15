@@ -24,26 +24,25 @@ const  TabNavigator = ({userToken}) => {
           if (route.name === 'QR Code') {
             iconName = focused? require('../../images/Qrcode_active.png'):require('../../images/Qrcode_inactive.png');
           }
+          if (route.name === 'Certificates') {
+            iconName = focused? require('../../images/history.png'):require('../../images/history.png');
+          }
+
+          const st = focused? null: {opacity:0.3}
 
           // You can return any component that you like here!
-          return <Image source={iconName} />;
+          return <Image source={iconName} style={[{width:24, height:24}, st]}/>;
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#FF652F',
-        inactiveTintColor: '#B4CFF2',
-        labelPosition:'below-icon',
+        showLabel:false,
         style: {
-          height:70,
-          backgroundColor: 'black'
+          backgroundColor: 'white'
         },
         tabStyle: {
           alignItems:'center',
           justifyContent: 'center',
         },
-        labelStyle: {
-        fontSize:15
-        }
       }}
       backBehavior= 'history'
       initialRouteName= 'Insert'

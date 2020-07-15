@@ -9,6 +9,7 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { enableScreens } from 'react-native-screens';
 import {Login, Logout, QrVerification, Settings} from './src/components';
 import { PrivacyPolicy, TermsOfUse, ResetPassword, DeleteAccount } from './src/components/Settings';
@@ -26,8 +27,42 @@ enableScreens();
 
 //Navigator initialization
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 export const AuthContext = React.createContext();
 
+const SettingsDrawerScreen  = () => (
+  <Drawer.Navigator>
+      <Drawer.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
+          options={{
+            title: 'Privacy Policy'
+          }}
+        />
+        <Drawer.Screen
+          name="TermsOfUse"
+          component={TermsOfUse}
+          options={{
+            title: 'Terms Of Use'
+          }}
+        />
+        <Drawer.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{
+            title: 'Reset Password'
+          }}
+        />
+        <Drawer.Screen
+          name="DeleteAccount"
+          component={DeleteAccount}
+          options={{
+            title: 'Delete Account'
+          }}
+          />
+        
+      </Drawer.Navigator>
+)
 
 const App = ({userToken, isLoading, isSignout, dispatch}) => {
 
@@ -107,7 +142,7 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
                 height:45
               },
               headerRight: () => (
-                <TouchableHighlight style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}} title="Settings" onPress={() => navigation.navigate('Settings')}>
+                <TouchableHighlight style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}} title="Settings" onPress={() => navigation.toggleDrawer()}>
                   <Text style={{color:'white', paddingHorizontal:8}}>Settings</Text>
                 </TouchableHighlight>
                 
@@ -143,40 +178,14 @@ const App = ({userToken, isLoading, isSignout, dispatch}) => {
             title: 'Scan QR Code'
           }}
         />
-        <Stack.Screen
-          name="PrivacyPolicy"
-          component={PrivacyPolicy}
-          options={{
-            title: 'Privacy Policy'
-          }}
-        />
-        <Stack.Screen
-          name="TermsOfUse"
-          component={TermsOfUse}
-          options={{
-            title: 'Terms Of Use'
-          }}
-        />
-        <Stack.Screen
-          name="ResetPassword"
-          component={ResetPassword}
-          options={{
-            title: 'Reset Password'
-          }}
-        />
-        <Stack.Screen
-          name="DeleteAccount"
-          component={DeleteAccount}
-          options={{
-            title: 'Delete Account'
-          }}
-        />
-        
       </Stack.Navigator>
+      <SettingsDrawerScreen/>
       </NavigationContainer>
     </AuthContext.Provider>
   )
 }
+
+
 
 
 const mapStateToProps = (state) => ({

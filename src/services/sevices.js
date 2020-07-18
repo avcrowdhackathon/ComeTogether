@@ -1,11 +1,11 @@
-import {Role} from '../data/index'
-import { users } from '../../users'
+import { users } from "../../users";
 
-export const loginProcess = (username, password) => {
-    var specificUser = '' 
-    users.forEach(user => {
-        if(user.username == username && user.password == password)
-            specificUser=user
-    })
-    return specificUser
-}
+export const loginProcess = (password) => {
+  var specificUser = "";
+
+  //DATABASE  needed in here, for the one time password
+  users.forEach((user) => {
+    if (user.one_time_password == password) specificUser = user;
+  });
+  return specificUser;
+};

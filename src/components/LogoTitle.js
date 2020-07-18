@@ -5,8 +5,8 @@ export default function LogoTitle() {
     return (
       <Image
         style ={{flex:1}}
-        source={require('../../images/android-icon-36x36.png')}
-        resizeMode='contain'
+        source={require('../../images/logo.png')}
+        style={{width:48, height:48}}
       />
     );
   }

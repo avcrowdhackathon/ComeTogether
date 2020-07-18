@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import { QRCode } from 'react-native-custom-qr-codes';
 import {connect} from 'react-redux'; 
 import { sha256 } from 'react-native-sha256';
@@ -12,18 +12,26 @@ const UserQRCode= ({navigation,qrValue}) => {
         sha256(qrValue).then(async hash => { HashVaule(hash)})
     }
     )
+
     return (
-        <View style={{flex:1, paddingTop:80, alignItems:'center', backgroundColor:'white'}}>
-            <QRCode 
-                value={value}
-            />
+        <View style={{flexGrow:1, backgroundColor:'#efeff5'}}>
+            <View style={{flex:1, borderRadius:10, alignItems:'center', justifyContent:'center'}}>
+
+                <QRCode 
+                    color='rgb(0,103,187)'
+                    size= '200'
+                    backgroundColor='#efeff5'
+                />
+            </View>
         </View>
+
     );
 };
 
 
 const mapStateToProps = (state, props) => ({
-    qrValue: state.auth.userToken.id_licence,
+    // qrValue: state.auth.userToken.id_licence,
+    qrValue: 'user123',
     navigation: props.navigation
 })
 

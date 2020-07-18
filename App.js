@@ -19,7 +19,8 @@ import { insertToken, deleteToken, restoreToken } from './actions';
 import IdVerification from "./src/components/IdVerification";
 import {TouchableHighlight, Text} from 'react-native';
 import { useRoute } from '@react-navigation/native';
-
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 
 // performance imporovement for navigator

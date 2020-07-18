@@ -23,6 +23,16 @@ const ses = new AWS.SES({
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
 
+  function validation() {
+    const email_trimmed = email.toLowerCase().trim();
+
+    if (email_trimmed == "") {
+      return true;
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)) {
+      return true;
+    } 
+  }
+
   const sendEmail = () => {
     //check if user exists in our database already
     const email_trimmed = email.toLowerCase().trim();
@@ -151,6 +161,7 @@ export default function Login_Send_Email({ navigation }) {
           style={styles.scan}
           title="SendEmail"
           onPress={sendEmail}
+          disabled={validation()}
         >
           <Text style={styles.button}>Send Password</Text>
         </TouchableHighlight>

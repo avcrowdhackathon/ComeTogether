@@ -32,6 +32,7 @@ const Stack = createStackNavigator();
 export const AuthContext = React.createContext();
 
 const App = ({ userToken, isLoading, isSignout, dispatch }) => {
+  const [firebaseLogin, setfirebaseLogin] = React.useState(false)
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
@@ -104,7 +105,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                   ...prevState,
                   email: "User not found",
                 }));
-              }else {
+              } else {
                 cb((prevState) => ({
                   ...prevState,
                   passwrod: "Something went wrong",
@@ -124,14 +125,25 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
     }),
     []
   );
-
+  auth().onAuthStateChanged(() => {
+    if(auth().currentUser !== null){
+      setfirebaseLogin(true)
+    } else {
+      setfirebaseLogin(false)
+    }
+  })
+  
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator
-          headerMode={userToken == null || isLoading ? "none" : "screen"}
+          headerMode={
+            userToken == null || !firebaseLogin || isLoading
+              ? "none"
+              : "screen"
+          }
         >
-          {userToken == null ? (
+          {userToken == null || !firebaseLogin ? (
             <Stack.Screen
               name="SignIn"
               component={LoginNavigator}

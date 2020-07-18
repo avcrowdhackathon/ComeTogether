@@ -115,7 +115,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "#EFEFF5",
     justifyContent: "space-around",
     paddingHorizontal: 20,
     overflow: "hidden",
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   labelEmail: {
     fontSize: 12,
-    color: "#FF652F",
+    color: "#rgb(0, 103, 187)",
     textAlign: "right",
   },
   goToEmail: {
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 44,
     borderRadius: 7,
-    backgroundColor: "#FF652F",
+    backgroundColor: "#rgb(0, 103, 187)",
     marginBottom: 100,
   },
   logo: {

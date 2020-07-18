@@ -76,7 +76,7 @@ export function PrivacyPolicy() {
        alignSelf: 'center',
        height:44,
        borderRadius:7,
-       backgroundColor: '#FF652F',
+       backgroundColor: '#rgb(0, 103, 187)',
        width:'70%',
        overflow:"hidden"
     },
@@ -87,7 +87,7 @@ export function PrivacyPolicy() {
        alignSelf: 'center',
        height:44,
        borderRadius:7,
-       backgroundColor: '#FF652F',
+       backgroundColor: '#rgb(0, 103, 187)',
        width:'50%',
        overflow:"hidden"
     },

@@ -16,6 +16,19 @@ export default function Login({ navigation }) {
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
 
+  function validation() {
+    const email_trimmed = email.toLowerCase().trim();
+    if (email_trimmed == "") {
+      return true;
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
+    ) {
+      return true;
+    } else if (password == "") {
+      return true;
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Image
@@ -27,7 +40,6 @@ export default function Login({ navigation }) {
 
       <View style={styles.root}>
         <View style={styles.rowContainer}>
-
           <TextInput
             autoCorrect={true}
             onChangeText={setEmail}
@@ -51,7 +63,7 @@ export default function Login({ navigation }) {
             }}
           >
             <Text style={styles.labelEmail}>
-              Don't have an account? Register now! 
+              Don't have an account? Register now!
             </Text>
           </TouchableHighlight>
         </View>
@@ -61,6 +73,7 @@ export default function Login({ navigation }) {
         <TouchableHighlight
           style={styles.scan}
           title="Login"
+          disabled={validation()}
           onPress={() => {
             signIn(email, password);
           }}

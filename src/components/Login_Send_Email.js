@@ -22,18 +22,27 @@ const ses = new AWS.SES({
 
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
+  const [error, seterror] = React.useState("");
 
-  function validation() {
+  const validation = React.useCallback(() => {
     const email_trimmed = email.toLowerCase().trim();
-
     if (email_trimmed == "") {
+      seterror("Email cannot be empty.");
       return true;
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)) {
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
+    ) {
+      seterror("Email format is not valid.");
       return true;
-    } 
-  }
+    } else {
+      seterror("");
+      return false;
+    }
+  });
 
   const sendEmail = () => {
+    const validate = validation();
+    if (validate) return;
     //check if user exists in our database already
     const email_trimmed = email.toLowerCase().trim();
     firestore()
@@ -144,6 +153,11 @@ export default function Login_Send_Email({ navigation }) {
             value={email}
             style={styles.textInput}
           />
+          {error !== "" && (
+            <View style={{ width: "100%" }}>
+              <Text style={styles.errorMessage}>{error}</Text>
+            </View>
+          )}
           <TouchableHighlight
             title="goToEmail"
             style={styles.goToEmail}
@@ -161,7 +175,6 @@ export default function Login_Send_Email({ navigation }) {
           style={styles.scan}
           title="SendEmail"
           onPress={sendEmail}
-          disabled={validation()}
         >
           <Text style={styles.button}>Send Password</Text>
         </TouchableHighlight>
@@ -192,6 +205,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#FF652F",
     textAlign: "right",
+  },
+  errorMessage: {
+    fontSize: 12,
+    color: "red",
+    textAlign: "left",
   },
   goToEmail: {
     width: "100%",

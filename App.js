@@ -18,10 +18,8 @@ import {
 } from "./src/navigators";
 import { LogoTitle, Splash } from "./src/components";
 import { connect } from "react-redux";
-import { loginProcess } from "./src/services/sevices";
 import { insertToken, deleteToken, restoreToken } from "./actions";
 import IdVerification from "./src/components/IdVerification";
-import { TouchableHighlight, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
@@ -68,7 +66,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async (email, password) => {
+      signIn: async (email, password, cb) => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -94,6 +92,23 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
             .catch((error) => {
               if (error.code === "auth/invalid-email") {
                 console.log("That email address is invalid!");
+              } else if (error.code === "auth/wrong-password") {
+                console.log("That password is incorrect!");
+                cb((prevState) => ({
+                  ...prevState,
+                  password: "Password is not correct",
+                }));
+              } else if (error.code === "auth/user-not-found") {
+                console.log("That password is incorrect!");
+                cb((prevState) => ({
+                  ...prevState,
+                  email: "User not found",
+                }));
+              }else {
+                cb((prevState) => ({
+                  ...prevState,
+                  passwrod: "Something went wrong",
+                }));
               }
 
               console.log(error);

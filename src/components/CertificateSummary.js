@@ -15,9 +15,9 @@ const CertificateSummary = ({route, navigation}) => {
 
     return(
       <>
-        <View style={{justifyContent:'center', alignItems:'center', fontSize:20, paddingVertical:8, backgroundColor:'white'}}>
+        <View style={{justifyContent:'center', alignItems:'center', fontSize:20, marginHorizontal:18, marginTop:10, paddingTop:20, borderTopRightRadius:10, borderTopLeftRadius:10, backgroundColor:'white'}}>
             <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', alignSelf:'stretch'}}>
-              <TouchableOpacity style={{position:'absolute', left:8}} onPress={backfunc}>
+              <TouchableOpacity style={{position:'absolute', left:16}} onPress={backfunc}>
                 <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
               </TouchableOpacity>
               <Text style={{fontSize:20, textAlign:'center'}}>
@@ -29,7 +29,7 @@ const CertificateSummary = ({route, navigation}) => {
               <B>Stavros Antoniadis</B>
             </Text>
         </View>
-        <View style={{ flex: 1, flexDirection:'row', paddingTop:40, backgroundColor:'white' }}>
+        <View style={{ flexDirection:'row', marginHorizontal:18, paddingVertical:20, borderBottomRightRadius:10, borderBottomLeftRadius:10, backgroundColor:'white' }}>
           <View style={page.infos_view}>
             <Text style={page.infos}>
               <B>Authority:</B>             
@@ -72,7 +72,8 @@ const page = StyleSheet.create({
     flexDirection:'row',
     fontSize: 18,
     marginVertical: 5,
-    marginLeft:50
+    width:90,
+    alignSelf:'center',
   }
 })
 

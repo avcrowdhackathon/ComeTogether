@@ -6,8 +6,8 @@ const Test = ({id, title, date, expiration, result, onSelect}) => {
     
 
     return(
-        <View style={{marginHorizontal:10, marginVertical:5}}>
-        <TouchableOpacity onPress={()=>onSelect(id)} style={{flex:1, flexDirection:'row', justifyContent:'space-between',  alignItems:'center', paddingHorizontal:10, paddingVertical:5, borderRadius:10, borderWidth:1}}>
+        <View style={{marginHorizontal:18, marginVertical:5, backgroundColor:'white', paddingHorizontal:18, paddingVertical:5, borderRadius:10}}>
+        <TouchableOpacity onPress={()=>onSelect(id)} style={{flex:1, flexDirection:'row', justifyContent:'space-between',  alignItems:'center'}}>
             <View>
                 <Text style={{fontSize:18, fontWeight:'bold', color:'blue'}}>
                     {title}
@@ -20,7 +20,7 @@ const Test = ({id, title, date, expiration, result, onSelect}) => {
                 </Text>
             </View>
             <View>
-                <Image style={{width:16, height:16}} source={result?require('../../images/green-tick.png'):require('../../images/red-x.png')} />
+                <Image style={{width:18, height:18}} source={result?require('../../images/green-tick.png'):require('../../images/red-x.png')} />
             </View>
         </TouchableOpacity>
         </View>

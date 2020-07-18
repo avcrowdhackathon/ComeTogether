@@ -14,3 +14,6 @@ export {default as CertificateSummary} from './CertificateSummary';
 export {default as Test} from './Test';
 export {default as B} from './B';
 export {default as EmailSent} from './EmailSent';
+export {default as SettingsBtn} from './SettingsBtn';
+export {default as SettingsScreen} from './SettingsScreen';
+export {default as Settings} from './Settings';

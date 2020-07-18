@@ -37,7 +37,7 @@ const  TabNavigator = ({userToken}) => {
       tabBarOptions={{
         showLabel:false,
         style: {
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         },
         tabStyle: {
           alignItems:'center',

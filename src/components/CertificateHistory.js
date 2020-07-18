@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, SafeAreaView, Text, Platform, View, Image } from 'react-native';
+import { FlatList, SafeAreaView, Text, Platform, View, Image, ActivityIndicator } from 'react-native';
 import { Test, Splash } from '../components';
 import firestore from "@react-native-firebase/firestore";
 
@@ -11,7 +11,7 @@ const CertificateHistory = ({navigation}) => {
 
 
     React.useEffect(()=>{
-      const subscriber =  firestore()
+      const subscriber = firestore()
       .collection("tests")
       .where('email', '==', "stathis@aa.aa")
       .get()
@@ -20,46 +20,45 @@ const CertificateHistory = ({navigation}) => {
           firestore()
             .collection("tests")
             .doc(res.docs[0].ref.id)
-            .onSnapshot(documentSnapshot => {
-              setCert(documentSnapshot.data().tests);
+            .onSnapshot( async (documentSnapshot) => {
+              await setCert(documentSnapshot.data().tests);
+              await setWait(false)
             });
           }
-        setWait(false);
       })
+
     }, [])
 
     const onSelect = React.useCallback((id, authority, issueDate, testType, result) => {
       navigation.navigate('Summary',{id:id, authority:authority, issueDate:issueDate, testType:testType, result:result})
     })
     if(wait){
-      return(<Splash />)
+      return(
+        <View style={{flex:1, justifyContent:'center'}}>
+          <ActivityIndicator size='large' color='rgb(0, 103, 187)' />
+        </View>
+      )
     }
     else {
       return(
           <SafeAreaView style={{flex:1}}>
               {cert?<FlatList 
-                  style={{backgroundColor:'white'}}
+                  style={{backgroundColor:'#efeff5'}}
                   data={cert}
                   ItemSeparatorComponent={
-                    Platform.OS !== 'android' &&
-                    (({ highlighted }) => (
+                    () => (
                       <View
-                        style={[
-                          style.separator,
-                          highlighted && { marginTop: 3 }
-                        ]}
+                        style={
+                           { marginTop: 5 }
+                        }
                       />
-                    ))
+                    )
                   }
-                  ListHeaderComponent= { Platform.OS !== 'android' &&
-                  (({ highlighted }) => (
+                  ListHeaderComponent= { () => (
                     <View
-                      style={[
-                        style.separator,
-                        highlighted && { marginTop: 5 }
-                      ]}
+                      style={{ paddingTop:10 }}
                     />
-                  ))}
+                  )}
                   renderItem={({item}) => (
                       <Test
                           id={item.testId}
@@ -74,7 +73,7 @@ const CertificateHistory = ({navigation}) => {
               />
           : 
           (
-          <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor: 'white',}}>
+          <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor: '#efeff5',}}>
             <Image style={{width:48, height:70, opacity: 0.5, marginVertical:6}} source={require('../../images/summary.png')}  />
             <Text style={{fontSize:20, color:'rgb(0,103,189)'}}>No Certifications Available!</Text>
           </View>

@@ -4,9 +4,12 @@ import {AuthContext} from '../../App';
 
 export default function Logout() {
     const { signOut } = React.useContext(AuthContext);
-     return (
-       <TouchableHighlight style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}} title="Logout" onPress={async ()=> {await signOut()}}>
-          <Text style={{color:'white', paddingHorizontal:8}}>Logout</Text>
-       </TouchableHighlight>
+
+     React.useEffect(() => {
+       signOut()
+     }, [])
+
+    return (
+      null
      );
    }

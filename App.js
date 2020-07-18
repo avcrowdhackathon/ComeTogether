@@ -5,20 +5,22 @@
  * @format
  * @flow
  */
-import React from "react";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { enableScreens } from "react-native-screens";
-import { Login, Logout, QrVerification } from "./src/components";
-import { TabNavigator, LoginNavigator } from "./src/navigators";
-import { LogoTitle, Splash } from "./src/components";
-import { connect } from "react-redux";
-import { loginProcess } from "./src/services/sevices";
-import { insertToken, deleteToken, restoreToken } from "./actions";
+import React from 'react';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { enableScreens } from 'react-native-screens';
+import {Login, SettingsBtn, QrVerification} from './src/components';
+import {TabNavigator, SettingsNavigator, LoginNavigator} from './src/navigators';
+import {LogoTitle, Splash} from './src/components';
+import {connect} from 'react-redux';
+import {loginProcess} from './src/services/sevices'
+import { insertToken, deleteToken, restoreToken } from './actions';
 import IdVerification from "./src/components/IdVerification";
-import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import {TouchableHighlight, Text} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+
+
 
 // performance imporovement for navigator
 enableScreens();
@@ -27,7 +29,9 @@ enableScreens();
 const Stack = createStackNavigator();
 export const AuthContext = React.createContext();
 
-const App = ({ userToken, isLoading, isSignout, dispatch }) => {
+
+const App = ({userToken, isLoading, isSignout, dispatch}) => {
+
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
@@ -43,6 +47,16 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
       dispatch(restoreToken());
     }
   }, []);
+
+
+  const RouteName = () => {
+    const route = useRoute(); 
+    return (
+      <Text style={{fontWeight:"bold",  fontSize:24, marginLeft:18, color:'black'}}>
+        {route.name} 
+      </Text>
+    )
+  }
 
   const authContext = React.useMemo(
     () => ({
@@ -111,43 +125,52 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 component={TabNavigator}
                 options={{
                   headerStyle: {
-                    backgroundColor: "white",
-                    // elevation: 0,
-                    // shadowOpacity: 0,
-                    // borderBottomWidth: 0
+                    backgroundColor: "#efeff5",
+                    elevation: 0,
+                    shadowOpacity: 0,
+                    borderBottomWidth: 0
                   },
-                  headerRight: (props) => <Logout />,
+                  headerRight: (props) => <SettingsBtn />,
+                  // headerLeft: (props) => (<RouteName />),
                   headerTitle: (props) => (
                     <>
                       <LogoTitle {...props} />
                     </>
                   ),
                   headerTitleAlign: "center",
-                  // headerStatusBarHeight: 10
-
+                  headerStatusBarHeight: 10
                 }}
               />
             </>
           )}
-          <Stack.Screen
-            name="VerifyById"
-            component={IdVerification}
-            options={{
-              title: "Scan or type Id",
-            }}
-          />
-          <Stack.Screen
-            name="VerifyByQR"
-            component={QrVerification}
-            options={{
-              title: "Scan QR Code",
-            }}
-          />
-        </Stack.Navigator>
+        <Stack.Screen
+          name="Settings"
+          component={SettingsNavigator}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="VerifyById"
+          component={IdVerification}
+          options={{
+            title: 'Scan or type Id'
+          }}
+        />
+        <Stack.Screen
+          name="VerifyByQR"
+          component={QrVerification}
+          options={{
+            title: 'Scan QR Code'
+          }}
+        />
+      </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
   );
 };
+
+
 
 const mapStateToProps = (state) => ({
   userToken: state.auth.userToken,

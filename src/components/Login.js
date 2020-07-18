@@ -63,6 +63,7 @@ export default function Login({ navigation }) {
             value={email}
             style={styles.textInput}
             secureTextEntry={false}
+            placeholder='Email'
           />
           {errors.email !== "" && (
             <View style={{ width: "100%" }}>
@@ -75,12 +76,24 @@ export default function Login({ navigation }) {
             value={password}
             style={styles.textInput}
             secureTextEntry={true}
+            placeholder='Password'
           />
           {errors.password !== "" && (
             <View style={{ width: "100%" }}>
               <Text style={styles.errorMessage}>{errors.password}</Text>
             </View>
           )}
+          <TouchableHighlight
+            title="resetPass"
+            style={styles.goToEmail}
+            onPress={() => {
+              navigation.navigate("Login_reset_password");
+            }}
+          >
+            <Text style={styles.labelEmail}>
+              Reset your password
+            </Text>
+          </TouchableHighlight>
           <TouchableHighlight
             title="goToEmail"
             style={styles.goToEmail}

@@ -17,3 +17,6 @@ export {default as EmailSent} from './EmailSent';
 export {default as SettingsBtn} from './SettingsBtn';
 export {default as SettingsScreen} from './SettingsScreen';
 export {default as Settings} from './Settings';
+export {default as NumericPad} from './NumericPad';
+export {default as PadBtn} from './PadBtn';
+export {default as PasscodeView} from './PasscodeView';

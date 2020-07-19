@@ -16,16 +16,16 @@ const  TabNavigator = ({userToken}) => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Insert') {
-            iconName = focused? require('../../images/insert_user_active.png'):require('../../images/inser_user_inactive.png');
+            iconName = focused? require('../../images/insert.png'):require('../../images/insertG.png');
           }
           if (route.name === 'Verify') {
-            iconName = focused? require('../../images/verify_user_active.png'):require('../../images/verify_user_inactive.png');
+            iconName = focused? require('../../images/verify.png'):require('../../images/verifyG.png');
           }
           if (route.name === 'QR Code') {
-            iconName = focused? require('../../images/Qrcode_active.png'):require('../../images/Qrcode_inactive.png');
+            iconName = focused? require('../../images/qr.png'):require('../../images/qrG.png');
           }
           if (route.name === 'Certificates') {
-            iconName = focused? require('../../images/history.png'):require('../../images/history.png');
+            iconName = focused? require('../../images/history.png'):require('../../images/historyG.png');
           }
 
           const st = focused? null: {opacity:0.3}

@@ -1,11 +1,12 @@
 import React from 'react';
-import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView} from 'react-native';
-
+import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
+import { NumericPad, PasscodeView } from '../components';
+import { useNavigation } from '@react-navigation/native';
 
 
 export function PrivacyPolicy() {
     return (
-       <ScrollView style={styles.container}>
+       <ScrollView contentContainerStyle={styles.container}>
           <Text style={styles.texts}>Privacy Policy Text</Text>
        </ScrollView>
     );
@@ -18,25 +19,25 @@ export function PrivacyPolicy() {
     );
  }
  export function ResetPassword() {
-    const [password, setPassword] = React.useState('')
- 
-    const resetPassword = async () => {
- 
-    }
+   const [password, setPassword] = React.useState('');
+   const [textState, setTextState] = React.useState('old');
+   const navigation = useNavigation();
+
+   const backfunc = () => {
+      navigation.goBack();
+   }
+
+   const resetPassword = async () => {
+   
+   }
     return (
-       <View style={styles.container}>
-          <Text style={styles.texts}>Type your current password to confirm</Text>
-          <TextInput
-            autoCorrect={false}
-            onChangeText={setPassword}
-            value={password}
-            style={styles.textInput}
-            secureTextEntry={true}
-          />
-          <TouchableHighlight style={styles.confirmButton} title="Reset Password" onPress= {()=>{resetPassword()}} >
-             <Text style={styles.optionButtonText}>Reset Password</Text>
-          </TouchableHighlight>
-          
+       <View style={{flexGrow:1, flexDirection:'column', justifyContent:'space-evenly'}}>
+         <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
+               <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
+         </TouchableOpacity>
+         <Text style={styles.texts}>{textState == 'old'? "Enter your existing passcode": textState == 'new'? "Create your new passcode":"Confirm your new passcode"}</Text>
+         <PasscodeView />
+         <NumericPad />
        </View>
     );
  }
@@ -48,7 +49,7 @@ export function PrivacyPolicy() {
     }
     return (
        <View style={styles.container}>
-          <Text style={styles.texts}>Type your current password to confirm</Text>
+          <Text>"Confirm with your passcode</Text>
           <TextInput
             autoCorrect={false}
             onChangeText={setPassword}
@@ -98,10 +99,10 @@ export function PrivacyPolicy() {
        fontWeight: 'bold',
     },
     texts: {
+       textAlign:'center',
        marginBottom: 20,
+       fontWeight:'bold',
        fontSize: 18,
-       textAlign: 'center',
-       width: '50%',
      },
     textInput: {
        height:40,

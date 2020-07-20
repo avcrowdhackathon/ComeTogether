@@ -7,7 +7,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 
-export default function EmailSent({ navigation }) {
+export default function ResetPassEmailSent({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
@@ -24,8 +24,8 @@ export default function EmailSent({ navigation }) {
       <View style={styles.root}>
         <View style={styles.rowContainer}>
           <Text style={styles.label}>
-            Use the password that has been sent in your Email in order to log
-            in.{" "}
+            Use the link that has been sent in your Email in order to reset your
+            password.{" "}
           </Text>
         </View>
         <TouchableHighlight

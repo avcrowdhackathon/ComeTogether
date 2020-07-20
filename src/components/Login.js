@@ -15,17 +15,34 @@ export default function Login({ navigation }) {
 
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [errors, setErrors] = React.useState({ email: "", password: "" });
 
   function validation() {
     const email_trimmed = email.toLowerCase().trim();
+    setErrors({ email: "", password: "" });
+
     if (email_trimmed == "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Email cannot be empty.",
+      }));
       return true;
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
     ) {
+      setErrors((prevState) => ({
+        ...prevState,
+        email: "Email format is not valid.",
+      }));
       return true;
     } else if (password == "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        password: "Password cannot be empty",
+      }));
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -46,15 +63,37 @@ export default function Login({ navigation }) {
             value={email}
             style={styles.textInput}
             secureTextEntry={false}
+            placeholder='Email'
           />
-
+          {errors.email !== "" && (
+            <View style={{ width: "100%" }}>
+              <Text style={styles.errorMessage}>{errors.email}</Text>
+            </View>
+          )}
           <TextInput
             autoCorrect={false}
             onChangeText={setPassword}
             value={password}
             style={styles.textInput}
             secureTextEntry={true}
+            placeholder='Password'
           />
+          {errors.password !== "" && (
+            <View style={{ width: "100%" }}>
+              <Text style={styles.errorMessage}>{errors.password}</Text>
+            </View>
+          )}
+          <TouchableHighlight
+            title="resetPass"
+            style={styles.goToEmail}
+            onPress={() => {
+              navigation.navigate("Login_reset_password");
+            }}
+          >
+            <Text style={styles.labelEmail}>
+              Reset your password
+            </Text>
+          </TouchableHighlight>
           <TouchableHighlight
             title="goToEmail"
             style={styles.goToEmail}
@@ -73,9 +112,10 @@ export default function Login({ navigation }) {
         <TouchableHighlight
           style={styles.scan}
           title="Login"
-          disabled={validation()}
           onPress={() => {
-            signIn(email, password);
+            const validate = validation();
+            if (validate) return;
+            signIn(email, password, setErrors);
           }}
         >
           <Text style={styles.button}>Login</Text>
@@ -88,7 +128,7 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "#EFEFF5",
     justifyContent: "space-around",
     paddingHorizontal: 20,
     overflow: "hidden",
@@ -105,7 +145,7 @@ const styles = StyleSheet.create({
   },
   labelEmail: {
     fontSize: 12,
-    color: "#FF652F",
+    color: "#rgb(0, 103, 187)",
     textAlign: "right",
   },
   goToEmail: {
@@ -116,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 44,
     borderRadius: 7,
-    backgroundColor: "#FF652F",
+    backgroundColor: "#rgb(0, 103, 187)",
     marginBottom: 100,
   },
   logo: {
@@ -146,6 +186,11 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+  },
+  errorMessage: {
+    fontSize: 12,
+    color: "red",
+    textAlign: "left",
   },
   textInput: {
     width: "100%",

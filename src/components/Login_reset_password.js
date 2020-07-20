@@ -2,25 +2,15 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  ScrollView,
   Text,
   TextInput,
   Image,
   TouchableHighlight,
 } from "react-native";
 
-import AWS from "aws-sdk";
-import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 
-const ses = new AWS.SES({
-  accessKeyId: "AKIAXQFEMNA4AWKM4HW5",
-  secretAccessKey: "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",
-  region: "eu-west-1",
-  apiVersion: "2010-12-01",
-});
-
-export default function Login_Send_Email({ navigation }) {
+export default function Login_reset_password({ navigation }) {
   const [email, setEmail] = React.useState("");
   const [error, seterror] = React.useState("");
 
@@ -45,92 +35,20 @@ export default function Login_Send_Email({ navigation }) {
     if (validate) return;
     //check if user exists in our database already
     const email_trimmed = email.toLowerCase().trim();
-    firestore()
-      .collection("users")
-      .where("email", "==", email_trimmed)
-      .get()
-      .then((doc) => {
-        if (!doc.empty) {
-          //user exists, so get his one time password
-          if (doc.docs[0].data().one_time_password === "")
-            console.warn(
-              `You are a registered user, if you don't remember your password, please reset it!`
-            );
-          else {
-            //send email, if one time password is set
-            var TemplateData = {
-              passwrod: doc.docs[0].data().one_time_password.toString(),
-            };
-
-            var params = {
-              Source: "info@cometogether.network",
-              Destination: {
-                ToAddresses: [email_trimmed],
-              },
-              Template: "BackTogetherLoginPassword" /* required */,
-              TemplateData: JSON.stringify(TemplateData) /* required */,
-            };
-
-            ses
-              .sendTemplatedEmail(params)
-              .promise()
-              .then(() => {
-                //redirect to 'email sent page'
-                navigation.navigate("EmailSent");
-              });
-          }
-        } else {
-          //user dont exist, so register him, and add him to database.
-          const defaultNum = Math.floor(100000 + Math.random() * 900000); //6 digits default number
-
-          auth()
-            .createUserWithEmailAndPassword(
-              email_trimmed,
-              defaultNum.toString()
-            )
-            .then((data) => {
-              firestore()
-                .collection("users")
-                .add({
-                  email: email_trimmed,
-                  one_time_password: defaultNum,
-                  id: data.user.uid,
-                  role: "user",
-                });
-              //send email with his code.
-              var TemplateData = {
-                passwrod: defaultNum,
-              };
-
-              var params = {
-                Source: "info@cometogether.network",
-                Destination: {
-                  ToAddresses: [email_trimmed],
-                },
-                Template: "BackTogetherLoginPassword" /* required */,
-                TemplateData: JSON.stringify(TemplateData) /* required */,
-              };
-
-              ses
-                .sendTemplatedEmail(params)
-                .promise()
-                .then(() => {
-                  //redirect to 'email sent page'
-                  navigation.navigate("EmailSent");
-                });
-            })
-            .catch((error) => {
-              if (error.code === "auth/email-already-in-use") {
-                console.warn("That email address is already in use!");
-              }
-
-              if (error.code === "auth/invalid-email") {
-                console.warn("That email address is invalid!");
-              }
-
-              console.log(error);
-            });
+    auth()
+      .sendPasswordResetEmail(email_trimmed)
+      .then((data) => {
+        navigation.navigate("ResetPassEmailSent");
+      })
+      .catch((error) => {
+        if (error.code === "auth/invalid-email") {
+          seterror("Email format is not valid.");
+        } else if (error.code === "auth/user-not-found") {
+          seterror("Email not found");
+        }else {
+          seterror("Something went wrong");
         }
+        console.log(error);
       });
   };
 
@@ -141,7 +59,7 @@ export default function Login_Send_Email({ navigation }) {
         source={require("../../images/BT_logoWithName.png")}
         resizeMode="contain"
       />
-      <Text style={styles.header}> One-Time Password</Text>
+      <Text style={styles.header}> Reset your password</Text>
 
       <View style={styles.root}>
         <View style={styles.rowContainer}>
@@ -151,8 +69,8 @@ export default function Login_Send_Email({ navigation }) {
             autoCorrect={true}
             onChangeText={setEmail}
             value={email}
-            style={styles.textInput}
             placeholder='Email'
+            style={styles.textInput}
           />
           {error !== "" && (
             <View style={{ width: "100%" }}>
@@ -177,7 +95,7 @@ export default function Login_Send_Email({ navigation }) {
           title="SendEmail"
           onPress={sendEmail}
         >
-          <Text style={styles.button}>Send Password</Text>
+          <Text style={styles.button}>Send Reset Link</Text>
         </TouchableHighlight>
       </View>
     </View>

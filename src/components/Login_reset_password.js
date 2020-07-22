@@ -6,6 +6,7 @@ import {
   TextInput,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
 } from "react-native";
 
 import auth from "@react-native-firebase/auth";
@@ -13,6 +14,7 @@ import auth from "@react-native-firebase/auth";
 export default function Login_reset_password({ navigation }) {
   const [email, setEmail] = React.useState("");
   const [error, seterror] = React.useState("");
+  const [wait, setWait] = React.useState(false);
 
   const validation = React.useCallback(() => {
     const email_trimmed = email.toLowerCase().trim();
@@ -34,72 +36,82 @@ export default function Login_reset_password({ navigation }) {
     const validate = validation();
     if (validate) return;
     //check if user exists in our database already
+    setWait(true);
     const email_trimmed = email.toLowerCase().trim();
     auth()
       .sendPasswordResetEmail(email_trimmed)
       .then((data) => {
         navigation.navigate("ResetPassEmailSent");
+        setWait(false);
       })
       .catch((error) => {
+        setWait(false);
         if (error.code === "auth/invalid-email") {
           seterror("Email format is not valid.");
         } else if (error.code === "auth/user-not-found") {
           seterror("Email not found");
-        }else {
+        } else {
           seterror("Something went wrong");
         }
         console.log(error);
       });
   };
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../../images/BT_logoWithName.png")}
-        resizeMode="contain"
-      />
-      <Text style={styles.header}> Reset your password</Text>
+  if (wait) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="rgb(0, 103, 187)" />
+      </View>
+    );
+  } else
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../../images/BT_logoWithName.png")}
+          resizeMode="contain"
+        />
+        <Text style={styles.header}> Reset your password</Text>
 
-      <View style={styles.root}>
-        <View style={styles.rowContainer}>
-          <Text style={styles.label}>Submit your email</Text>
+        <View style={styles.root}>
+          <View style={styles.rowContainer}>
+            <Text style={styles.label}>Submit your email</Text>
 
-          <TextInput
-            autoCorrect={true}
-            onChangeText={setEmail}
-            value={email}
-            placeholder='Email'
-            style={styles.textInput}
-          />
-          {error !== "" && (
-            <View style={{ width: "100%" }}>
-              <Text style={styles.errorMessage}>{error}</Text>
-            </View>
-          )}
+            <TextInput
+              autoCorrect={true}
+              onChangeText={setEmail}
+              value={email}
+              placeholder="Email"
+              style={styles.textInput}
+            />
+            {error !== "" && (
+              <View style={{ width: "100%" }}>
+                <Text style={styles.errorMessage}>{error}</Text>
+              </View>
+            )}
+            <TouchableHighlight
+              title="goToEmail"
+              style={styles.goToEmail}
+              onPress={() => {
+                navigation.navigate("SignIn");
+              }}
+            >
+              <Text style={styles.labelEmail}>Go to login</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
           <TouchableHighlight
-            title="goToEmail"
-            style={styles.goToEmail}
-            onPress={() => {
-              navigation.navigate("SignIn");
-            }}
+            style={styles.scan}
+            title="SendEmail"
+            onPress={sendEmail}
           >
-            <Text style={styles.labelEmail}>Go to login</Text>
+            <Text style={styles.button}>Send Reset Link</Text>
           </TouchableHighlight>
         </View>
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableHighlight
-          style={styles.scan}
-          title="SendEmail"
-          onPress={sendEmail}
-        >
-          <Text style={styles.button}>Send Reset Link</Text>
-        </TouchableHighlight>
-      </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

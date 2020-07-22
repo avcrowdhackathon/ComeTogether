@@ -34,7 +34,7 @@ export const deleteUser = async (password) => {
     .currentUser.reauthenticateWithCredential(authCredential)
     .then(data => {
       user.delete().then(() => console.warn('user deleted'))
-
+      //delete from database too !! 
     })
     .catch(err => console.warn('Wrong credentials'));
 } 

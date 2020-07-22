@@ -2,7 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  ScrollView,
+  ActivityIndicator,
   Text,
   TextInput,
   Image,
@@ -23,6 +23,7 @@ const ses = new AWS.SES({
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
   const [error, seterror] = React.useState("");
+  const [wait, setWait] = React.useState(false);
 
   const validation = React.useCallback(() => {
     const email_trimmed = email.toLowerCase().trim();
@@ -45,6 +46,7 @@ export default function Login_Send_Email({ navigation }) {
     if (validate) return;
     //check if user exists in our database already
     const email_trimmed = email.toLowerCase().trim();
+    setWait(true);
     firestore()
       .collection("users")
       .where("email", "==", email_trimmed)
@@ -52,11 +54,12 @@ export default function Login_Send_Email({ navigation }) {
       .then((doc) => {
         if (!doc.empty) {
           //user exists, so get his one time password
-          if (doc.docs[0].data().one_time_password === "")
+          if (doc.docs[0].data().one_time_password === "") {
             console.warn(
               `You are a registered user, if you don't remember your password, please reset it!`
             );
-          else {
+            setWait(false);
+          } else {
             //send email, if one time password is set
             var TemplateData = {
               passwrod: doc.docs[0].data().one_time_password.toString(),
@@ -75,6 +78,7 @@ export default function Login_Send_Email({ navigation }) {
               .sendTemplatedEmail(params)
               .promise()
               .then(() => {
+                setWait(false);
                 //redirect to 'email sent page'
                 navigation.navigate("EmailSent");
               });
@@ -97,6 +101,7 @@ export default function Login_Send_Email({ navigation }) {
                   id: data.user.uid,
                   role: "user",
                 });
+
               //send email with his code.
               var TemplateData = {
                 passwrod: defaultNum,
@@ -116,72 +121,82 @@ export default function Login_Send_Email({ navigation }) {
                 .promise()
                 .then(() => {
                   //redirect to 'email sent page'
+                  setWait(false);
                   navigation.navigate("EmailSent");
                 });
             })
             .catch((error) => {
               if (error.code === "auth/email-already-in-use") {
                 console.warn("That email address is already in use!");
+                setWait(false);
               }
 
               if (error.code === "auth/invalid-email") {
                 console.warn("That email address is invalid!");
+                setWait(false);
               }
-
+              setWait(false);
               console.log(error);
             });
         }
       });
   };
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../../images/BT_logoWithName.png")}
-        resizeMode="contain"
-      />
-      <Text style={styles.header}> One-Time Password</Text>
+  if (wait) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="rgb(0, 103, 187)" />
+      </View>
+    );
+  } else
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../../images/BT_logoWithName.png")}
+          resizeMode="contain"
+        />
+        <Text style={styles.header}> One-Time Password</Text>
 
-      <View style={styles.root}>
-        <View style={styles.rowContainer}>
-          <Text style={styles.label}>Submit your email</Text>
+        <View style={styles.root}>
+          <View style={styles.rowContainer}>
+            <Text style={styles.label}>Submit your email</Text>
 
-          <TextInput
-            autoCorrect={true}
-            onChangeText={setEmail}
-            value={email}
-            style={styles.textInput}
-            placeholder='Email'
-          />
-          {error !== "" && (
-            <View style={{ width: "100%" }}>
-              <Text style={styles.errorMessage}>{error}</Text>
-            </View>
-          )}
+            <TextInput
+              autoCorrect={true}
+              onChangeText={setEmail}
+              value={email}
+              style={styles.textInput}
+              placeholder="Email"
+            />
+            {error !== "" && (
+              <View style={{ width: "100%" }}>
+                <Text style={styles.errorMessage}>{error}</Text>
+              </View>
+            )}
+            <TouchableHighlight
+              title="goToEmail"
+              style={styles.goToEmail}
+              onPress={() => {
+                navigation.navigate("SignIn");
+              }}
+            >
+              <Text style={styles.labelEmail}>Go to login</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
           <TouchableHighlight
-            title="goToEmail"
-            style={styles.goToEmail}
-            onPress={() => {
-              navigation.navigate("SignIn");
-            }}
+            style={styles.scan}
+            title="SendEmail"
+            onPress={sendEmail}
           >
-            <Text style={styles.labelEmail}>Go to login</Text>
+            <Text style={styles.button}>Send Password</Text>
           </TouchableHighlight>
         </View>
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableHighlight
-          style={styles.scan}
-          title="SendEmail"
-          onPress={sendEmail}
-        >
-          <Text style={styles.button}>Send Password</Text>
-        </TouchableHighlight>
-      </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

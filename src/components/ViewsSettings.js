@@ -2,19 +2,21 @@ import React from 'react';
 import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
 import { NumericPad, PasscodeView } from '../components';
 import { useNavigation } from '@react-navigation/native';
+import Policy from "./Policy";
+import Terms from "./Terms";
 
 
 export function PrivacyPolicy() {
     return (
        <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.texts}>Privacy Policy Text</Text>
+         <Policy/>
        </ScrollView>
     );
  }
  export function TermsOfUse() {
     return (
        <View style={styles.container}>
-          <Text style={styles.texts}>Terms of Use Text</Text>
+         <Terms/>
        </View>
     );
  }
@@ -28,7 +30,7 @@ export function PrivacyPolicy() {
    }
 
    const resetPassword = async () => {
-   
+
    }
     return (
        <View style={{flexGrow:1, flexDirection:'column', justifyContent:'space-evenly'}}>
@@ -43,9 +45,9 @@ export function PrivacyPolicy() {
  }
  export function DeleteAccount() {
     const [password, setPassword] = React.useState('')
- 
+
     const deleteAccount = async () => {
- 
+
     }
     return (
        <View style={styles.container}>
@@ -63,11 +65,11 @@ export function PrivacyPolicy() {
        </View>
     );
  }
- 
+
  const styles = StyleSheet.create({
     container: {
-       flex: 1, 
-       alignItems: 'center', 
+       flex: 1,
+       alignItems: 'center',
        justifyContent: 'center'
     },
     optionButton: {
@@ -92,7 +94,7 @@ export function PrivacyPolicy() {
        width:'50%',
        overflow:"hidden"
     },
- 
+
     optionButtonText: {
        fontSize: 20,
        color:'#FFFFFF',
@@ -113,6 +115,6 @@ export function PrivacyPolicy() {
        borderRadius: 8,
        borderColor: 'grey',
        backgroundColor: 'rgba(243, 241, 239, 0.8)'
- 
+
      },
  })

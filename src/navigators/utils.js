@@ -1,8 +1,6 @@
 import React from 'react';
-import {View} from 'react-native'
-import {InsertUser, VerifyOptions, UserQRCode} from '../components';
+import {InsertUser, VerifyOptions, UserQRCode, InsertRole} from '../components';
 import CertificateNavigator from './CertificateNavigator';
-import {Role} from '../data/index'
 
 
 export const getTabScreens = (role, Tab) => {
@@ -14,6 +12,7 @@ export const getTabScreens = (role, Tab) => {
                 <Tab.Screen name="Verify" component={VerifyOptions} />
                 <Tab.Screen name="QR Code" component={UserQRCode} />
                 <Tab.Screen name= "Certificates" component={CertificateNavigator} />
+                <Tab.Screen name= "Admin" component={InsertRole} />
             </>
         );
     }else if(role == 'health'){

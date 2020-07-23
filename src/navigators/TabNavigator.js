@@ -27,6 +27,9 @@ const  TabNavigator = ({userToken}) => {
           if (route.name === 'Certificates') {
             iconName = focused? require('../../images/history.png'):require('../../images/history.png');
           }
+          if (route.name === 'Admin') {
+            iconName = focused? require('../../images/admin.png'):require('../../images/admin.png');
+          }
 
           const st = focused? null: {opacity:0.3}
 

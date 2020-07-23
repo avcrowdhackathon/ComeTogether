@@ -19,4 +19,5 @@ export {default as SettingsScreen} from './SettingsScreen';
 export {default as Login_reset_password} from './Login_reset_password';
 export {default as Settings} from './Settings';
 export {default as ResetPassEmailSent} from './ResetPassEmailSent';
+export {default as InsertRole} from './InsertRole';
 

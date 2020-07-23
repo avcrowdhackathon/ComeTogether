@@ -32,7 +32,7 @@ const Stack = createStackNavigator();
 export const AuthContext = React.createContext();
 
 const App = ({ userToken, isLoading, isSignout, dispatch }) => {
-  const [firebaseLogin, setfirebaseLogin] = React.useState(false)
+  const [firebaseLogin, setfirebaseLogin] = React.useState(false);
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
@@ -64,10 +64,10 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
       </Text>
     );
   };
-
   const authContext = React.useMemo(
     () => ({
-      signIn: async (email, password, cb) => {
+      signIn: async (email, password, cb, setWait) => {
+        setWait(true);
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -85,8 +85,10 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 .then((doc) => {
                   if (!doc.empty) {
                     const data = doc.docs[0].data();
-
+                    setWait(false);
                     dispatch(insertToken(data));
+                  } else {
+                    setWait(false);
                   }
                 });
             })
@@ -99,23 +101,27 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                   ...prevState,
                   password: "Password is not correct",
                 }));
+                setWait(false);
               } else if (error.code === "auth/user-not-found") {
                 console.log("That password is incorrect!");
                 cb((prevState) => ({
                   ...prevState,
                   email: "User not found",
                 }));
+                setWait(false);
               } else {
                 cb((prevState) => ({
                   ...prevState,
                   passwrod: "Something went wrong",
                 }));
+                setWait(false);
               }
-
+              setWait(false);
               console.log(error);
             });
         } catch (error) {
           alert(error);
+          setWait(false);
         }
       },
 
@@ -126,21 +132,20 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
     []
   );
   auth().onAuthStateChanged(() => {
-    if(auth().currentUser !== null){
-      setfirebaseLogin(true)
+    if (auth().currentUser !== null) {
+      setfirebaseLogin(true);
     } else {
-      setfirebaseLogin(false)
+      setfirebaseLogin(false);
+      dispatch(deleteToken());
     }
-  })
-  
+  });
+
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator
           headerMode={
-            userToken == null || !firebaseLogin || isLoading
-              ? "none"
-              : "screen"
+            userToken == null || !firebaseLogin || isLoading ? "none" : "screen"
           }
         >
           {userToken == null || !firebaseLogin ? (

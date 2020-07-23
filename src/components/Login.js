@@ -2,7 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  ScrollView,
+  ActivityIndicator,
   Text,
   TextInput,
   Image,
@@ -16,6 +16,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [errors, setErrors] = React.useState({ email: "", password: "" });
+  const [wait, setWait] = React.useState(false)
 
   function validation() {
     const email_trimmed = email.toLowerCase().trim();
@@ -46,83 +47,88 @@ export default function Login({ navigation }) {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require("../../images/BT_logoWithName.png")}
-        resizeMode="contain"
-      />
-      <Text style={styles.header}> Login</Text>
+  if (wait) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="large" color="rgb(0, 103, 187)" />
+      </View>
+    );
+  } else
+    return (
+      <View style={styles.container}>
+        <Image
+          style={styles.logo}
+          source={require("../../images/BT_logoWithName.png")}
+          resizeMode="contain"
+        />
+        <Text style={styles.header}> Login</Text>
 
-      <View style={styles.root}>
-        <View style={styles.rowContainer}>
-          <TextInput
-            autoCorrect={true}
-            onChangeText={setEmail}
-            value={email}
-            style={styles.textInput}
-            secureTextEntry={false}
-            placeholder='Email'
-          />
-          {errors.email !== "" && (
-            <View style={{ width: "100%" }}>
-              <Text style={styles.errorMessage}>{errors.email}</Text>
-            </View>
-          )}
-          <TextInput
-            autoCorrect={false}
-            onChangeText={setPassword}
-            value={password}
-            style={styles.textInput}
-            secureTextEntry={true}
-            placeholder='Password'
-          />
-          {errors.password !== "" && (
-            <View style={{ width: "100%" }}>
-              <Text style={styles.errorMessage}>{errors.password}</Text>
-            </View>
-          )}
+        <View style={styles.root}>
+          <View style={styles.rowContainer}>
+            <TextInput
+              autoCorrect={true}
+              onChangeText={setEmail}
+              value={email}
+              style={styles.textInput}
+              secureTextEntry={false}
+              placeholder="Email"
+            />
+            {errors.email !== "" && (
+              <View style={{ width: "100%" }}>
+                <Text style={styles.errorMessage}>{errors.email}</Text>
+              </View>
+            )}
+            <TextInput
+              autoCorrect={false}
+              onChangeText={setPassword}
+              value={password}
+              style={styles.textInput}
+              secureTextEntry={true}
+              placeholder="Password"
+            />
+            {errors.password !== "" && (
+              <View style={{ width: "100%" }}>
+                <Text style={styles.errorMessage}>{errors.password}</Text>
+              </View>
+            )}
+            <TouchableHighlight
+              title="resetPass"
+              style={styles.goToEmail}
+              onPress={() => {
+                navigation.navigate("Login_reset_password");
+              }}
+            >
+              <Text style={styles.labelEmail}>Reset your password</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              title="goToEmail"
+              style={styles.goToEmail}
+              onPress={() => {
+                navigation.navigate("SendEmail");
+              }}
+            >
+              <Text style={styles.labelEmail}>
+                Don't have an account? Register now!
+              </Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+
+        <View style={styles.buttonContainer}>
           <TouchableHighlight
-            title="resetPass"
-            style={styles.goToEmail}
+            style={styles.scan}
+            title="Login"
             onPress={() => {
-              navigation.navigate("Login_reset_password");
+              const validate = validation();
+              if (validate) return;
+              signIn(email, password, setErrors, setWait);
             }}
           >
-            <Text style={styles.labelEmail}>
-              Reset your password
-            </Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            title="goToEmail"
-            style={styles.goToEmail}
-            onPress={() => {
-              navigation.navigate("SendEmail");
-            }}
-          >
-            <Text style={styles.labelEmail}>
-              Don't have an account? Register now!
-            </Text>
+            <Text style={styles.button}>Login</Text>
           </TouchableHighlight>
         </View>
       </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableHighlight
-          style={styles.scan}
-          title="Login"
-          onPress={() => {
-            const validate = validation();
-            if (validate) return;
-            signIn(email, password, setErrors);
-          }}
-        >
-          <Text style={styles.button}>Login</Text>
-        </TouchableHighlight>
-      </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

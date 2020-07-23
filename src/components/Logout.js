@@ -6,7 +6,7 @@ import auth from "@react-native-firebase/auth";
 export default function Logout() {
   const { signOut } = React.useContext(AuthContext);
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     auth().signOut();
     signOut();
   }, []);

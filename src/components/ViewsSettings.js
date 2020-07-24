@@ -1,10 +1,10 @@
 import React from 'react';
-import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
-import { NumericPad, PasscodeView } from '../components';
+import {TouchableOpacity, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { connect } from "react-redux";
 import Policy from "./Policy";
 import Terms from "./Terms";
+import {deleteUser} from '../services/sevices';
+
 
 
 export function PrivacyPolicy() {
@@ -25,76 +25,75 @@ export function PrivacyPolicy() {
 
  export function DeleteAccount() {
     const [password, setPassword] = React.useState('')
+    const navigation = useNavigation();
 
+    const backfunc = () => {
+      navigation.goBack();
+    }
+  
     const deleteAccount = async () => {
-
+      const msg = deleteUser(password);
+      if( msg ){
+         navigation.goBack();
+      }
+      else {
+         console.warn("snakbar")
+      }
     }
     return (
        <View style={styles.container}>
-          <Text>"Confirm with your passcode</Text>
+         <View style={{flexDirection:'row', marginTop:20, marginHorizontal:18, flexGrow:0.5}}>
+          <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
+              <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
+          </TouchableOpacity>
+          <Text style={{fontWeight:'bold', fontSize:18, color:'dimgrey'}}>Delete Account</Text>
+        </View>
+        <View style={{flexGrow:2, flexDirection:'column'}}>
+          <Text style={styles.texts}>Confirm with your passcode</Text>
           <TextInput
             autoCorrect={false}
             onChangeText={setPassword}
+            textContentType='password'
             value={password}
             style={styles.textInput}
             secureTextEntry={true}
           />
-          <TouchableHighlight style={styles.confirmButton} title="Delete Account" onPress= {()=>{deleteAccount()}} >
+          <TouchableOpacity style={styles.confirmButton} title="Delete Account" onPress= {()=>{deleteAccount()}} >
              <Text style={styles.optionButtonText}>Delete Account</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
+         </View>
        </View>
     );
  }
 
  const styles = StyleSheet.create({
     container: {
-       flex: 1,
-       alignItems: 'center',
-       justifyContent: 'center'
-    },
-    optionButton: {
-       margin: 25,
-       justifyContent:'center',
-       alignItems: 'center',
-       alignSelf: 'center',
-       height:44,
-       borderRadius:7,
-       backgroundColor: '#rgb(0, 103, 187)',
-       width:'70%',
-       overflow:"hidden"
+      flex:1
     },
     confirmButton: {
-       margin: 25,
+       marginHorizontal: 18,
+       marginVertical:20,
        justifyContent:'center',
        alignItems: 'center',
-       alignSelf: 'center',
-       height:44,
-       borderRadius:7,
+       height:40,
+       borderRadius:10,
        backgroundColor: '#rgb(0, 103, 187)',
-       width:'50%',
-       overflow:"hidden"
     },
-
     optionButtonText: {
-       fontSize: 20,
+       fontSize: 18,
        color:'#FFFFFF',
        fontWeight: 'bold',
     },
     texts: {
        textAlign:'center',
-       marginBottom: 20,
        fontWeight:'bold',
        fontSize: 18,
      },
     textInput: {
-       height:40,
-       width: '50%',
-       alignSelf: 'center',
-       paddingLeft: 6,
-       borderWidth: 2,
-       borderRadius: 8,
-       borderColor: 'grey',
-       backgroundColor: 'rgba(243, 241, 239, 0.8)'
-
+      height:40,
+      margin: 18,
+      paddingLeft: 6,
+      borderRadius: 10,
+      backgroundColor: 'white'
      },
  })

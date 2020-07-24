@@ -3,15 +3,14 @@ import { View, Text, StyleSheet, Animated} from 'react-native';
 import { connect } from "react-redux";
 
 
-const PasscodeView = ({currentpass, newpass, status}) => {
+const PasscodeView = ({currentpass, newpass, confpass, status, repeat}) => {
     const [animation, setAnimation] = React.useState(new Animated.Value(0))
     
-
     const boxInterpolation =  animation.interpolate({
         inputRange: [0, 1],
         outputRange:["rgb(0,103,187)" , "rgba(0,103,187, 0.6)"]
     })
-    let cl = (pos) => {const foc= (status?currentpass.length:newpass.length) >= pos?{color:boxInterpolation}:{color:'rgba(0,103,187, 0.6)'}; return(foc)}
+    let cl = (pos) => {const foc= (status?currentpass.length:repeat?confpass.length:newpass.length) >= pos?{color:boxInterpolation}:{color:'rgba(0,103,187, 0.6)'}; return(foc)}
 
     return(
         <View style={{justifyContent:'center', alignItems:'center'}}>
@@ -50,7 +49,9 @@ const style = StyleSheet.create({
 const mapStateToProps = (state) => ({
     currentpass: state.pass.passCode,
     newpass: state.pass.newCode,
-    status: state.pass.old
+    confpass: state.pass.confCode,
+    status: state.pass.old,
+    repeat: state.pass.repeat
   });
   
   export default connect(

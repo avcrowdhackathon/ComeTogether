@@ -1,9 +1,10 @@
 import React from 'react';
 import {TouchableOpacity, Text } from 'react-native';
 import { connect } from "react-redux";
-import { setPassCode , setNewCode, setStatus} from '../../actions';
- 
-const PadBtn = ({number, style, currentpass,newpass,status, dispatch}) => {
+import { setPassCode , setNewCode, setStatus, setRepeat, setConfCode} from '../../actions';
+import { resetPassUser } from '../services/sevices'; 
+
+const PadBtn = ({number, style, currentpass, newpass, confpass, status, repeat, dispatch}) => {
 
   const pressFuncCurrent = () => {
     if(currentpass.length == 5){
@@ -14,13 +15,24 @@ const PadBtn = ({number, style, currentpass,newpass,status, dispatch}) => {
 
   const pressFuncNew = () => {
     if(newpass.length == 5){
-      //dispatch(setStatus(false))
+      dispatch(setRepeat(true))
     }
-    dispatch(setPassCode(newpass+number))
+    dispatch(setNewCode(newpass+number))
   }
-
+  
+  const pressFuncConf = async () => {
+    await dispatch(setConfCode(confpass+number))
+    if( confpass.length == 5){
+      if(confpass === newpass){
+        await resetPassUser(currentpass, newpass);
+      }
+      else {
+        console.warn("Error");
+      }
+    }
+  }
     return(
-        <TouchableOpacity style={{width:30, height:30, justifyContent:'center', alignItems:'center'}} onPress={()=>{status?pressFuncCurrent():pressFuncNew()}}>
+        <TouchableOpacity style={{width:30, height:30, justifyContent:'center', alignItems:'center'}} onPress={()=>{status?pressFuncCurrent():repeat?pressFuncConf():pressFuncNew()}}>
             <Text style={style}>
                 {number}
             </Text>
@@ -32,7 +44,9 @@ const PadBtn = ({number, style, currentpass,newpass,status, dispatch}) => {
 const mapStateToProps = (state) => ({
     currentpass: state.pass.passCode,
     newpass: state.pass.newCode,
-    status: state.pass.old
+    confpass: state.pass.confCode,
+    status: state.pass.old,
+    repeat: state.pass.repeat
   });
   
   const mapDispatchToProps = (dispatch) => ({

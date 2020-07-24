@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
+import {Text, ScrollView, View, StyleSheet, Linking, Image, TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import {Text, ScrollView, View, StyleSheet, Linking} from 'react-native';
 
-class Policy extends Component {
+const Policy = () => {
 
-  render() {
+  const navigation = useNavigation();
+
+  const backfunc = () => {
+    navigation.goBack();
+  }
 
       return (
         <View style={styles.containerWrapper}>
-          {/*<Image*/}
-          {/*  style={styles.logo}*/}
-          {/*  source={require("../../images/BT_logoWithName.png")}*/}
-          {/*  resizeMode="contain"*/}
-          {/*/>*/}
-        <ScrollView style={styles.container}>
+        <View style={{flexDirection:'row', marginVertical:20, marginHorizontal:18}}>
+          <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
+              <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
+          </TouchableOpacity>
+          <Text style={{fontWeight:'bold', fontSize:18, color:'dimgrey'}}>Privacy Policy</Text>
+        </View>
+        <ScrollView style={styles.scroll}>
 
 
                               <Text h1>A. PRIVACY POLICY</Text>
@@ -110,7 +116,7 @@ that we can't identify you. In any case, we won’t keep your personaldata more 
           </ScrollView>
         </View>
       );
-  }
+
 }
 
 export default Policy
@@ -118,16 +124,15 @@ export default Policy
 const styles = StyleSheet.create({
   containerWrapper:{
     display: 'flex',
-    marginTop:20,
+    backgroundColor:'#efeff5'
   },
-  container: {
-    backgroundColor: "#EFEFF5",
-    paddingHorizontal: 20,
-    overflow: "hidden",
-    height: 100,
-    marginBottom: 30,
-    display: 'flex',
-
+  scroll : {
+    backgroundColor:'white',
+    marginHorizontal:18,
+    marginVertical:20,
+    borderRadius:10,
+    paddingHorizontal:18,
+    paddingVertical:18
   },
   logo: {
     marginBottom: 10,

@@ -3,14 +3,16 @@ import {TouchableOpacity, StyleSheet, Text, View, Image} from 'react-native';
 import { NumericPad, PasscodeView } from '../components';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from "react-redux";
-import { resetNewCode, resetPassCode, setStatus } from '../../actions';
+import { resetNewCode, resetPassCode, setStatus, resetConfCode, setRepeat } from '../../actions';
 
-const ResetPassword = ({status, dispatch}) => {
+const ResetPassword = ({status, repeat, dispatch}) => {
     const navigation = useNavigation();
     
     const backfunc = () => {
         dispatch(resetPassCode());
         dispatch(resetNewCode());
+        dispatch(resetConfCode());
+        dispatch(setRepeat(false));
         dispatch(setStatus(true));
         navigation.goBack();
     }
@@ -23,7 +25,7 @@ const ResetPassword = ({status, dispatch}) => {
         </TouchableOpacity>
         </View>
     <View style={{flexGrow:2, flexDirection:'column', justifyContent:'space-between', marginHorizontal:18}}>
-        <Text style={styles.texts}>{status? "Enter your existing passcode": status? "Create your new passcode":"Confirm your new passcode"}</Text>
+        <Text style={styles.texts}>{status? "Enter your existing passcode": repeat? "Confirm your new passcode":"Create your new passcode"}</Text>
         <PasscodeView/>
         <NumericPad/>
     </View>
@@ -41,7 +43,8 @@ const ResetPassword = ({status, dispatch}) => {
  })
 
 const mapStateToProps = (state) => ({
-    status: state.pass.old
+    status: state.pass.old,
+    repeat: state.pass.repeat
 });
 
 const mapDispatchToProps = (dispatch) => ({

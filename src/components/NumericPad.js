@@ -2,16 +2,9 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, SliderComponent } from 'react-native';
 import {PadBtn} from '../components';
 import { connect } from "react-redux";
-import { setPassCode, setStatus, resetNewCode, resetPassCode, setNewCode } from '../../actions';
-import { resetPassUser } from '../services/sevices';
+import { setPassCode, setStatus, resetNewCode, resetPassCode, setNewCode, setRepeat, setConfCode } from '../../actions';
 
-const NumericPad = ({currentpass, newpass, old, dispatch}) => {
-    const reset = () => {
-        resetPassUser(currentpass, newpass);
-        dispatch(resetPassCode());
-        dispatch(resetNewCode());
-        dispatch(setStatus(true));
-    }
+const NumericPad = ({currentpass, newpass, confpass, old, repeat, dispatch}) => {
 
     return(
         <View style={{marginHorizontal:40}}>
@@ -33,7 +26,7 @@ const NumericPad = ({currentpass, newpass, old, dispatch}) => {
             <View style={style.lines}>
                 <View style={{width:30, height:30}}></View>
                 <PadBtn style={style.numb} number="0"/>
-                {currentpass == '' ? <View style={{width:30, height:30}}></View> : <TouchableOpacity style={{width:30, height:30, justifyContent:'center', alignItems:'center'}} onPress={()=> {old?dispatch(setPassCode(currentpass.slice(0,currentpass.length-1))):dispatch(setNewCode(newpass.slice(0,newpass.length-1)))}}>
+                {currentpass == '' ? <View style={{width:30, height:30}}></View> : <TouchableOpacity style={{width:30, height:30, justifyContent:'center', alignItems:'center'}} onPress={()=> {old?dispatch(setPassCode(currentpass.slice(0,currentpass.length-1))):repeat?dispatch(setConfCode(confpass.slice(0, confpass.length-1))):dispatch(setNewCode(newpass.slice(0,newpass.length-1)))}}>
                     <Image  source={require("../../images/back.png")} />
                 </TouchableOpacity>}
             </View>
@@ -56,7 +49,9 @@ const style= StyleSheet.create({
 const mapStateToProps = (state) => ({
     currentpass: state.pass.passCode,
     newpass: state.pass.newCode,
-    old: state.pass.old
+    confpass: state.pass.confCode,
+    old: state.pass.old,
+    repeat: state.pass.repeat
   });
   
   const mapDispatchToProps = (dispatch) => ({

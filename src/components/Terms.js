@@ -1,14 +1,25 @@
-import React, { Component } from 'react';
-import {Text, ScrollView, View, StyleSheet} from 'react-native';
+import React from 'react';
+import {Text, ScrollView, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-class Terms extends Component {
 
-  render() {
+const Terms = ({}) => {
+ 
+  const navigation = useNavigation();
+
+  const backfunc = () => {
+    navigation.goBack();
+  }
 
       return (
         <View style={styles.containerWrapper}>
-
-        <ScrollView>
+        <View style={{flexDirection:'row', marginVertical:20, marginHorizontal:18}}>
+                <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
+                    <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
+                </TouchableOpacity>
+                <Text style={{fontWeight:'bold', fontSize:18, color:'dimgrey'}}>Terms & Conditions</Text>
+        </View>
+        <ScrollView style={styles.scroll}>
                               <Text h1>Ι. Οροι Χρήσης {'\n'}{'\n'}</Text>
 
                               <Text h4>ΠΑΡΕΧΟΜΕΝΗ ΥΠΗΡΕΣΙΑ</Text>
@@ -197,7 +208,6 @@ Code). Ο δυναμικός QR Code είναι ένα είδος προηγμέ
           </ScrollView>
         </View>
       );
-  }
 }
 
 export default Terms;
@@ -205,9 +215,17 @@ export default Terms;
 const styles = StyleSheet.create({
   containerWrapper:{
     display: 'flex',
-    marginTop:20,
-    padding: 16
+    backgroundColor:'#efeff5'
   },
+  scroll : {
+    backgroundColor:'white',
+    marginHorizontal:18,
+    marginVertical:20,
+    borderRadius:10,
+    paddingHorizontal:18,
+    paddingVertical:18
+  },
+
   container: {
     backgroundColor: "#EFEFF5",
     paddingHorizontal: 20,

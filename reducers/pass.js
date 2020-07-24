@@ -1,7 +1,9 @@
 const initialData = {
     passCode: '',
     newCode: '',
-    old: true
+    confCode: '',
+    old: true,
+    repeat:false
 }
   
 export default  passCodeReducer = (prevState = initialData, action) => {
@@ -32,6 +34,21 @@ export default  passCodeReducer = (prevState = initialData, action) => {
             ...prevState,
             old: action.status
         };
+    case 'SET_REPEAT':
+        return {
+            ...prevState,
+            repeat: action.status
+        };   
+    case 'SET_CONFCODE':
+        return {
+            ...prevState,
+            confCode: action.confCode
+        };
+    case 'RESET_CONFCODE':
+        return {
+            ...prevState,
+            confCode: ''
+        };     
     default:
         return prevState;  
     }

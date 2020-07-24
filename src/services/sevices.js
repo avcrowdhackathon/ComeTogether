@@ -1,5 +1,6 @@
 import { users } from "../../users";
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 export const loginProcess = (password) => {
   var specificUser = "";
@@ -19,22 +20,36 @@ export const resetPassUser = async (oldPass, newPass) => {
   const authCredential = provider.credential(user.email, oldPass);
   await auth()
     .currentUser.reauthenticateWithCredential(authCredential)
-    .then(data => {
-      user.updatePassword(newPass).then(() => console.warn('password updated!!'))
-
+    .then((data) => {
+      user
+        .updatePassword(newPass)
+        .then(() => console.warn("password updated!!"));
     })
-    .catch(err => console.warn('Wrong credentials'));
-} 
+    .catch((err) => console.warn("Wrong credentials"));
+};
 
 export const deleteUser = async (password) => {
   const user = auth().currentUser;
   const provider = auth.EmailAuthProvider;
   const authCredential = provider.credential(user.email, password);
+  const userid = user.uid;
+
   await auth()
     .currentUser.reauthenticateWithCredential(authCredential)
-    .then(data => {
-      user.delete().then(() => console.warn('user deleted'))
-      //delete from database too !! 
+    .then((data) => {
+      firestore()
+        .collection("users")
+        .where("id", "==", userid)
+        .get()
+        .then((doc) => {
+          if (!doc.empty) {
+            doc.docs[0].ref.delete();
+          }
+        });
+      user.delete().then(() => console.warn("user deleted"));
     })
-    .catch(err => console.warn('Wrong credentials'));
-} 
+    .catch((err) => {
+      console.warn(err);
+      console.warn("Wrong credentials");
+    });
+};

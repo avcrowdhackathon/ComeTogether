@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 
@@ -72,44 +72,38 @@ export default function Login_reset_password({ navigation }) {
           resizeMode="contain"
         />
         <Text style={styles.header}> Reset your password</Text>
+        <View style={styles.rowContainer}>
+          <Text style={styles.label}>Submit your email</Text>
 
-        <View style={styles.root}>
-          <View style={styles.rowContainer}>
-            <Text style={styles.label}>Submit your email</Text>
-
-            <TextInput
-              autoCorrect={true}
-              onChangeText={setEmail}
-              value={email}
-              placeholder="Email"
-              style={styles.textInput}
-            />
-            {error !== "" && (
-              <View style={{ width: "100%" }}>
-                <Text style={styles.errorMessage}>{error}</Text>
-              </View>
-            )}
-            <TouchableHighlight
-              title="goToEmail"
-              style={styles.goToEmail}
-              onPress={() => {
-                navigation.navigate("SignIn");
-              }}
-            >
-              <Text style={styles.labelEmail}>Go to login</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableHighlight
-            style={styles.scan}
-            title="SendEmail"
-            onPress={sendEmail}
+          <TextInput
+            autoCorrect={true}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Email"
+            style={styles.textInput}
+          />
+          {error !== "" && (
+            <View style={{ width: "100%" }}>
+              <Text style={styles.errorMessage}>{error}</Text>
+            </View>
+          )}
+          <TouchableOpacity
+            title="goToEmail"
+            style={styles.goToEmail}
+            onPress={() => {
+              navigation.navigate("SignIn");
+            }}
           >
-            <Text style={styles.button}>Send Reset Link</Text>
-          </TouchableHighlight>
+            <Text style={styles.labelEmail}>Go to login</Text>
+          </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={styles.scan}
+          title="SendEmail"
+          onPress={sendEmail}
+        >
+          <Text style={styles.button}>Send Reset Link</Text>
+        </TouchableOpacity>
       </View>
     );
 }
@@ -118,9 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFEFF5",
-    justifyContent: "space-around",
-    paddingHorizontal: 20,
-    overflow: "hidden",
+    marginHorizontal: 18,
   },
   button: {
     fontSize: 20,
@@ -149,16 +141,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 44,
-    borderRadius: 7,
+    borderRadius: 10,
     backgroundColor: "#rgb(0, 103, 187)",
     marginBottom: 100,
   },
   logo: {
-    flex: 0.5,
-    marginBottom: 25,
-    marginTop: 15,
-    height: undefined,
-    width: undefined,
+    width:90, 
+    height:90, 
+    alignSelf:'center',
+    marginBottom: 20,
+    marginTop: 20,
   },
   header: {
     flex: 0.3,
@@ -185,9 +177,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 10,
     paddingLeft: 6,
-    borderWidth: 2,
-    borderRadius: 8,
-    borderColor: "grey",
-    backgroundColor: "rgba(243, 241, 239, 0.8)",
+    borderRadius: 10,
+    backgroundColor: "white",
   },
 });

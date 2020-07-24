@@ -2,18 +2,18 @@ import React from 'react';
 import { FlatList, SafeAreaView, Text, Platform, View, Image, ActivityIndicator } from 'react-native';
 import { Test, Splash } from '../components';
 import firestore from "@react-native-firebase/firestore";
+import {connect} from 'react-redux';
 
 
-const CertificateHistory = ({navigation}) => {
+const CertificateHistory = ({navigation, userToken}) => {
 
     const [cert, setCert] = React.useState(null);
     const [wait, setWait] = React.useState(true)
 
-
     React.useEffect(()=>{
       const subscriber = firestore()
       .collection("tests")
-      .where('email', '==', "stathis@aa.aa")
+      .where('email', '==', userToken.email)
       .get()
       .then((res) => {
         if (res.docs.length !== 0) {
@@ -22,12 +22,15 @@ const CertificateHistory = ({navigation}) => {
             .doc(res.docs[0].ref.id)
             .onSnapshot( async (documentSnapshot) => {
               await setCert(documentSnapshot.data().tests);
-              await setWait(false)
             });
           }
-      })
+         setWait(false)
 
-    }, [])
+      })
+        .catch((error) => {
+          alert( error)
+        })
+        }, [])
 
     const onSelect = React.useCallback((id, authority, issueDate, testType, result) => {
       navigation.navigate('Summary',{id:id, authority:authority, issueDate:issueDate, testType:testType, result:result})
@@ -42,7 +45,7 @@ const CertificateHistory = ({navigation}) => {
     else {
       return(
           <SafeAreaView style={{flex:1}}>
-              {cert?<FlatList 
+              {cert?<FlatList
                   style={{backgroundColor:'#efeff5'}}
                   data={cert}
                   ItemSeparatorComponent={
@@ -71,7 +74,7 @@ const CertificateHistory = ({navigation}) => {
                   )}
                   keyExtractor={item=>item.testId}
               />
-          : 
+          :
           (
           <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor: '#efeff5',}}>
             <Image style={{width:48, height:70, opacity: 0.5, marginVertical:6}} source={require('../../images/summary.png')}  />
@@ -85,5 +88,8 @@ const CertificateHistory = ({navigation}) => {
     }
 }
 
+const mapStateToProps = (state) => ({
+  userToken: state.auth.userToken
+})
 
-export default CertificateHistory;
+export default connect(mapStateToProps)(CertificateHistory)

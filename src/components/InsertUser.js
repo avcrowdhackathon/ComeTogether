@@ -53,14 +53,16 @@ class InsertUser extends Component {
                 .collection("tests")
                 .doc(res.docs[0].ref.id)
                 .update({ tests:  [...res.docs[0].data().tests, ...dataParams.tests]})
-            .then(() => {
+            .then(async () => {
+              await this.setState({isPending: false})
               alert('Updated data successfully')
             })
             } else {
               firestore()
                 .collection("tests")
                 .add({ email: this.state.patientEmail, tests: [...dataParams.tests]})
-                .then(() => {
+                .then(async () => {
+                  await this.setState({isPending: false})
                   alert('Inserted data successfully')
                 })
             }
@@ -114,7 +116,7 @@ class InsertUser extends Component {
             authority: this.state.authority
           }]
         };
-      }else if(this.state.type === 'type2'){
+      }else if(this.state.testType === 'type2'){
         data = {
           patientEmail: this.state.patientEmail,
           tests:  [{
@@ -127,7 +129,7 @@ class InsertUser extends Component {
             authority: this.state.authority
           }]
         };
-      }else if(this.state.type === 'type3'){
+      }else if(this.state.testType === 'type3'){
         data = {
           patientEmail: this.state.patientEmail,
           tests:  [
@@ -143,7 +145,7 @@ class InsertUser extends Component {
             {
               testId: this.state.testId,
               testType: 'Antibodies',
-              result: this.state.checkBoxes[0].value === 1,
+              result: this.state.checkBoxes[1].value === 1,
               issueDate: this.state.issueDate,
               expireDate: this.state.expireDate,
               issuer: this.state.doctorEmail,
@@ -153,7 +155,7 @@ class InsertUser extends Component {
       }
 
       if(!this.state.isPending) {
-        this.setState({isPending: true})
+        await this.setState({isPending: true})
         await this.issue(data)
       }
     } catch (e) {
@@ -165,7 +167,7 @@ class InsertUser extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{backgroundColor:'#efeff5'}}> 
+        <ScrollView contentContainerStyle={{backgroundColor:'#efeff5'}}>
           <Text style={styles.title}>Issue Certificate</Text>
 
           <Text style={styles.label}>Issuing Authority</Text>
@@ -260,7 +262,7 @@ class InsertUser extends Component {
                       labelWrapStyle={{}}
                     />
                   </RadioButton>
-                ))}  
+                ))}
                 </RadioForm>
               </View>
 

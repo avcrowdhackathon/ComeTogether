@@ -1,44 +1,39 @@
 import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, Animated} from 'react-native';
+import { connect } from "react-redux";
 
-const PasscodeView = ({t1,t2, t3, t4, t5, t6}) => {
-    const [field1, setField1] = React.useState(null);
-    const [field2, setField2] = React.useState(true);
-    const [field3, setField3] = React.useState(false);
-    const [field4, setField4] = React.useState(false);
-    const [field5, setField5] = React.useState(false);
-    const [field6, setField6] = React.useState(false);
 
-    React.useEffect(() => {
-        
-    }, [t1,t2,t3,t4,t5,t6])
+const PasscodeView = ({currentpass, newpass, status}) => {
+    const [animation, setAnimation] = React.useState(new Animated.Value(0))
+    
+
     const boxInterpolation =  animation.interpolate({
         inputRange: [0, 1],
         outputRange:["rgb(0,103,187)" , "rgba(0,103,187, 0.6)"]
     })
-    const cl = (val) => {const foc= val?{color:boxInterpolation}:{color:'rgba(0,103,187, 0.6)'}; return(foc)}
+    let cl = (pos) => {const foc= (status?currentpass.length:newpass.length) >= pos?{color:boxInterpolation}:{color:'rgba(0,103,187, 0.6)'}; return(foc)}
 
     return(
         <View style={{justifyContent:'center', alignItems:'center'}}>
             <View style={{flexDirection:'row'}}>
-                <Text style={[style.field, cl(field1) ]}>
+                <Animated.Text style={[style.field, cl(1)]}>
                     *
-                </Text>
-                <Text style={[style.field, cl(field2)]}>
+                </Animated.Text>
+                <Animated.Text style={[style.field, cl(2)]}>
                     *
-                </Text>
-                <Text style={[style.field, cl(field3)]}>
+                </Animated.Text>
+                <Animated.Text style={[style.field, cl(3)]}>
                     *
-                </Text>
-                <Text style={[style.field, cl(field4)]}>
+                </Animated.Text>
+                <Animated.Text style={[style.field, cl(4)]}>
                     *
-                </Text>
-                <Text style={[style.field, cl(field5)]}>
+                </Animated.Text>
+                <Animated.Text style={[style.field, cl(5)]}>
                     *
-                </Text>
-                <Text style={[style.field, cl(field6)]}>
+                </Animated.Text>
+                <Animated.Text style={[style.field, cl(6)]}>
                     *
-                </Text>
+                </Animated.Text>
             </View>
         </View>
     )
@@ -52,4 +47,12 @@ const style = StyleSheet.create({
     }
 })
 
-export default PasscodeView;
+const mapStateToProps = (state) => ({
+    currentpass: state.pass.passCode,
+    newpass: state.pass.newCode,
+    status: state.pass.old
+  });
+  
+  export default connect(
+    mapStateToProps
+  )(PasscodeView);

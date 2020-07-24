@@ -24,7 +24,6 @@ const UserQRCode= ({navigation,qrValue}) => {
                 />
             </View>
         </View>
-
     );
 };
 

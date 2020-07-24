@@ -2,6 +2,8 @@ import React from 'react';
 import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
 import { NumericPad, PasscodeView } from '../components';
 import { useNavigation } from '@react-navigation/native';
+import { connect } from "react-redux";
+
 
 
 export function PrivacyPolicy() {
@@ -18,29 +20,8 @@ export function PrivacyPolicy() {
        </View>
     );
  }
- export function ResetPassword() {
-   const [password, setPassword] = React.useState('');
-   const [textState, setTextState] = React.useState('old');
-   const navigation = useNavigation();
 
-   const backfunc = () => {
-      navigation.goBack();
-   }
 
-   const resetPassword = async () => {
-   
-   }
-    return (
-       <View style={{flexGrow:1, flexDirection:'column', justifyContent:'space-evenly'}}>
-         <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
-               <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
-         </TouchableOpacity>
-         <Text style={styles.texts}>{textState == 'old'? "Enter your existing passcode": textState == 'new'? "Create your new passcode":"Confirm your new passcode"}</Text>
-         <PasscodeView />
-         <NumericPad />
-       </View>
-    );
- }
  export function DeleteAccount() {
     const [password, setPassword] = React.useState('')
  

@@ -16,8 +16,12 @@ export {default as B} from './B';
 export {default as EmailSent} from './EmailSent';
 export {default as SettingsBtn} from './SettingsBtn';
 export {default as SettingsScreen} from './SettingsScreen';
-export {default as Login_reset_password} from './Login_reset_password';
 export {default as Settings} from './Settings';
+export {default as NumericPad} from './NumericPad';
+export {default as PadBtn} from './PadBtn';
+export {default as PasscodeView} from './PasscodeView';
+export {default as Login_reset_password} from './Login_reset_password';
 export {default as ResetPassEmailSent} from './ResetPassEmailSent';
+export {default as ResetPass} from './ResetPass';
 export {default as InsertRole} from './InsertRole';
-
+export {default as ResetPassword} from './ResetPassword';

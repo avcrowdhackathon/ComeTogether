@@ -6,7 +6,7 @@ import {
   Text,
   TextInput,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import { AuthContext } from "../../App";
 
@@ -62,8 +62,6 @@ export default function Login({ navigation }) {
           resizeMode="contain"
         />
         <Text style={styles.header}> Login</Text>
-
-        <View style={styles.root}>
           <View style={styles.rowContainer}>
             <TextInput
               autoCorrect={true}
@@ -91,7 +89,7 @@ export default function Login({ navigation }) {
                 <Text style={styles.errorMessage}>{errors.password}</Text>
               </View>
             )}
-            <TouchableHighlight
+            <TouchableOpacity
               title="resetPass"
               style={styles.goToEmail}
               onPress={() => {
@@ -99,8 +97,8 @@ export default function Login({ navigation }) {
               }}
             >
               <Text style={styles.labelEmail}>Reset your password</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
+            </TouchableOpacity>
+            <TouchableOpacity
               title="goToEmail"
               style={styles.goToEmail}
               onPress={() => {
@@ -110,12 +108,9 @@ export default function Login({ navigation }) {
               <Text style={styles.labelEmail}>
                 Don't have an account? Register now!
               </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableHighlight
+          <TouchableOpacity
             style={styles.scan}
             title="Login"
             onPress={() => {
@@ -125,8 +120,7 @@ export default function Login({ navigation }) {
             }}
           >
             <Text style={styles.button}>Login</Text>
-          </TouchableHighlight>
-        </View>
+          </TouchableOpacity>
       </View>
     );
 }
@@ -135,15 +129,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFEFF5",
-    justifyContent: "space-around",
-    paddingHorizontal: 20,
-    overflow: "hidden",
+    marginHorizontal:18,
   },
   button: {
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "bold",
-    paddingHorizontal: 20,
   },
   label: {
     fontSize: 15,
@@ -161,34 +152,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 44,
-    borderRadius: 7,
+    borderRadius: 10,
     backgroundColor: "#rgb(0, 103, 187)",
-    marginBottom: 100,
+    marginTop:10,
   },
   logo: {
-    flex: 0.5,
-    marginBottom: 25,
-    marginTop: 15,
-    height: undefined,
-    width: undefined,
+    width:90, 
+    height:90, 
+    alignSelf:'center',
+    marginBottom: 20,
+    marginTop: 20,
   },
   header: {
-    flex: 0.3,
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",
-  },
-  root: {
-    flex: 1,
-    flexDirection: "column",
-  },
-  rowContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  buttonContainer: {
-    width: "100%",
-    alignItems: "center",
+    overflow:'hidden'
   },
   text: {
     flex: 1,
@@ -199,12 +178,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   textInput: {
-    width: "100%",
     marginTop: 10,
     paddingLeft: 6,
-    borderWidth: 2,
-    borderRadius: 8,
-    borderColor: "grey",
-    backgroundColor: "rgba(243, 241, 239, 0.8)",
+    borderRadius: 10,
+    backgroundColor: "white",
   },
 });

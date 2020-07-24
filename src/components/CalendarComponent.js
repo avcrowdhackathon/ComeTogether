@@ -14,7 +14,7 @@ class CalendarComponent extends Component {
     this.setMarkedDates = this.setMarkedDates.bind(this);
 
     this.state = {
-      markedDates:{[moment(this.props.current).format('YYYY-MM-DD')] : {selected: !!this.props.current}}
+      markedDates:{[moment(this.props.current).format('YYYY-MM-DD')] : {selected: !!this.props.current, selectedColor:'#0067bb'}}
     };
   }
 
@@ -25,7 +25,7 @@ class CalendarComponent extends Component {
 
   //set date as we only need one
    setMarkedDates(key, typeOfDate) {
-    const markedDates = {[key]: {selected: true}};
+    const markedDates = {[key]: {selected: true, selectedColor:'#0067bb'}};
     this.setState( {markedDates})
     this.sendToParent(key, typeOfDate)
   }
@@ -34,6 +34,7 @@ class CalendarComponent extends Component {
     return (
       <View style={styles.container}>
         <Calendar
+          theme={{arrowColor:'#0067bb'}}
           onDayPress={(day) => this.setMarkedDates(day.dateString, this.props.typeOfDate)}
           markedDates={this.state.markedDates}
           maxDate={this.props.maxDate || ''}
@@ -52,7 +53,7 @@ export default CalendarComponent
 
 const styles = StyleSheet.create({
   container: {
-    margin:15,
+    margin:18,
     marginTop: 5
   },
 });

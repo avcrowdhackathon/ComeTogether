@@ -53,14 +53,16 @@ class InsertUser extends Component {
                 .collection("tests")
                 .doc(res.docs[0].ref.id)
                 .update({ tests:  [...res.docs[0].data().tests, ...dataParams.tests]})
-            .then(() => {
+            .then(async () => {
+              await this.setState({isPending: false})
               alert('Updated data successfully')
             })
             } else {
               firestore()
                 .collection("tests")
                 .add({ email: this.state.patientEmail, tests: [...dataParams.tests]})
-                .then(() => {
+                .then(async () => {
+                  await this.setState({isPending: false})
                   alert('Inserted data successfully')
                 })
             }
@@ -114,7 +116,7 @@ class InsertUser extends Component {
             authority: this.state.authority
           }]
         };
-      }else if(this.state.type === 'type2'){
+      }else if(this.state.testType === 'type2'){
         data = {
           patientEmail: this.state.patientEmail,
           tests:  [{
@@ -127,7 +129,7 @@ class InsertUser extends Component {
             authority: this.state.authority
           }]
         };
-      }else if(this.state.type === 'type3'){
+      }else if(this.state.testType === 'type3'){
         data = {
           patientEmail: this.state.patientEmail,
           tests:  [
@@ -143,7 +145,7 @@ class InsertUser extends Component {
             {
               testId: this.state.testId,
               testType: 'Antibodies',
-              result: this.state.checkBoxes[0].value === 1,
+              result: this.state.checkBoxes[1].value === 1,
               issueDate: this.state.issueDate,
               expireDate: this.state.expireDate,
               issuer: this.state.doctorEmail,
@@ -153,7 +155,7 @@ class InsertUser extends Component {
       }
 
       if(!this.state.isPending) {
-        this.setState({isPending: true})
+        await this.setState({isPending: true})
         await this.issue(data)
       }
     } catch (e) {
@@ -165,7 +167,7 @@ class InsertUser extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{backgroundColor:'#efeff5'}}>
           <Text style={styles.title}>Issue Certificate</Text>
 
           <Text style={styles.label}>Issuing Authority</Text>
@@ -206,6 +208,7 @@ class InsertUser extends Component {
             <Picker
               selectedValue={this.state.testType}
               style={{height: 40}}
+              itemStyle={{fontSize:16}}
               onValueChange={(itemValue) =>{
                 if (itemValue !== 0) {
                   this.setState({testType: itemValue})
@@ -217,7 +220,7 @@ class InsertUser extends Component {
                 }
               }
               }>
-              <Picker.Item key={0} label='Please select...' value={0} />
+              <Picker.Item style={{color:'dimgrey'}} key={0} label='Please select...' value={0} />
 
               {Types.map((type)=> {
                 return <Picker.Item key={type.value} label={type.label} value={type.value} />
@@ -227,21 +230,40 @@ class InsertUser extends Component {
 
           {this.state.checkBoxes.map((checkBox,index)=>{
             return(
-              <View style={styles.typeCheckbox}>
-                <Text key={checkBox.label} style={styles.radioBtnLabel}>{checkBox.label}</Text>
+              <View style={styles.typeCheckbox} key={checkBox.label}>
+                <Text style={styles.radioBtnLabel}>{checkBox.label}</Text>
                 <RadioForm
-                  radio_props={radio_props}
-                  initial={checkBox.value}
                   formHorizontal={true}
-                  labelHorizontal={false}
-                  buttonColor={'#2196f3'}
                   animation={true}
-                  onPress={(value) => {
-                    let checkBoxes = this.state.checkBoxes;
-                    checkBoxes[index].value = value
-                    this.setState({checkBoxes:checkBoxes})
-                  }}
-                />
+                >
+                { radio_props.map((obj, i) => (
+                  <RadioButton labelHorizontal={false} key={i} >
+                    <RadioButtonInput
+                      obj={obj}
+                      index={i}
+                      isSelected={checkBox.value === obj.value}
+                      onPress={(value) => {
+                        let checkBoxes = this.state.checkBoxes;
+                        checkBoxes[index].value = value
+                        this.setState({checkBoxes:checkBoxes})
+                      }}
+                      borderWidth={2}
+                      buttonInnerColor={'rgb(0,103,187)'}
+                      buttonOuterColor={'rgb(0,103,187)'}
+                      buttonSize={20}
+                      buttonOuterSize={40}
+                      buttonStyle={{}}
+                      buttonWrapStyle={{}}
+                    />
+                    <RadioButtonLabel
+                      obj={obj}
+                      index={i}
+                      labelStyle={{fontSize: 14}}
+                      labelWrapStyle={{}}
+                    />
+                  </RadioButton>
+                ))}
+                </RadioForm>
               </View>
 
             )
@@ -274,7 +296,7 @@ export default InsertUser
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 23
+    paddingTop: 20
   },
   title:{
     fontSize: 28,
@@ -282,46 +304,43 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   input: {
-    margin: 15,
+    marginHorizontal:18,
     marginTop: 2,
+    backgroundColor:'white',
     height: 40,
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
-    borderRadius: 5
+    borderRadius: 10
   },
   typeDropdown: {
-    marginLeft: 15,
+    marginHorizontal:18,
     marginBottom: 2,
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
-    borderRadius: 5
+    backgroundColor:'white',
+    borderRadius: 10
   },
   typeCheckbox: {
-    marginLeft: 35,
+    marginLeft: 18,
   },
   label: {
-    marginLeft: 15,
-    marginTop: 35,
-    fontSize: 18
+    marginLeft: 18,
+    color:'dimgrey',
+    marginTop: 20,
+    fontSize: 16
   },
   radioBtnLabel: {
     marginTop: 5,
-    fontSize: 18
+    color:'dimgrey',
+    fontSize: 16,
   },
   submitButton: {
-    backgroundColor: 'blue',
-    padding: 10,
-    margin: 15,
+    backgroundColor: 'rgb(0,103,187)',
+    marginHorizontal:18,
     height: 40,
-    borderRadius: 5,
-    display: 'flex',
-    alignSelf:'center',
-    width: 200
+    borderRadius: 10,
+    justifyContent:'center',
+    marginBottom:20
   },
   submitButtonText:{
     color: 'white',
     margin:'auto',
     textAlign:'center',
-
   }
 })

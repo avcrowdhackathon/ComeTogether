@@ -1,117 +1,99 @@
 import React from 'react';
-import {TouchableOpacity, TouchableHighlight, Text, TextInput, View, StyleSheet, ScrollView} from 'react-native';
+import {TouchableOpacity, Text, TextInput, View, StyleSheet, ScrollView, Image} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Policy from "./Policy";
+import Terms from "./Terms";
+import {deleteUser} from '../services/sevices';
 
 
 
 export function PrivacyPolicy() {
     return (
-       <ScrollView style={styles.container}>
-          <Text style={styles.texts}>Privacy Policy Text</Text>
+       <ScrollView contentContainerStyle={styles.container}>
+         <Policy/>
        </ScrollView>
     );
  }
  export function TermsOfUse() {
     return (
        <View style={styles.container}>
-          <Text style={styles.texts}>Terms of Use Text</Text>
+         <Terms/>
        </View>
     );
  }
- export function ResetPassword() {
-    const [password, setPassword] = React.useState('')
- 
-    const resetPassword = async () => {
- 
-    }
-    return (
-       <View style={styles.container}>
-          <Text style={styles.texts}>Type your current password to confirm</Text>
-          <TextInput
-            autoCorrect={false}
-            onChangeText={setPassword}
-            value={password}
-            style={styles.textInput}
-            secureTextEntry={true}
-          />
-          <TouchableHighlight style={styles.confirmButton} title="Reset Password" onPress= {()=>{resetPassword()}} >
-             <Text style={styles.optionButtonText}>Reset Password</Text>
-          </TouchableHighlight>
-          
-       </View>
-    );
- }
+
+
  export function DeleteAccount() {
     const [password, setPassword] = React.useState('')
- 
+    const navigation = useNavigation();
+
+    const backfunc = () => {
+      navigation.goBack();
+    }
+  
     const deleteAccount = async () => {
- 
+      const msg = deleteUser(password);
+      if( msg ){
+         navigation.goBack();
+      }
+      else {
+         console.warn("snakbar")
+      }
     }
     return (
        <View style={styles.container}>
-          <Text style={styles.texts}>Type your current password to confirm</Text>
+         <View style={{flexDirection:'row', marginTop:20, marginHorizontal:18, flexGrow:0.5}}>
+          <TouchableOpacity style={{marginRight:18}} onPress={backfunc}>
+              <Image style={{width:24, height:24}} source={require('../../images/back.png')} />
+          </TouchableOpacity>
+          <Text style={{fontWeight:'bold', fontSize:18, color:'dimgrey'}}>Delete Account</Text>
+        </View>
+        <View style={{flexGrow:2, flexDirection:'column'}}>
+          <Text style={styles.texts}>Confirm with your passcode</Text>
           <TextInput
             autoCorrect={false}
             onChangeText={setPassword}
+            textContentType='password'
             value={password}
             style={styles.textInput}
             secureTextEntry={true}
           />
-          <TouchableHighlight style={styles.confirmButton} title="Delete Account" onPress= {()=>{deleteAccount()}} >
+          <TouchableOpacity style={styles.confirmButton} title="Delete Account" onPress= {()=>{deleteAccount()}} >
              <Text style={styles.optionButtonText}>Delete Account</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
+         </View>
        </View>
     );
  }
- 
+
  const styles = StyleSheet.create({
     container: {
-       flex: 1, 
-       alignItems: 'center', 
-       justifyContent: 'center'
-    },
-    optionButton: {
-       margin: 25,
-       justifyContent:'center',
-       alignItems: 'center',
-       alignSelf: 'center',
-       height:44,
-       borderRadius:7,
-       backgroundColor: '#rgb(0, 103, 187)',
-       width:'70%',
-       overflow:"hidden"
+      flex:1
     },
     confirmButton: {
-       margin: 25,
+       marginHorizontal: 18,
+       marginVertical:20,
        justifyContent:'center',
        alignItems: 'center',
-       alignSelf: 'center',
-       height:44,
-       borderRadius:7,
+       height:40,
+       borderRadius:10,
        backgroundColor: '#rgb(0, 103, 187)',
-       width:'50%',
-       overflow:"hidden"
     },
- 
     optionButtonText: {
-       fontSize: 20,
+       fontSize: 18,
        color:'#FFFFFF',
        fontWeight: 'bold',
     },
     texts: {
-       marginBottom: 20,
+       textAlign:'center',
+       fontWeight:'bold',
        fontSize: 18,
-       textAlign: 'center',
-       width: '50%',
      },
     textInput: {
-       height:40,
-       width: '50%',
-       alignSelf: 'center',
-       paddingLeft: 6,
-       borderWidth: 2,
-       borderRadius: 8,
-       borderColor: 'grey',
-       backgroundColor: 'rgba(243, 241, 239, 0.8)'
- 
+      height:40,
+      margin: 18,
+      paddingLeft: 6,
+      borderRadius: 10,
+      backgroundColor: 'white'
      },
  })

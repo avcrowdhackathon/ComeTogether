@@ -19,12 +19,11 @@ const UserQRCode= ({navigation,qrValue}) => {
 
                 <QRCode 
                     color='rgb(0,103,187)'
-                    size= '200'
+                    size= {200}
                     backgroundColor='#efeff5'
                 />
             </View>
         </View>
-
     );
 };
 

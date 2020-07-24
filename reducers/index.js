@@ -5,6 +5,7 @@ import {persistReducer } from 'redux-persist';
 import authReducer from './auth';
 import privateKeyReducer from './privateKey';
 import stepsReducer from './steps';
+import passCodeReducer from './pass';
 
 const privateKeyPersistConfig = {
     key: 'privateKey',
@@ -34,7 +35,8 @@ const rootPersistConfig = {
 const reducer =  combineReducers({
     auth: persistReducer(authPersistConfig, authReducer),
     privateKey: persistReducer(privateKeyPersistConfig, privateKeyReducer),
-    steps: persistReducer(stepsPersistConfig, stepsReducer)
+    steps: persistReducer(stepsPersistConfig, stepsReducer),
+    pass: passCodeReducer
 })
 
 export default persistReducer(rootPersistConfig, reducer)

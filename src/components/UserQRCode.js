@@ -15,8 +15,8 @@ const UserQRCode= ({navigation,qrValue}) => {
 
     return (
         <View style={{flexGrow:1, backgroundColor:'#efeff5'}}>
-            <View style={{flex:1, borderRadius:10, alignItems:'center', justifyContent:'center'}}>
-
+            <Text style={{fontSize: 22, textAlign: "center", marginTop:15, marginBottom:100}}>Qr Code</Text>
+            <View style={{flex:1, borderRadius:10, alignItems:'center'}}>
                 <QRCode 
                     color='rgb(0,103,187)'
                     size= {200}

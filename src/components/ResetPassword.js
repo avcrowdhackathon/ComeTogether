@@ -1,9 +1,12 @@
 import React from 'react';
-import {View, TouchableOpacity, Image, Text, TextInput, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Image, Text, TextInput, StyleSheet, BackHandler} from 'react-native';
 import {resetPassUser} from '../services/sevices';
 import { useNavigation } from '@react-navigation/native';
 import {connect} from 'react-redux';
 import { setNewCode,setPassCode,setConfCode, resetPassCode, resetNewCode, resetConfCode, setRepeat, setStatus } from '../../actions';
+import Snackbar from 'react-native-snackbar';
+
+
 
 const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch}) => {
     const navigation = useNavigation();
@@ -16,15 +19,58 @@ const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch
       dispatch(setStatus(true));
       navigation.goBack();
     }
-  
+    
+    const replicabackbutton = () => {
+      dispatch(resetPassCode());
+      dispatch(resetNewCode());
+      dispatch(resetConfCode());
+      dispatch(setRepeat(false));
+      dispatch(setStatus(true));
+    }
+    
+    React.useEffect(()=>{
+      const backHandler = BackHandler.addEventListener(
+         "hardwareBackPress",
+         replicabackbutton
+       );
+       return () => backHandler.remove();
+    },[])
+
+    const snack = (msg) => {
+      Snackbar.show({
+         text: `${msg}`,
+         duration: Snackbar.LENGTH_SHORT,
+         backgroundColor:'white',
+         textColor:'red',
+         action: {
+         text: 'UNDO',
+         textColor: 'rgb(0, 103, 187)',
+         onPress: () => { Snackbar.dismiss()},
+         },
+      });
+    }
+
     const reset = async () => {
-      const msg = resetPassUser(currentpass, newpass);
-      if( msg ){
-         backfunc()
+      if( confpass == newpass ){
+         const msg = await resetPassUser(currentpass, newpass);
+         if( msg ){
+            backfunc()
+            snack('Password updated')
+         }
+         else {
+            dispatch(resetPassCode());
+            dispatch(resetNewCode());
+            dispatch(resetConfCode());
+            dispatch(setRepeat(false));
+            dispatch(setStatus(true));
+            snack(`Wrong Password`);
+         }
       }
       else {
-         backfunc()
-         console.warn("snakbar")
+         dispatch(resetNewCode());
+         dispatch(resetConfCode());
+         dispatch(setRepeat(false));
+         snack(`Wrong Confirmation Password`);
       }
     }
 

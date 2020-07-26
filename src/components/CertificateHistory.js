@@ -37,16 +37,16 @@ const CertificateHistory = ({navigation, userToken}) => {
     })
     if(wait){
       return(
-        <View style={{flex:1, justifyContent:'center'}}>
+        <View style={{flex:1, justifyContent:'center', backgroundColor:'#efeff5'}}>
           <ActivityIndicator size='large' color='rgb(0, 103, 187)' />
         </View>
       )
     }
     else {
       return(
-          <SafeAreaView style={{flex:1}}>
+          <SafeAreaView style={{flex:1, backgroundColor:'#efeff5'}}>
+              <Text style={{fontSize:22, textAlign:'center', marginTop:20}}>Certificate History</Text>
               {cert?<FlatList
-                  style={{backgroundColor:'#efeff5'}}
                   data={cert}
                   ItemSeparatorComponent={
                     () => (
@@ -77,7 +77,7 @@ const CertificateHistory = ({navigation, userToken}) => {
           :
           (
           <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor: '#efeff5',}}>
-            <Image style={{width:48, height:70, opacity: 0.5, marginVertical:6}} source={require('../../images/summary.png')}  />
+            <Image style={{width:48, height:70, opacity: 0.9, marginVertical:6}} source={require('../../images/summary.png')}  />
             <Text style={{fontSize:20, color:'rgb(0,103,189)'}}>No Certifications Available!</Text>
           </View>
           )

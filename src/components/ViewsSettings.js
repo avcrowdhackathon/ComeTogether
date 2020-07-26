@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Policy from "./Policy";
 import Terms from "./Terms";
 import {deleteUser} from '../services/sevices';
+import Snackbar from 'react-native-snackbar';
 
 
 
@@ -30,14 +31,29 @@ export function PrivacyPolicy() {
     const backfunc = () => {
       navigation.goBack();
     }
+
+    const snack = (msg) => {
+      Snackbar.show({
+         text: `${msg}`,
+         duration: Snackbar.LENGTH_SHORT,
+         backgroundColor:'white',
+         textColor:'red',
+         action: {
+           text: 'UNDO',
+           textColor: 'rgb(0, 103, 187)',
+           onPress: () => { Snackbar.dismiss()},
+         },
+      });
+    }
   
     const deleteAccount = async () => {
-      const msg = deleteUser(password);
+      const msg = await deleteUser(password);
       if( msg ){
          navigation.goBack();
+         snack('Account Deleted');
       }
       else {
-         console.warn("snakbar")
+         snack('Wrong Password');
       }
     }
     return (
@@ -77,7 +93,7 @@ export function PrivacyPolicy() {
        alignItems: 'center',
        height:40,
        borderRadius:10,
-       backgroundColor: '#rgb(0, 103, 187)',
+       backgroundColor: 'rgb(0, 103, 187)',
     },
     optionButtonText: {
        fontSize: 18,

@@ -53,7 +53,8 @@ export default VerifyOptions
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop:15,
+    flex:1,
+    paddingTop:20,
     backgroundColor:'#efeff5'
   },
   preview: {
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     margin: 'auto',
     textAlign: 'center',
     marginBottom:100
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   idVerificationButton: {
     backgroundColor: 'rgb(0,103,187)',
     borderRadius: 10,
-    height:60,
+    height:44,
     justifyContent:'center',
     color: 'white',
     marginHorizontal:30,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   qrCodeVerificationButton: {
     backgroundColor: 'rgb(0,103,187)',
     borderRadius: 10,
-    height:60,
+    height:44,
     justifyContent:'center',
     color: 'white',
     marginHorizontal:30

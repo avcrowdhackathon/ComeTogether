@@ -10,6 +10,14 @@ import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import React from 'react'
+import messaging from '@react-native-firebase/messaging';
+
+messaging().setBackgroundMessageHandler(async (message) => {
+    if(message) {
+      console.log('Notification caused app to open from quit state:', message.notification)
+    
+    }
+  })
 
 
 //redux initialization

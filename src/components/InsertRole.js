@@ -30,7 +30,7 @@ class InsertRole extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{backgroundColor:'#efeff5'}}>
           <Text style={styles.title}>Set User's Role</Text>
 
           <Text style={styles.label}>User's email</Text>
@@ -81,49 +81,46 @@ export default InsertRole;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 23,
+    paddingTop: 20,
   },
-  title: {
+  title:{
     fontSize: 28,
     textAlign: "center",
-    marginTop: 15,
+    marginTop:15
   },
   input: {
-    margin: 15,
+    marginHorizontal:18,
     marginTop: 2,
+    backgroundColor:'white',
     height: 40,
-    borderColor: "#C0C0C0",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10
   },
   typeDropdown: {
-    marginLeft: 15,
+    marginHorizontal:18,
     marginBottom: 2,
-    borderColor: "#C0C0C0",
-    borderWidth: 1,
-    borderRadius: 5,
+    backgroundColor:'white',
+    borderRadius: 10
   },
   typeCheckbox: {
-    marginLeft: 35,
+    marginLeft: 18,
   },
   label: {
-    marginLeft: 15,
-    marginTop: 35,
-    fontSize: 18,
+    marginLeft: 18,
+    color:'dimgrey',
+    marginTop: 20,
+    fontSize: 16
   },
   radioBtnLabel: {
     marginTop: 5,
     fontSize: 18,
   },
   submitButton: {
-    backgroundColor: "blue",
-    padding: 10,
-    margin: 15,
+    backgroundColor: 'rgb(0,103,187)',
+    marginHorizontal:18,
     height: 40,
-    borderRadius: 5,
-    display: "flex",
-    alignSelf: "center",
-    width: 200,
+    borderRadius: 10,
+    justifyContent:'center',
+    marginTop:20
   },
   submitButtonText: {
     color: "white",

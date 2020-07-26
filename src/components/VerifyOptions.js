@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   idVerificationButton: {
     backgroundColor: 'rgb(0,103,187)',
     borderRadius: 10,
-    height:60,
+    height:44,
     justifyContent:'center',
     color: 'white',
     marginHorizontal:30,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   qrCodeVerificationButton: {
     backgroundColor: 'rgb(0,103,187)',
     borderRadius: 10,
-    height:60,
+    height:44,
     justifyContent:'center',
     color: 'white',
     marginHorizontal:30

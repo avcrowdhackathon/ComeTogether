@@ -23,9 +23,9 @@ export const resetPassUser = async (oldPass, newPass) => {
     .then((data) => {
       user
         .updatePassword(newPass)
-        .then(() => console.warn("password updated!!"));
+        .then(() => {return true;});
     })
-    .catch((err) => console.warn("Wrong credentials"));
+    .catch((err) => {console.warn("mesa",err); return false;});
 };
 
 export const deleteUser = async (password) => {
@@ -46,10 +46,9 @@ export const deleteUser = async (password) => {
             doc.docs[0].ref.delete();
           }
         });
-      user.delete().then(() => console.warn("user deleted"));
+      user.delete().then(() => {return true});
     })
     .catch((err) => {
-      console.warn(err);
-      console.warn("Wrong credentials");
+      return false;
     });
 };

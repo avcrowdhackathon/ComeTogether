@@ -4,6 +4,9 @@ import {resetPassUser} from '../services/sevices';
 import { useNavigation } from '@react-navigation/native';
 import {connect} from 'react-redux';
 import { setNewCode,setPassCode,setConfCode, resetPassCode, resetNewCode, resetConfCode, setRepeat, setStatus } from '../../actions';
+import Snackbar from 'react-native-snackbar';
+
+
 
 const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch}) => {
     const navigation = useNavigation();
@@ -18,13 +21,50 @@ const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch
     }
   
     const reset = async () => {
-      const msg = resetPassUser(currentpass, newpass);
-      if( msg ){
-         backfunc()
+      if( confpass == newpass ){
+         const msg = await resetPassUser(currentpass, newpass);
+         if( msg ){
+            backfunc()
+            Snackbar.show({
+               text: 'Password updated',
+               duration: Snackbar.LENGTH_INDEFINITE,
+               action: {
+               text: 'UNDO',
+               textColor: 'rgb(0, 103, 187)',
+               onPress: () => { Snackbar.dismiss()},
+               },
+            });
+         }
+         else {
+            dispatch(resetPassCode());
+            dispatch(resetNewCode());
+            dispatch(resetConfCode());
+            dispatch(setRepeat(false));
+            dispatch(setStatus(true));
+            Snackbar.show({
+               text: `Wrond Password`,
+               duration: Snackbar.LENGTH_INDEFINITE,
+               action: {
+               text: 'UNDO',
+               textColor: 'rgb(0, 103, 187)',
+               onPress: () => { Snackbar.dismiss()},
+               },
+            });
+         }
       }
       else {
-         backfunc()
-         console.warn("snakbar")
+         dispatch(resetNewCode());
+         dispatch(resetConfCode());
+         dispatch(setRepeat(false));
+         Snackbar.show({
+            text: `Wrong Confirmation Password`,
+            duration: Snackbar.LENGTH_INDEFINITE,
+            action: {
+            text: 'UNDO',
+            textColor: 'rgb(0, 103, 187)',
+            onPress: () => { Snackbar.dismiss()},
+            },
+         });
       }
     }
 

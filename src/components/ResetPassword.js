@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Image, Text, TextInput, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Image, Text, TextInput, StyleSheet, BackHandler} from 'react-native';
 import {resetPassUser} from '../services/sevices';
 import { useNavigation } from '@react-navigation/native';
 import {connect} from 'react-redux';
@@ -19,21 +19,43 @@ const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch
       dispatch(setStatus(true));
       navigation.goBack();
     }
-  
+    
+    const replicabackbutton = () => {
+      dispatch(resetPassCode());
+      dispatch(resetNewCode());
+      dispatch(resetConfCode());
+      dispatch(setRepeat(false));
+      dispatch(setStatus(true));
+    }
+    
+    React.useEffect(()=>{
+      const backHandler = BackHandler.addEventListener(
+         "hardwareBackPress",
+         replicabackbutton
+       );
+       return () => backHandler.remove();
+    },[])
+
+    const snack = (msg) => {
+      Snackbar.show({
+         text: `${msg}`,
+         duration: Snackbar.LENGTH_SHORT,
+         backgroundColor:'white',
+         textColor:'red',
+         action: {
+         text: 'UNDO',
+         textColor: 'rgb(0, 103, 187)',
+         onPress: () => { Snackbar.dismiss()},
+         },
+      });
+    }
+
     const reset = async () => {
       if( confpass == newpass ){
          const msg = await resetPassUser(currentpass, newpass);
          if( msg ){
             backfunc()
-            Snackbar.show({
-               text: 'Password updated',
-               duration: Snackbar.LENGTH_INDEFINITE,
-               action: {
-               text: 'UNDO',
-               textColor: 'rgb(0, 103, 187)',
-               onPress: () => { Snackbar.dismiss()},
-               },
-            });
+            snack('Password updated')
          }
          else {
             dispatch(resetPassCode());
@@ -41,30 +63,14 @@ const ResetPassword = ({currentpass, newpass, confpass, status, repeat, dispatch
             dispatch(resetConfCode());
             dispatch(setRepeat(false));
             dispatch(setStatus(true));
-            Snackbar.show({
-               text: `Wrond Password`,
-               duration: Snackbar.LENGTH_INDEFINITE,
-               action: {
-               text: 'UNDO',
-               textColor: 'rgb(0, 103, 187)',
-               onPress: () => { Snackbar.dismiss()},
-               },
-            });
+            snack(`Wrong Password`);
          }
       }
       else {
          dispatch(resetNewCode());
          dispatch(resetConfCode());
          dispatch(setRepeat(false));
-         Snackbar.show({
-            text: `Wrong Confirmation Password`,
-            duration: Snackbar.LENGTH_INDEFINITE,
-            action: {
-            text: 'UNDO',
-            textColor: 'rgb(0, 103, 187)',
-            onPress: () => { Snackbar.dismiss()},
-            },
-         });
+         snack(`Wrong Confirmation Password`);
       }
     }
 

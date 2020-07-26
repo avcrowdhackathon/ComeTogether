@@ -53,7 +53,7 @@ export default VerifyOptions
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop:15,
+    paddingTop:20,
     backgroundColor:'#efeff5'
   },
   preview: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     margin: 'auto',
     textAlign: 'center',
     marginBottom:100

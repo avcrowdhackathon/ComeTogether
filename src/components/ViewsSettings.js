@@ -31,31 +31,29 @@ export function PrivacyPolicy() {
     const backfunc = () => {
       navigation.goBack();
     }
+
+    const snack = (msg) => {
+      Snackbar.show({
+         text: `${msg}`,
+         duration: Snackbar.LENGTH_SHORT,
+         backgroundColor:'white',
+         textColor:'red',
+         action: {
+           text: 'UNDO',
+           textColor: 'rgb(0, 103, 187)',
+           onPress: () => { Snackbar.dismiss()},
+         },
+      });
+    }
   
     const deleteAccount = async () => {
       const msg = await deleteUser(password);
       if( msg ){
          navigation.goBack();
-         Snackbar.show({
-            text: 'Account Deleted',
-            duration: Snackbar.LENGTH_INDEFINITE,
-            action: {
-              text: 'UNDO',
-              textColor: 'rgb(0, 103, 187)',
-              onPress: () => { Snackbar.dismiss()},
-            },
-         });
+         snack('Account Deleted');
       }
       else {
-         Snackbar.show({
-            text: 'Wrong Password',
-            duration: Snackbar.LENGTH_INDEFINITE,
-            action: {
-              text: 'UNDO',
-              textColor: 'rgb(0, 103, 187)',
-              onPress: () => { Snackbar.dismiss()},
-            },
-         });
+         snack('Wrong Password');
       }
     }
     return (

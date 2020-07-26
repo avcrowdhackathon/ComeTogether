@@ -13,6 +13,9 @@ import AWS from "aws-sdk";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Snackbar from 'react-native-snackbar';
+
+
 
 const ses = new AWS.SES({
   accessKeyId: "AKIAXQFEMNA4AWKM4HW5",
@@ -23,21 +26,34 @@ const ses = new AWS.SES({
 
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
-  const [error, seterror] = React.useState("");
   const [wait, setWait] = React.useState(false);
+
+
+  const snack = (msg) => {
+    Snackbar.show({
+      text: `${msg}`,
+      textColor:'red',
+      backgroundColor:'white',
+      duration: Snackbar.LENGTH_SHORT,
+      action: {
+        text: 'UNDO',
+        textColor: 'rgb(0, 103, 187)',
+        onPress: () => { Snackbar.dismiss()},
+      },
+    });
+  }
 
   const validation = React.useCallback(() => {
     const email_trimmed = email.toLowerCase().trim();
     if (email_trimmed == "") {
-      seterror("Email cannot be empty.");
+      snack("Email cannot be empty.");
       return true;
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
     ) {
-      seterror("Email format is not valid.");
+      snack("Email format is not valid.");
       return true;
     } else {
-      seterror("");
       return false;
     }
   });
@@ -168,11 +184,6 @@ export default function Login_Send_Email({ navigation }) {
               style={styles.textInput}
               placeholder="Email"
             />
-            {error !== "" && (
-              <View style={{ width: "100%" }}>
-                <Text style={styles.errorMessage}>{error}</Text>
-              </View>
-            )}
             <TouchableHighlight
               title="goToEmail"
               style={styles.goToEmail}
@@ -215,11 +226,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#rgb(0, 103, 187)",
     textAlign: "right",
-  },
-  errorMessage: {
-    fontSize: 12,
-    color: "red",
-    textAlign: "left",
   },
   goToEmail: {
     width: "100%",

@@ -9,42 +9,53 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AuthContext } from "../../App";
+import Snackbar from 'react-native-snackbar';
+
 
 export default function Login({ navigation }) {
   const { signIn } = React.useContext(AuthContext);
 
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [errors, setErrors] = React.useState({ email: "", password: "" });
   const [wait, setWait] = React.useState(false)
+
+  const snack = (msg) => {
+    Snackbar.show({
+      text: `${msg}`,
+      textColor:'red',
+      backgroundColor: 'white',
+      duration: Snackbar.LENGTH_SHORT,
+      action: {
+        text: 'UNDO',
+        textColor: 'rgb(0, 103, 187)',
+        onPress: () => { Snackbar.dismiss()},
+      },
+    });
+  }
 
   function validation() {
     const email_trimmed = email.toLowerCase().trim();
-    setErrors({ email: "", password: "" });
 
     if (email_trimmed == "") {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Email cannot be empty.",
-      }));
+      snack("Email cannot be empty")
       return true;
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
     ) {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Email format is not valid.",
-      }));
+      snack("Email format is not valid")
       return true;
     } else if (password == "") {
-      setErrors((prevState) => ({
-        ...prevState,
-        password: "Password cannot be empty",
-      }));
+      snack("Password cannot be empty");
       return true;
     } else {
       return false;
     }
+  }
+
+  const pressFunc = () => {
+    const validate = validation();
+    if (validate) return;
+    signIn(email, password, setWait)
   }
 
   if (wait) {
@@ -71,11 +82,6 @@ export default function Login({ navigation }) {
               secureTextEntry={false}
               placeholder="Email"
             />
-            {errors.email !== "" && (
-              <View style={{ width: "100%" }}>
-                <Text style={styles.errorMessage}>{errors.email}</Text>
-              </View>
-            )}
             <TextInput
               autoCorrect={false}
               onChangeText={setPassword}
@@ -84,11 +90,6 @@ export default function Login({ navigation }) {
               secureTextEntry={true}
               placeholder="Password"
             />
-            {errors.password !== "" && (
-              <View style={{ width: "100%" }}>
-                <Text style={styles.errorMessage}>{errors.password}</Text>
-              </View>
-            )}
             <TouchableOpacity
               title="resetPass"
               style={styles.goToEmail}
@@ -113,11 +114,7 @@ export default function Login({ navigation }) {
           <TouchableOpacity
             style={styles.scan}
             title="Login"
-            onPress={() => {
-              const validate = validation();
-              if (validate) return;
-              signIn(email, password, setErrors, setWait);
-            }}
+            onPress={() => { pressFunc()}}
           >
             <Text style={styles.button}>Login</Text>
           </TouchableOpacity>
@@ -171,11 +168,6 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-  },
-  errorMessage: {
-    fontSize: 12,
-    color: "red",
-    textAlign: "left",
   },
   textInput: {
     marginTop: 10,

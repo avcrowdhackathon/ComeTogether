@@ -23,6 +23,8 @@ import IdVerification from "./src/components/IdVerification";
 import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
+import Snackbar from 'react-native-snackbar';
+
 
 // performance imporovement for navigator
 enableScreens();
@@ -33,6 +35,19 @@ export const AuthContext = React.createContext();
 
 const App = ({ userToken, isLoading, isSignout, dispatch }) => {
   const [firebaseLogin, setfirebaseLogin] = React.useState(false);
+  const snack = (msg) => {
+    Snackbar.show({
+      text: `${msg}`,
+      textColor:'red',
+      backgroundColor: 'white',
+      duration: Snackbar.LENGTH_SHORT,
+      action: {
+        text: 'UNDO',
+        textColor: 'rgb(0, 103, 187)',
+        onPress: () => { Snackbar.dismiss()},
+        },
+    });
+  }
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       // After restoring token, we may need to validate it in production apps
@@ -66,7 +81,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
   };
   const authContext = React.useMemo(
     () => ({
-      signIn: async (email, password, cb, setWait) => {
+      signIn: async (email, password, setWait) => {
         setWait(true);
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
@@ -93,31 +108,16 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 });
             })
             .catch((error) => {
-              if (error.code === "auth/invalid-email") {
-                console.log("That email address is invalid!");
-              } else if (error.code === "auth/wrong-password") {
-                console.log("That password is incorrect!");
-                cb((prevState) => ({
-                  ...prevState,
-                  password: "Password is not correct",
-                }));
-                setWait(false);
-              } else if (error.code === "auth/user-not-found") {
-                console.log("That password is incorrect!");
-                cb((prevState) => ({
-                  ...prevState,
-                  email: "User not found",
-                }));
-                setWait(false);
-              } else {
-                cb((prevState) => ({
-                  ...prevState,
-                  passwrod: "Something went wrong",
-                }));
-                setWait(false);
-              }
               setWait(false);
-              console.log(error);
+              if (error.code === "auth/invalid-email") {
+                snack("That email address is invalid");
+              } else if (error.code === "auth/wrong-password") {
+                snack("Password is not correct");
+              } else if (error.code === "auth/user-not-found") {
+                snack("User not found");
+              } else {
+                snack("Something went wrong");
+              }
             });
         } catch (error) {
           alert(error);

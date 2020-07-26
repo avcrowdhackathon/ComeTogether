@@ -8,26 +8,40 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-
 import auth from "@react-native-firebase/auth";
+import Snackbar from 'react-native-snackbar';
+
 
 export default function Login_reset_password({ navigation }) {
   const [email, setEmail] = React.useState("");
   const [error, seterror] = React.useState("");
   const [wait, setWait] = React.useState(false);
 
+  const snack = (msg) => {
+    Snackbar.show({
+      text: `${msg}`,
+      backgroundColor:'white',
+      textColor:'red',
+      duration: Snackbar.LENGTH_SHORT,
+      action: {
+        text: 'UNDO',
+        textColor: 'rgb(0, 103, 187)',
+        onPress: () => { Snackbar.dismiss()},
+      },
+    });
+  }
+
   const validation = React.useCallback(() => {
     const email_trimmed = email.toLowerCase().trim();
     if (email_trimmed == "") {
-      seterror("Email cannot be empty.");
+      snack("Email cannot be empty.");
       return true;
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
     ) {
-      seterror("Email format is not valid.");
+      snack("Email format is not valid.");
       return true;
     } else {
-      seterror("");
       return false;
     }
   });
@@ -47,11 +61,11 @@ export default function Login_reset_password({ navigation }) {
       .catch((error) => {
         setWait(false);
         if (error.code === "auth/invalid-email") {
-          seterror("Email format is not valid.");
+          snack("Email format is not valid.");
         } else if (error.code === "auth/user-not-found") {
-          seterror("Email not found");
+          snack("Email not found");
         } else {
-          seterror("Something went wrong");
+          snack("Something went wrong");
         }
         console.log(error);
       });
@@ -82,11 +96,6 @@ export default function Login_reset_password({ navigation }) {
             placeholder="Email"
             style={styles.textInput}
           />
-          {error !== "" && (
-            <View style={{ width: "100%" }}>
-              <Text style={styles.errorMessage}>{error}</Text>
-            </View>
-          )}
           <TouchableOpacity
             title="goToEmail"
             style={styles.goToEmail}
@@ -128,11 +137,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#rgb(0, 103, 187)",
     textAlign: "right",
-  },
-  errorMessage: {
-    fontSize: 12,
-    color: "red",
-    textAlign: "left",
   },
   goToEmail: {
     width: "100%",

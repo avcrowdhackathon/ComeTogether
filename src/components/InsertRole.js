@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   title:{
-    fontSize: 28,
+    fontSize: 22,
     textAlign: "center",
     marginTop:15
   },

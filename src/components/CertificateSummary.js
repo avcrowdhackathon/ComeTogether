@@ -14,7 +14,7 @@ const CertificateSummary = ({route, navigation}) => {
     }
 
     return(
-      <>
+      <View style={{flexGrow:1, backgroundColor:'#efeff5'}}>
         <View style={{justifyContent:'center', alignItems:'center', fontSize:20, marginHorizontal:18, marginTop:10, paddingTop:20, borderTopRightRadius:10, borderTopLeftRadius:10, backgroundColor:'white'}}>
             <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', alignSelf:'stretch'}}>
               <TouchableOpacity style={{position:'absolute', left:16}} onPress={backfunc}>
@@ -59,7 +59,7 @@ const CertificateSummary = ({route, navigation}) => {
             </Text>
           </View>
         </View>
-      </>
+      </View>
     )
 }
 

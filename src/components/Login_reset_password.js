@@ -73,7 +73,7 @@ export default function Login_reset_password({ navigation }) {
 
   if (wait) {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
+      <View style={{ flex: 1, justifyContent: "center", backgroundColor:'#efeff5'}}>
         <ActivityIndicator size="large" color="rgb(0, 103, 187)" />
       </View>
     );

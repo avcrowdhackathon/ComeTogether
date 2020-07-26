@@ -29,7 +29,7 @@ class InsertRole extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor:'#efeff5' }}>
         <ScrollView contentContainerStyle={{backgroundColor:'#efeff5'}}>
           <Text style={styles.title}>Set User's Role</Text>
 

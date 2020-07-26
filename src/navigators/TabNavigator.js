@@ -3,12 +3,38 @@ import {Image} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {connect} from 'react-redux';
 import {getTabScreens} from './utils'
-
+import messaging from '@react-native-firebase/messaging';
 
 
 const Tab = createBottomTabNavigator();
 
 const  TabNavigator = ({userToken}) => {
+
+  const checkPermission = async () => {
+    const enabled = await messaging().hasPermission();
+    if (enabled) {
+      console.log('I have the permission to act'); //getFcmToken();
+    } else {
+      requestPermission();
+    }
+  };
+
+  const requestPermission = async () => {
+    try {
+      await messaging().requestPermission();
+      // User has authorised
+    } catch (error) {
+      // User has rejected permissions
+    }
+  };
+
+  React.useEffect(() => {
+    checkPermission();
+
+    // Check whether an initial notification is available
+    //firebaseBackgroundMessage();
+  }, []);
+
   if(userToken == null) return null
     return (
       <Tab.Navigator

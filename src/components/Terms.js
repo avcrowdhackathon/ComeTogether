@@ -126,7 +126,7 @@ Code). Ο δυναμικός QR Code είναι ένα είδος προηγμέ
 δυναμικός χαρακτήρας του ηλεκτρονικού εισιτηρίου.</Text>
 <Text h1>ΙΙ. Όροι διεξαγωγής εκδηλώσεων/θεαμάτων {'\n'}</Text>
 
-<Text>
+<Text  style={styles.marginBottom}>
 1. Η αγορά του εισιτηρίου, παρέχει το δικαίωμα στον κάτοχό του, να παρακολουθήσει την
 εκδήλωση που αναγράφεται σε αυτό, εάν και εφόσον αποδεχθεί και τηρήσει τους όρους
 λειτουργίας του χώρου. Η είσοδος του θεατή στην εκδήλωση σημαίνει την ανεπιφύλακτη
@@ -215,7 +215,8 @@ export default Terms;
 const styles = StyleSheet.create({
   containerWrapper:{
     display: 'flex',
-    backgroundColor:'#efeff5'
+    backgroundColor:'#efeff5',
+    flex: 1
   },
   scroll : {
     backgroundColor:'white',
@@ -233,6 +234,8 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 30,
     display: 'flex',
-
+  },
+  marginBottom: {
+    marginBottom: 20
   }
 });

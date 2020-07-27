@@ -11,7 +11,7 @@ Provides: RT-PCR and antibody test status. Built by ComeTogether on EOSIO.
 
 * Clone the repository git@github.com:avcrowdhackathon/ComeTogether.git
 
-* Create a firebase account and add google-services.jon to /android/app/location
+* Create a firebase account and add google-services.json to /android/app/location
 
 ### How to run in your personal mobile phone at LINUX: 
 

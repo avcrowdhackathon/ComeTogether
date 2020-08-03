@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {B} from '../components';
+import {connect} from 'react-redux';
 
-const CertificateSummary = ({route, navigation}) => {
+
+const CertificateSummary = ({userToken, route, navigation}) => {
  
   const {id, authority, issueDate, testType, result} = route.params;
     React.useEffect(()=>{
@@ -26,7 +28,7 @@ const CertificateSummary = ({route, navigation}) => {
             </View>
             <Image style={{width:48, height:70, marginVertical:6}} source={require('../../images/summary.png')}  />
             <Text style={{fontSize:28, textAlign:'center'}}>
-              <B>Stavros Antoniadis</B>
+              <B>{userToken.fullName}</B>
             </Text>
         </View>
         <View style={{ flexDirection:'row', marginHorizontal:18, paddingVertical:20, borderBottomRightRadius:10, borderBottomLeftRadius:10, backgroundColor:'white' }}>
@@ -62,6 +64,11 @@ const CertificateSummary = ({route, navigation}) => {
       </View>
     )
 }
+const mapStateToProps = (state,ownProps ) => ({
+  userToken: state.auth.userToken,
+  route: ownProps.route,
+  navigation: ownProps.navigation
+  });
 
 const page = StyleSheet.create({
   infos_view: {
@@ -77,4 +84,4 @@ const page = StyleSheet.create({
   }
 })
 
-export default CertificateSummary;
+export default connect(mapStateToProps)(CertificateSummary);

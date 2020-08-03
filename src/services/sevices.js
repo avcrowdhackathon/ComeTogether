@@ -25,7 +25,7 @@ export const resetPassUser = async (oldPass, newPass) => {
         .updatePassword(newPass)
         .then(() => {return true;});
     })
-    .catch((err) => {console.warn("mesa",err); return false;});
+    .catch((err) => {return false;});
 };
 
 export const deleteUser = async (password) => {

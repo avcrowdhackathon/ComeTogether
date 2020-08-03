@@ -22,3 +22,6 @@ export const resetNewCode = () => ({type:'RESET_NEWCODE'});
 export const setStatus = (status) => ({type:'SET_STATUS', status:status});
 
 export const setRepeat = (status) => ({type:'SET_REPEAT', status:status})
+
+//stepsReducer
+export const setStepsSeen = (flag) => ({type:'SET_STEPS', stepsSeen:flag});

@@ -11,14 +11,22 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import React from 'react'
 import messaging from '@react-native-firebase/messaging';
+import {connect} from 'react-redux';
 
-messaging().setBackgroundMessageHandler(async (message) => {
-    if(message) {
+
+const fb =({userToken}) => messaging().setBackgroundMessageHandler(async (message) => {
+  console.log(message)
+  console.log(userToken.email)
+    if(message && message.to == userToken.email ) {
       console.log('Notification caused app to open from quit state:', message.notification)
-    
     }
   })
 
+const mapStateToProps = (state) => ({
+  userToken: state.auth.userToken,
+});
+
+connect(mapStateToProps)(fb)
 
 //redux initialization
 const store = createStore(

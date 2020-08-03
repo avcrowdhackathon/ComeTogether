@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   Image,
-  TouchableHighlight,
 } from "react-native";
 
 import AWS from "aws-sdk";
@@ -72,7 +71,7 @@ export default function Login_Send_Email({ navigation }) {
         if (!doc.empty) {
           //user exists, so get his one time password
           if (doc.docs[0].data().one_time_password === "") {
-            console.warn(
+            snack(
               `You are a registered user, if you don't remember your password, please reset it!`
             );
             setWait(false);
@@ -115,6 +114,7 @@ export default function Login_Send_Email({ navigation }) {
                 .add({
                   email: email_trimmed,
                   one_time_password: defaultNum,
+                  stepSeen: false,
                   id: data.user.uid,
                   role: "user",
                 });
@@ -144,12 +144,12 @@ export default function Login_Send_Email({ navigation }) {
             })
             .catch((error) => {
               if (error.code === "auth/email-already-in-use") {
-                console.warn("That email address is already in use!");
+                snack("That email address is already in use!");
                 setWait(false);
               }
 
               if (error.code === "auth/invalid-email") {
-                console.warn("That email address is invalid!");
+                snack("That email address is invalid!");
                 setWait(false);
               }
               setWait(false);
@@ -184,7 +184,7 @@ export default function Login_Send_Email({ navigation }) {
               style={styles.textInput}
               placeholder="Email"
             />
-            <TouchableHighlight
+            <TouchableOpacity
               title="goToEmail"
               style={styles.goToEmail}
               onPress={() => {
@@ -192,7 +192,7 @@ export default function Login_Send_Email({ navigation }) {
               }}
             >
               <Text style={styles.labelEmail}>Go to login</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity

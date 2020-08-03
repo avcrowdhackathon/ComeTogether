@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, SafeAreaView, Text, Platform, View, Image, ActivityIndicator } from 'react-native';
+import { FlatList, SafeAreaView, Text, Platform, View, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import { Test, Splash } from '../components';
 import firestore from "@react-native-firebase/firestore";
 import {connect} from 'react-redux';
@@ -9,7 +9,8 @@ const CertificateHistory = ({navigation, userToken}) => {
 
     const [cert, setCert] = React.useState(null);
     const [wait, setWait] = React.useState(true)
-
+    const [refresh, setRefresh] = React.useState(false);
+    
     React.useEffect(()=>{
       const subscriber = firestore()
       .collection("tests")
@@ -24,13 +25,37 @@ const CertificateHistory = ({navigation, userToken}) => {
               await setCert(documentSnapshot.data().tests);
             });
           }
-         setWait(false)
-
       })
-        .catch((error) => {
-          alert( error)
-        })
-        }, [])
+      .then(()=> setWait(false))
+      .catch((error) => {
+        alert( error)
+      })
+      return (() => {
+        subscriber() 
+     })
+    }, [])
+
+    const onRefresh = React.useCallback(() => {
+        setRefresh(true)
+        firestore()
+      .collection("tests")
+      .where('email', '==', userToken.email)
+      .get()
+      .then((res) => {
+        if (res.docs.length !== 0) {
+          firestore()
+            .collection("tests")
+            .doc(res.docs[0].ref.id)
+            .onSnapshot( async (documentSnapshot) => {
+              await setCert(documentSnapshot.data().tests);
+            });
+          }
+      })
+      .then(()=>setRefresh(false))
+      .catch((error) => {
+        alert( error)
+      })
+    },[refresh])    
 
     const onSelect = React.useCallback((id, authority, issueDate, testType, result) => {
       navigation.navigate('Summary',{id:id, authority:authority, issueDate:issueDate, testType:testType, result:result})
@@ -62,6 +87,12 @@ const CertificateHistory = ({navigation, userToken}) => {
                       style={{ paddingTop:10 }}
                     />
                   )}
+                  refreshControl={
+                    <RefreshControl
+                        colors={["#ff862f", "#FF652F"]}
+                        refreshing={refresh}
+                        onRefresh={onRefresh} />
+                  }
                   renderItem={({item}) => (
                       <Test
                           id={item.testId}

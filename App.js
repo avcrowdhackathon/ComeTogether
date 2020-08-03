@@ -24,6 +24,7 @@ import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 import Snackbar from 'react-native-snackbar';
+import PersonalInfos from "./src/components/PersonalInfos";
 
 
 // performance imporovement for navigator
@@ -157,7 +158,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 animationTypeForReplace: isSignout ? "pop" : "push",
               }}
             />
-          ) : (
+          ) :( userToken.stepSeen? (
             <>
               {isLoading && <Stack.Screen name="Splash" component={Splash} />}
               <Stack.Screen
@@ -203,7 +204,20 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 }}
               />
             </>
+          ) : (<>
+               {isLoading && <Stack.Screen name="Splash" component={Splash} />}
+                <Stack.Screen
+                  name="PersonalInfos"
+                  component={PersonalInfos}
+                  options={{
+                    headerShown: false,
+                    title: "Personal Infos",
+                  }}
+                />
+                </>
+              )
           )}
+
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>

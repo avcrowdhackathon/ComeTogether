@@ -79,7 +79,7 @@ const page = StyleSheet.create({
     flexDirection:'row',
     fontSize: 18,
     marginVertical: 5,
-    width:90,
+    width:100,
     alignSelf:'center',
   }
 })

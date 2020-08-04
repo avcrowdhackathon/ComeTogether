@@ -7,9 +7,6 @@ import {connect} from 'react-redux';
 const CertificateSummary = ({userToken, route, navigation}) => {
  
   const {id, authority, issueDate, testType, result} = route.params;
-    React.useEffect(()=>{
-       
-    })
 
     const backfunc = () => {
       navigation.goBack();

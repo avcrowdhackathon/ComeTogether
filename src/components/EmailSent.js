@@ -4,7 +4,7 @@ import {
   View,
   Text,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 
 export default function EmailSent({ navigation }) {
@@ -28,7 +28,7 @@ export default function EmailSent({ navigation }) {
             in.{" "}
           </Text>
         </View>
-        <TouchableHighlight
+        <TouchableOpacity
           title="goToLogin"
           style={styles.goToEmail}
           onPress={() => {
@@ -36,7 +36,7 @@ export default function EmailSent({ navigation }) {
           }}
         >
           <Text style={styles.labelEmail}>Go to login</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   },
   goToEmail: {
     width: "100%",
+    marginVertical:5
   },
   scan: {
     justifyContent: "center",

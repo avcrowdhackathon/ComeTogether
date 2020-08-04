@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#FFFFFF",
     fontWeight: "bold",
-    paddingHorizontal: 20,
+    marginHorizontal: 18,
   },
   label: {
     fontSize: 15,
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   },
   goToEmail: {
     width: "100%",
+    marginVertical: 10
   },
   scan: {
     justifyContent: "center",

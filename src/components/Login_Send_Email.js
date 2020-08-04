@@ -6,12 +6,12 @@ import {
   Text,
   TextInput,
   Image,
+  TouchableOpacity
 } from "react-native";
 
 import AWS from "aws-sdk";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Snackbar from 'react-native-snackbar';
 
 
@@ -225,10 +225,11 @@ const styles = StyleSheet.create({
   labelEmail: {
     fontSize: 12,
     color: "#rgb(0, 103, 187)",
-    textAlign: "right",
+    textAlign:'right'
   },
   goToEmail: {
     width: "100%",
+    marginVertical: 10
   },
   scan: {
     justifyContent: "center",

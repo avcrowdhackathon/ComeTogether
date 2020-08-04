@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 10,
     backgroundColor: "#rgb(0, 103, 187)",
-    marginTop:10,
+    marginTop: 5
   },
   logo: {
     width:90, 
@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    marginTop: 10,
     paddingLeft: 6,
+    marginVertical: 5,
     borderRadius: 10,
     backgroundColor: "white",
   },

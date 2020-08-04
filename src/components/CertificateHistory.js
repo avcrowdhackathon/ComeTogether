@@ -12,27 +12,28 @@ const CertificateHistory = ({navigation, userToken}) => {
     const [refresh, setRefresh] = React.useState(false);
     
     React.useEffect(()=>{
+      let un;
       const subscriber = firestore()
       .collection("tests")
       .where('email', '==', userToken.email)
       .get()
       .then((res) => {
         if (res.docs.length !== 0) {
-          firestore()
+         un = firestore()
             .collection("tests")
             .doc(res.docs[0].ref.id)
-            .onSnapshot( async (documentSnapshot) => {
-              await setCert(documentSnapshot.data().tests);
+            .onSnapshot((documentSnapshot) => {
+              setCert(documentSnapshot.data().tests);
             });
-          }
+        }
+        setWait(false);
+        
+
       })
-      .then(()=> setWait(false))
       .catch((error) => {
         alert( error)
       })
-      return (() => {
-        subscriber() 
-     })
+      return  () => un();
     }, [])
 
     const onRefresh = React.useCallback(() => {
@@ -46,8 +47,8 @@ const CertificateHistory = ({navigation, userToken}) => {
           firestore()
             .collection("tests")
             .doc(res.docs[0].ref.id)
-            .onSnapshot( async (documentSnapshot) => {
-              await setCert(documentSnapshot.data().tests);
+            .onSnapshot((documentSnapshot) => {
+              setCert(documentSnapshot.data().tests);
             });
           }
       })

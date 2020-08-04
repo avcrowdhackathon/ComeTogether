@@ -4,7 +4,7 @@ import {
   View,
   Text,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 
 export default function ResetPassEmailSent({ navigation }) {
@@ -28,7 +28,7 @@ export default function ResetPassEmailSent({ navigation }) {
             password.{" "}
           </Text>
         </View>
-        <TouchableHighlight
+        <TouchableOpacity
           title="goToLogin"
           style={styles.goToEmail}
           onPress={() => {
@@ -36,7 +36,7 @@ export default function ResetPassEmailSent({ navigation }) {
           }}
         >
           <Text style={styles.labelEmail}>Go to login</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#rgb(0, 103, 187)",
     textAlign: "right",
+    marginVertical:5
   },
   goToEmail: {
     width: "100%",

@@ -18,7 +18,7 @@ const UserQRCode= ({navigation, qrValue}) => {
             <Text style={{fontSize: 22, textAlign: "center", marginTop:15, marginBottom:100}}>Qr Code</Text>
             <View style={{flex:1, borderRadius:10, alignItems:'center'}}>
                 <QRCode
-                    value= {value}
+                    value= 'kappa'
                     color='rgb(0,103,187)'
                     size= {200}
                     backgroundColor='#efeff5'

@@ -10,9 +10,9 @@ const CertificateHistory = ({navigation, userToken}) => {
     const [cert, setCert] = React.useState(null);
     const [wait, setWait] = React.useState(true)
     const [refresh, setRefresh] = React.useState(false);
-    
+    let un = () => {};
+
     React.useEffect(()=>{
-      let un;
       const subscriber = firestore()
       .collection("tests")
       .where('email', '==', userToken.email)

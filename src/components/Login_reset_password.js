@@ -14,7 +14,7 @@ import Snackbar from 'react-native-snackbar';
 
 export default function Login_reset_password({ navigation }) {
   const [email, setEmail] = React.useState("");
-  const [error, seterror] = React.useState("");
+  const [title, setTitle] = React.useState(false);
   const [wait, setWait] = React.useState(false);
 
   const snack = (msg) => {
@@ -85,7 +85,7 @@ export default function Login_reset_password({ navigation }) {
           source={require("../../images/BT_logoWithName.png")}
           resizeMode="contain"
         />
-        <Text style={styles.header}> Reset your password</Text>
+        {title && <Text style={styles.header}> Reset your password</Text>}
         <View style={styles.rowContainer}>
           <Text style={styles.label}>Submit your email</Text>
 
@@ -95,6 +95,7 @@ export default function Login_reset_password({ navigation }) {
             value={email}
             placeholder="Email"
             style={styles.textInput}
+            onFocus={setTitle(true)}
           />
           <TouchableOpacity
             title="goToEmail"

@@ -7,18 +7,18 @@ import { sha256 } from 'react-native-sha256';
 
 
 const UserQRCode= ({navigation, qrValue}) => {
-    const [value, HashVaule] = React.useState(null)
+    const [value, HashVaule] = React.useState(' ');
+
     React.useEffect(() => {
         sha256(qrValue).then(async hash => { HashVaule(hash)})
-    }
-    )
+    }, [])
     
     return (
         <View style={{flexGrow:1, backgroundColor:'#efeff5'}}>
             <Text style={{fontSize: 22, textAlign: "center", marginTop:15, marginBottom:100}}>Qr Code</Text>
             <View style={{flex:1, borderRadius:10, alignItems:'center'}}>
                 <QRCode
-                    value= 'kappa'
+                    value= {value}
                     color='rgb(0,103,187)'
                     size= {200}
                     backgroundColor='#efeff5'

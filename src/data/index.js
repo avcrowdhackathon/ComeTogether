@@ -19,18 +19,28 @@ export const Role = {
 
 export const Types = [
   {
-    label: "COVID-19 Test",
+    label: "RT-PCR",
     value: "type1",
     checkBoxes: [
       {
-        label: "COVID-19",
+        label: "RT-PCR",
+        value: 0,
+      },
+    ],
+  },
+  {
+    label: "Fast RT-PCR",
+    value: "type2",
+    checkBoxes: [
+      {
+        label: "RT-PCR",
         value: 0,
       },
     ],
   },
   {
     label: "Antibody Test",
-    value: "type2",
+    value: "type3",
     checkBoxes: [
       {
         label: "Antibodies",
@@ -39,13 +49,9 @@ export const Types = [
     ],
   },
   {
-    label: "COVID-19 & Antibody Test",
-    value: "type3",
+    label: "Fast Antibody Test",
+    value: "type4",
     checkBoxes: [
-      {
-        label: "COVID-19",
-        value: 0,
-      },
       {
         label: "Antibodies",
         value: 0,
@@ -56,19 +62,11 @@ export const Types = [
 
 export const DropdownRoles = [
   {
-    label: "Admin",
+    label: "User",
     value: 0,
   },
   {
-    label: "User",
-    value: 1,
-  },
-  {
     label: "Health",
-    value: 2,
-  },
-  {
-    label: "Verifier",
-    value: 3,
+    value: 1,
   },
 ];

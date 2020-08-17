@@ -13,6 +13,7 @@ import { DropdownRoles } from "../data";
 import AWS from "aws-sdk";
 import firestore from "@react-native-firebase/firestore";
 import auth from "@react-native-firebase/auth";
+import { connect } from "react-redux";
 import Snackbar from "react-native-snackbar";
 
 const ses = new AWS.SES({
@@ -22,7 +23,7 @@ const ses = new AWS.SES({
   apiVersion: "2010-12-01",
 });
 
-const snack = (msg, color= 'red') => {
+const snack = (msg, color = "red") => {
   Snackbar.show({
     text: `${msg}`,
     textColor: color,
@@ -84,13 +85,26 @@ class InsertRole extends Component {
       .get()
       .then((doc) => {
         if (!doc.empty) {
-          firestore()
-            .collection("users")
-            .doc(doc.docs[0].ref.id)
-            .update({ role: role });
-          this.setState({ wait: false });
-          snack("User's role has been updated!", 'green');
-
+          let usersData = doc.docs[0].data();
+          //change only if user has specific role
+          if (
+            (usersData.role === "user" || usersData.role === "health") &&
+            (usersData.healthCenter === undefined ||
+              usersData.healthCenter === this.props.userToken.healthCenter)
+          ) {
+            firestore()
+              .collection("users")
+              .doc(doc.docs[0].ref.id)
+              .update({
+                role: role,
+                healthCenter: this.props.userToken.healthCenter,
+              });
+            this.setState({ wait: false });
+            snack("User's role has been updated!", "green");
+          }else {
+            this.setState({ wait: false });
+            snack("You don't have the permission to change user's role!", "red");
+          }
         } else {
           //user dont exist, so register him, and add him to database.
           const defaultNum = Math.floor(100000 + Math.random() * 900000); //6 digits default number
@@ -110,6 +124,7 @@ class InsertRole extends Component {
                   stepSeen: false,
                   id: data.user.uid,
                   role: role,
+                  healthCenter: this.props.userToken.healthCenter
                 });
 
               //send email with his code.
@@ -132,7 +147,7 @@ class InsertRole extends Component {
                 .then(() => {
                   //redirect to 'email sent page'
                   this.setState({ wait: false });
-                  snack("User has been created!", 'green');
+                  snack("User has been created!", "green");
                 });
             })
             .catch((error) => {
@@ -216,7 +231,12 @@ class InsertRole extends Component {
       );
   }
 }
-export default InsertRole;
+
+const mapStateToProps = (state) => ({
+  userToken: state.auth.userToken,
+});
+
+export default connect(mapStateToProps)(InsertRole);
 
 const styles = StyleSheet.create({
   container: {

@@ -26,7 +26,7 @@ const ses = new AWS.SES({
 export default function Login_Send_Email({ navigation }) {
   const [email, setEmail] = React.useState("");
   const [wait, setWait] = React.useState(false);
-  const [title, setTitle] = React.useState(false);
+  const [title, setTitle] = React.useState(true);
 
   const snack = (msg) => {
     Snackbar.show({
@@ -173,7 +173,7 @@ export default function Login_Send_Email({ navigation }) {
           source={require("../../images/BT_logoWithName.png")}
           resizeMode="contain"
         />
-       {title && <Text style={[styles.header, ]}> One-Time Password</Text>}
+       {title && <Text style={styles.header}> One-Time Password</Text>}
           <View style={styles.rowContainer}>
             <Text style={styles.label}>Submit your email</Text>
 
@@ -183,7 +183,7 @@ export default function Login_Send_Email({ navigation }) {
               value={email}
               style={styles.textInput}
               placeholder="Email"
-              onFocus={setTitle(true)}
+              onFocus={()=>setTitle(false)}
             />
             <TouchableOpacity
               title="goToEmail"
@@ -238,7 +238,6 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 10,
     backgroundColor: "#rgb(0, 103, 187)",
-    marginBottom: 100,
   },
   logo: {
     width:90, 
@@ -248,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   header: {
-    flex: 0.3,
+    flex: 0.15,
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",

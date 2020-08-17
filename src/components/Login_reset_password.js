@@ -14,7 +14,7 @@ import Snackbar from 'react-native-snackbar';
 
 export default function Login_reset_password({ navigation }) {
   const [email, setEmail] = React.useState("");
-  const [title, setTitle] = React.useState(false);
+  const [title, setTitle] = React.useState(true);
   const [wait, setWait] = React.useState(false);
 
   const snack = (msg) => {
@@ -95,7 +95,7 @@ export default function Login_reset_password({ navigation }) {
             value={email}
             placeholder="Email"
             style={styles.textInput}
-            onFocus={setTitle(true)}
+            onFocus={()=> setTitle(false)}
           />
           <TouchableOpacity
             title="goToEmail"
@@ -149,7 +149,6 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 10,
     backgroundColor: "#rgb(0, 103, 187)",
-    marginBottom: 100,
   },
   logo: {
     width:90, 
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   header: {
-    flex: 0.3,
+    flex: 0.15,
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",

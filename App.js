@@ -19,7 +19,6 @@ import {
 import { LogoTitle, Splash } from "./src/components";
 import { connect } from "react-redux";
 import { insertToken, deleteToken, restoreToken } from "./actions";
-import IdVerification from "./src/components/IdVerification";
 import { useRoute } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
@@ -187,13 +186,6 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
                 component={SettingsNavigator}
                 options={{
                   headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="VerifyById"
-                component={IdVerification}
-                options={{
-                  title: "Scan or type Id",
                 }}
               />
               <Stack.Screen

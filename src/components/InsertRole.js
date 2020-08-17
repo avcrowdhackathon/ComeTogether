@@ -103,7 +103,8 @@ class InsertRole extends Component {
             .then((data) => {
               firestore()
                 .collection("users")
-                .add({
+                .doc(data.user.uid)
+                .set({
                   email: email_trimmed,
                   one_time_password: defaultNum,
                   stepSeen: false,

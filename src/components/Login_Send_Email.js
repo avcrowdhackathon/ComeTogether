@@ -111,7 +111,8 @@ export default function Login_Send_Email({ navigation }) {
             .then((data) => {
               firestore()
                 .collection("users")
-                .add({
+                .doc(data.user.uid)
+                .set({
                   email: email_trimmed,
                   one_time_password: defaultNum,
                   stepSeen: false,

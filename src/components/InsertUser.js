@@ -75,7 +75,7 @@ class InsertUser extends Component {
       if (dataParams && dataParams.tests && dataParams.tests.length) {
         firestore()
           .collection("tests")
-          .where("email", "==", this.state.patientEmail)
+          .where("email", "==", this.state.patientEmail.toLowerCase().trim())
           .get()
           .then((res) => {
             if (res.docs.length !== 0) {
@@ -93,7 +93,7 @@ class InsertUser extends Component {
               firestore()
                 .collection("tests")
                 .add({
-                  email: this.state.patientEmail,
+                  email: this.state.patientEmail.toLowerCase().trim(),
                   tests: [...dataParams.tests],
                 })
                 .then(async () => {
@@ -130,7 +130,7 @@ class InsertUser extends Component {
             testType: this.state.testLabel,
             result: this.state.checkBoxes[0].value === 1,
             issueDate: this.state.issueDate,
-            issuer: this.props.userToken.email,
+            issuer: this.props.userToken.email.toLowerCase().trim(),
             authority: this.props.userToken.healthCenter,
           },
         ],

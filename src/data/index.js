@@ -20,7 +20,7 @@ export const Role = {
 export const Types = [
   {
     label: "RT-PCR",
-    value: "type1",
+    value: "RT-PCR",
     checkBoxes: [
       {
         label: "RT-PCR",
@@ -29,18 +29,18 @@ export const Types = [
     ],
   },
   {
-    label: "Fast RT-PCR",
-    value: "type2",
+    label: "Rapid RT-PCR",
+    value: "Rapid RT-PCR",
     checkBoxes: [
       {
-        label: "RT-PCR",
+        label: "Rapid RT-PCR",
         value: 0,
       },
     ],
   },
   {
     label: "Antibody Test",
-    value: "type3",
+    value: "Antibody Test",
     checkBoxes: [
       {
         label: "Antibodies",
@@ -49,11 +49,11 @@ export const Types = [
     ],
   },
   {
-    label: "Fast Antibody Test",
-    value: "type4",
+    label: "Rapid Antibody Test",
+    value: "Rapid Antibody Test",
     checkBoxes: [
       {
-        label: "Antibodies",
+        label: "Rapid Antibodies",
         value: 0,
       },
     ],

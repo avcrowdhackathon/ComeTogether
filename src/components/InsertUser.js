@@ -176,7 +176,7 @@ class InsertUser extends Component {
           <View style={styles.typeDropdown}>
             <Picker
               selectedValue={this.state.testType}
-              style={{ height: 40 }}
+              style={{ height: 40, marginBottom: Platform.OS === 'ios' ? 150 : 0}}
               itemStyle={{ fontSize: 16 }}
               onValueChange={(itemValue) => {
                 if (itemValue !== 0) {
@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     height: 40,
     borderRadius: 10,
+    paddingLeft: 8
   },
   typeDropdown: {
     marginHorizontal: 18,

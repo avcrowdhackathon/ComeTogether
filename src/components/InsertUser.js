@@ -47,6 +47,23 @@ const snack = (msg, color = "red") => {
   });
 };
 
+
+const validation = (email) => {
+  const email_trimmed = email.toLowerCase().trim();
+  if (email_trimmed == "") {
+    snack("Email cannot be empty.");
+    return false;
+  } else if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,8}$/i.test(email_trimmed)
+  ) {
+    snack("Email format is not valid.");
+    return false;
+  } else {
+    return true;
+  }
+};
+
+
 var radio_props = [
   { label: "positive", value: 1 },
   { label: "negative", value: 0 },
@@ -111,6 +128,8 @@ class InsertUser extends Component {
     }
   };
 
+
+
   handlePatientEmail = (text) => {
     this.setState({ patientEmail: text });
   };
@@ -121,6 +140,9 @@ class InsertUser extends Component {
   issueCertificate = async () => {
     try {
       let data;
+
+      // If validation is wrong display error message and do nothing
+      if (!validation(this.state.patientEmail)) return;
 
       data = {
         patientEmail: this.state.patientEmail,
@@ -145,6 +167,8 @@ class InsertUser extends Component {
       await this.setState({ isPending: false });
     }
   };
+
+
 
   render() {
     return (

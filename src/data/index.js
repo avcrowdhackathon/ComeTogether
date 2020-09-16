@@ -29,7 +29,7 @@ export const Types = [
     ],
   },
   {
-    label: "Fast RT-PCR",
+    label: "Rapid RT-PCR",
     value: "type2",
     checkBoxes: [
       {
@@ -39,7 +39,7 @@ export const Types = [
     ],
   },
   {
-    label: "Antibody Test",
+    label: "Antibodies Test",
     value: "type3",
     checkBoxes: [
       {
@@ -49,7 +49,7 @@ export const Types = [
     ],
   },
   {
-    label: "Fast Antibody Test",
+    label: "Rapid Antibodies Test",
     value: "type4",
     checkBoxes: [
       {

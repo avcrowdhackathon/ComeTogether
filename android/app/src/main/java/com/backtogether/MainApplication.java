@@ -1,4 +1,4 @@
-package com.backtogether;
+package com.backtogether1;
 
 import android.app.Application;
 import android.content.Context;

@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.backtogether"
+        applicationId "com.backtogether1"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true

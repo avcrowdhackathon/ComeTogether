@@ -10,7 +10,7 @@ import firestore from "@react-native-firebase/firestore";
 
 
 
-const UserQRCode= ({navigation, qrValue}) => {
+const UserQRCode= ({navigation, userToken}) => {
     const [value, HashValue] = React.useState(' ');
     const [testType, changeTestType] = React.useState(null);
     const Types = [
@@ -36,11 +36,19 @@ const UserQRCode= ({navigation, qrValue}) => {
     React.useEffect(() => {
        testType && firestore()
         .collection("tests")
-        .where("testType", "array-contains", testType)
-        .orderBy("issueDate", "desc")
-        .limit(1)
+        .where('email', '==', userToken.email)
         .get()
-        .then((doc) => {if(doc.exists){ console.warn("doccc", doc);  sha256(qrValue).then(async hash => { HashValue(hash)})} else console.warn("No doc");});
+        .then((res) => {
+            if (res.docs.length !== 0) {
+                firestore()
+                .collection("tests")
+                .doc(res.docs[0].ref.id)
+                .onSnapshot((documentSnapshot) => {
+                    const qr = documentSnapshot.data().tests.filter(obj => {return obj.testType == testType});
+                    HashValue(JSON.stringify(qr[0]));
+                });
+            }
+        })
     }, [testType])
 
     return (
@@ -78,8 +86,8 @@ const UserQRCode= ({navigation, qrValue}) => {
 
 
 const mapStateToProps = (state, props) => ({
-    qrValue: 'user123',
-    navigation: props.navigation
+    navigation: props.navigation,
+    userToken: state.auth.userToken
 })
 
 export default connect(mapStateToProps)(UserQRCode)

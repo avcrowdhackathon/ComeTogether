@@ -4,7 +4,7 @@ import { Image, TouchableHighlight, Modal, StyleSheet, View, Text, TextInput, Sc
 import { useIsFocused } from '@react-navigation/native';
 import {JsonRpc, RpcError } from 'eosjs';
 import { sha256 } from 'react-native-sha256';
-const rpc = new JsonRpc('https://jungle2.cryptolions.io:443', { fetch });
+// const rpc = new JsonRpc('https://jungle2.cryptolions.io:443', { fetch });
 
 
 const QrVerification = ({offline, navigation, camera}) => {
@@ -14,7 +14,7 @@ const QrVerification = ({offline, navigation, camera}) => {
   const [processing, setProcessing] = React.useState(false)
   const [valid,setValid] = React.useState(null)
   const [msg, setmsg] = React.useState('')
-  const [id, setID] = React.useState('')
+  const [id, setID] = React.useState(null)
   const isFocused = useIsFocused();
   const [rescan, setRescan] = React.useState(true)
 
@@ -24,32 +24,35 @@ const QrVerification = ({offline, navigation, camera}) => {
 
   const verification = async () => {
     try{
-      console.log('......id is,', id)
-        var resp = await rpc.get_table_rows({
-          json: true, // Get the response as json
-          code: 'immunityproo', // Contract that we target
-          scope: 'immunityproo', // Account that owns the data
-          table: 'certificates', // Table name
-          table_key: 'cashid', // Table secondary key name
-          key_type: 'sha256', // Table secondary key name
-          index_position: 2,
-          lower_bound: id, // Table secondary key value
-          upper_bound: id, //Auth.getProfile().eosId, // Table secondary key value
-          limit: 1 // Here we limit to 1 to get only row
-        });
+        // var resp = await rpc.get_table_rows({
+        //   json: true, // Get the response as json
+        //   code: 'immunityproo', // Contract that we target
+        //   scope: 'immunityproo', // Account that owns the data
+        //   table: 'certificates', // Table name
+        //   table_key: 'cashid', // Table secondary key name
+        //   key_type: 'sha256', // Table secondary key name
+        //   index_position: 2,
+        //   lower_bound: id, // Table secondary key value
+        //   upper_bound: id, //Auth.getProfile().eosId, // Table secondary key value
+        //   limit: 1 // Here we limit to 1 to get only row
+        // });
         setProcessing(false)
-        if(resp.rows.length === 0){
-          setmsg('User was not found')
-          setValid(false)
-          setModal(true)
-        }else if(resp.rows[0].immunity === 1) {
-          setmsg('User has immunity')
+        // if(resp.rows.length === 0){
+        //   setmsg('User was not found')
+        //   setValid(false)
+        //   setModal(true)
+        // }else 
+        if(id.result === 1) {
+          setmsg('User tested positive at '+ id.issueDate)
           setValid(true)
           setModal(true)
-        }else{
-          setmsg('User does NOT have immunity')
+        }else if(id.result == 0){
+          setmsg('User tested negative at ' + id.issueDate)
           setValid(false)
           setModal(true)
+        }
+        else {
+          throw "Wrong Qr provided"
         }
 
     } catch(e) {
@@ -63,15 +66,12 @@ const QrVerification = ({offline, navigation, camera}) => {
   };
 
   const barcodeRecognized = async ({ barcodes }) => {
-    console.log('processing.........', processing, rescan)
+    if(rescan) setRescan(false)
     barcodes.forEach(async (barcode) => {
-        if (barcodes && barcodes.length && !processing && rescan){
-        // setID(barcodes[0].data)
-          setProcessing(true)
-          setRescan(false)
-        setID('6d627f0ee4cf643c9771e431850df957f12260fa335b4c76b1897f2ad40bb252')
-          await verification()
-        }
+      const data = JSON.parse(barcode.data)
+      setID(data)
+      setProcessing(true)
+      await verification()
     })
 
   }
@@ -85,51 +85,55 @@ const updateState = () => {
 
   if(isFocused){
     return(
-      <ScrollView style={styles.container}>
-        <RNCamera
-          ref={ref => {
-            camera = ref;
-          }}
-          type={RNCamera.Constants.Type.back}
-          captureAudio={false}
-          flashMode={flash?RNCamera.Constants.FlashMode.torch:RNCamera.Constants.FlashMode.off}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          onGoogleVisionBarcodesDetected={barcodeRecognized}
-          style={styles.preview}
-        >
-          {/*<TouchableHighlight style={{position:'absolute', top:10, right:10, borderRadius:50, zIndex:100, backgroundColor:'rgba(255,255,255,0.7)'}} onPress={flashOn} >*/}
-          {/*  <Image  source={flash?require("../../images/_Active.png"):require("../../images/_Idle.png")} />*/}
-          {/*</TouchableHighlight>*/}
-          {/*<Icon type="Entypo" onPress={takePicture} style={styles.icon} name={"flickr-with-circle"} />*/}
-        </RNCamera>
-        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-          {processing? <Text style={[styles.text, {backgroundColor:'rgba(243, 241, 239, 1)', padding: 20}]}>{processing?"Processing . . .":null}</Text> : null}
-        </View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={()=>setModal(false)}
-        >
-          <View style={[{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'},{backgroundColor: `${valid?'rgba(0, 128, 0, 0.5)':'rgba(255, 0, 0, 0.5)'}`}]}>
-            <View style={{backgroundColor:'rgba(255,255,255,0.8)', padding:20, justifyContent:'center',alignItems:'center'}}>
-              <Text style={[styles.text,{justifyContent:'center',alignItems:'center'}]}>{msg}</Text>
-              <Image style={{ height:50, width:50 }} source={valid?require('../../images/green-tick.png'):require('../../images/red-x.png')} resizeMode="contain" />
-
-              <Text style={styles.text}>{}</Text>
-
-              <TouchableHighlight style={{backgroundColor:`${valid?'green':'red'}`,padding:5,width:100, marginTop:10, justifyContent:'center', alignItems:'center', borderRadius:20}} title="Dismiss" onPress={updateState}>
-                <Text style={styles.text}> OK </Text>
-              </TouchableHighlight>
-            </View>
+        <ScrollView style={styles.container}>
+          
+          <Text style={{fontSize: 22, textAlign: "center", marginTop:15, marginBottom:20 }}>QR Scanner</Text>
+          <RNCamera
+            ref={ref => {
+              camera = ref;
+            }}
+            type={RNCamera.Constants.Type.back}
+            captureAudio={false}
+            flashMode={flash?RNCamera.Constants.FlashMode.torch:RNCamera.Constants.FlashMode.off}
+            androidCameraPermissionOptions={{
+              title: 'Permission to use camera',
+              message: 'We need your permission to use your camera',
+              buttonPositive: 'Ok',
+              buttonNegative: 'Cancel',
+            }}
+            googleVisionBarcodeType={RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.QR_CODE}            
+            onGoogleVisionBarcodesDetected={rescan?barcodeRecognized:null}
+            googleVisionBarcodeMode={RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeMode.ALTERNATE}
+            style={styles.preview}
+          >
+            {/*<TouchableHighlight style={{position:'absolute', top:10, right:10, borderRadius:50, zIndex:100, backgroundColor:'rgba(255,255,255,0.7)'}} onPress={flashOn} >*/}
+            {/*  <Image  source={flash?require("../../images/_Active.png"):require("../../images/_Idle.png")} />*/}
+            {/*</TouchableHighlight>*/}
+            {/*<Icon type="Entypo" onPress={takePicture} style={styles.icon} name={"flickr-with-circle"} />*/}
+          </RNCamera>
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+            {processing? <Text style={[styles.text, {backgroundColor:'rgba(243, 241, 239, 1)', padding: 20}]}>{processing?"Processing . . .":null}</Text> : null}
           </View>
-        </Modal>
-      </ScrollView>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={()=>setModal(false)}
+          >
+            <View style={[{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'},{backgroundColor: `${valid?'rgba(0, 128, 0, 0.5)':'rgba(255, 0, 0, 0.5)'}`}]}>
+              <View style={{backgroundColor:'rgba(255,255,255,0.8)', padding:20, justifyContent:'center',alignItems:'center'}}>
+                <Text style={[styles.text,{justifyContent:'center',alignItems:'center'}]}>{msg}</Text>
+                <Image style={{ height:50, width:50 }} source={valid?require('../../images/green-tick.png'):require('../../images/red-x.png')} resizeMode="contain" />
+
+                <Text style={styles.text}>{}</Text>
+
+                <TouchableHighlight style={{backgroundColor:`${valid?'green':'red'}`,padding:5,width:100, marginTop:10, justifyContent:'center', alignItems:'center', borderRadius:20}} title="Dismiss" onPress={updateState}>
+                  <Text style={styles.text}> OK </Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        </ScrollView>
     )
   }else if(!isFocused){
     return null
@@ -141,7 +145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'white',
+    backgroundColor: '#efeff5',
   },
   preview: {
     flex: 1,

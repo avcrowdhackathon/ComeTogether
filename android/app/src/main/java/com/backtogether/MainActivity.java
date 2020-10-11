@@ -1,4 +1,4 @@
-package com.backtogether;
+package com.backtogether1;
 
 import com.facebook.react.ReactActivity;
 

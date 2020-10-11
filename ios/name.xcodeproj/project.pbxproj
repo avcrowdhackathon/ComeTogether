@@ -12,7 +12,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		1DB0712C24EDA75A00A2D278 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1DB0712B24EDA75900A2D278 /* GoogleService-Info.plist */; };
+		1D6B8CCC25332636003B9170 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1D6B8CCB25332636003B9170 /* GoogleService-Info.plist */; };
 		1EAAA2841F64EB9973ADA533 /* libPods-name-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 893A5DEB73F8C6C4344B3406 /* libPods-name-tvOS.a */; };
 		233D75CC9AE5E3091363799E /* libPods-name.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6CACEA348CE9C07424B1CC /* libPods-name.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -56,7 +56,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = name/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = name/main.m; sourceTree = "<group>"; };
 		1AD7B785413CD124AB04E9C0 /* Pods-name-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-name-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-name-tvOSTests/Pods-name-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		1DB0712B24EDA75900A2D278 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1D6B8CCB25332636003B9170 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* name-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "name-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* name-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "name-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E24B5F35A036B21CC8F3C89 /* Pods-name-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-name-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-name-tvOS/Pods-name-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -127,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* name */ = {
 			isa = PBXGroup;
 			children = (
+				1D6B8CCB25332636003B9170 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -161,7 +162,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				1DB0712B24EDA75900A2D278 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* name */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* nameTests */,
@@ -344,8 +344,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				1DB0712C24EDA75A00A2D278 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				1D6B8CCC25332636003B9170 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +379,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=/usr/local/bin/node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		12104DFF5C24906597208B6B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

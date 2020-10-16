@@ -37,7 +37,7 @@ const CertificateStatus = ({navigation, userToken}) => {
       .then((res) => {
         if (res.docs){
           const cleanData = res.docs.reduce((flat, toFlatten) => {
-            return flat.concat(toFlatten.data());
+            return flat.concat({...toFlatten.data(), ref: toFlatten.ref});
           }, []);
           setCert(cleanData);
         }
@@ -59,7 +59,7 @@ const CertificateStatus = ({navigation, userToken}) => {
       .then((res) => {
         if (res.docs){
           const cleanData = res.docs.reduce((flat, toFlatten) => {
-            return flat.concat(toFlatten.data());
+            return flat.concat({...toFlatten.data(), ref: toFlatten.ref});
           }, []);
           setCert(cleanData);
         }
@@ -82,8 +82,8 @@ const CertificateStatus = ({navigation, userToken}) => {
       getFilteredTests(filterLabel)
     },[refresh]);
 
-  const onSelect = React.useCallback((id, authority, issueDate, testType, result) => {
-      navigation.navigate('Summary',{id:id, authority: authority, issueDate: issueDate, testType: testType, result: result})
+  const onSelect = React.useCallback((id, authority, issueDate, testType, result, ref) => {
+      navigation.navigate('Summary',{id:id, authority: authority, issueDate: issueDate, testType: testType, result: result, ref: ref})
     })
     if(wait){
       return(
@@ -152,7 +152,7 @@ const CertificateStatus = ({navigation, userToken}) => {
                           result={item.result}
                           role={userToken.role}
                           status={item.status}
-                          onSelect={() => onSelect(index, item.authority, item.issueDate, item.testType, item.result)}
+                          onSelect={() => onSelect(index, item.authority, item.issueDate, item.testType, item.result, item.ref)}
                       />
                   )}
                   keyExtractor={(item, index) =>index.toString()}

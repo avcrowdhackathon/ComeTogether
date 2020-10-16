@@ -104,7 +104,7 @@ class InsertUser extends Component {
                 })
                 .then(async () => {
                   await this.setState({ isPending: false });
-                  snack("Updated data successfully", "green");
+                  snack("Updated patient records successfully", "green");
                 });
             } else {
               firestore()

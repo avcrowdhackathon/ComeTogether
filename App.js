@@ -142,6 +142,8 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
   });
 
   return (
+    <SafeAreaView style={{flex:1, backgroundColor:'#efeff5'}}>
+
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <SafeAreaView style={{flex:1}}>
@@ -216,6 +218,7 @@ const App = ({ userToken, isLoading, isSignout, dispatch }) => {
         </SafeAreaView>
       </NavigationContainer>
     </AuthContext.Provider>
+    </SafeAreaView>
   );
 };
 
